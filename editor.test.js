@@ -1,53 +1,25 @@
-// Minimal DOM matching what index.html provides — must be set up before requiring editor.js
-// so that the top-level getElementById() calls inside the module find real elements.
-document.body.innerHTML = `
-  <div id="toolbar">
-    <button id="btn-bold"         class="btn btn-sm btn-outline-secondary"></button>
-    <button id="btn-italic"       class="btn btn-sm btn-outline-secondary"></button>
-    <button id="btn-underline"    class="btn btn-sm btn-outline-secondary"></button>
-    <button id="btn-strikeThrough" class="btn btn-sm btn-outline-secondary"></button>
-    <button id="btn-toggle-edit"  class="btn btn-sm btn-success">Editing: ON</button>
-  </div>
-  <div id="url-bar" style="display:none;">
-    <input type="text" id="url-input" value="" />
-    <div id="url-error" style="display:none;"></div>
-  </div>
-  <div id="editor" contenteditable="true"></div>
-`;
+import { vi, describe, test, expect, beforeEach, beforeAll } from 'vitest';
 
-// Mock browser APIs that jsdom does not implement
-document.execCommand = jest.fn().mockReturnValue(true);
-document.queryCommandState = jest.fn().mockReturnValue(false);
+// editor.js is loaded dynamically inside beforeAll so that vitest.setup.js
+// has already populated the DOM before editor.js runs its top-level
+// getElementById() calls.
+let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
+    copyText, cutText, pasteText, openUrlBar, confirmUrl,
+    showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
+    exportHTML, toggleEdit;
 
-Object.defineProperty(navigator, 'clipboard', {
-  value: {
-    writeText: jest.fn().mockResolvedValue(undefined),
-    readText:  jest.fn().mockResolvedValue('clipboard text'),
-  },
-  configurable: true,
+beforeAll(async () => {
+  const mod = await import('./editor.js');
+  // Vite re-exports CJS module.exports properties as named ESM exports.
+  // Fallback to .default in case the environment wraps it differently.
+  const fns = mod.execCmd ? mod : mod.default;
+  ({
+    execCmd, execCommandWithArg, updateToolbarState, toggleSource,
+    copyText, cutText, pasteText, openUrlBar, confirmUrl,
+    showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
+    exportHTML, toggleEdit,
+  } = fns);
 });
-
-global.URL.createObjectURL = jest.fn().mockReturnValue('blob:mock');
-global.URL.revokeObjectURL = jest.fn();
-
-// Load module after DOM + mocks are in place
-const {
-  execCmd,
-  execCommandWithArg,
-  updateToolbarState,
-  toggleSource,
-  copyText,
-  cutText,
-  pasteText,
-  openUrlBar,
-  confirmUrl,
-  showUrlError,
-  insertImageFromUrl,
-  closeUrlBar,
-  clearAll,
-  exportHTML,
-  toggleEdit,
-} = require('./editor');
 
 // ---------------------------------------------------------------------------
 // execCmd
@@ -103,7 +75,7 @@ describe('clearAll', () => {
 });
 
 // ---------------------------------------------------------------------------
-// toggleEdit  (state flows: ON → OFF → ON across the two tests)
+// toggleEdit  (state flows ON → OFF → ON across the two tests)
 // ---------------------------------------------------------------------------
 describe('toggleEdit', () => {
   test('switches from edit ON to OFF', () => {
@@ -132,7 +104,7 @@ describe('toggleEdit', () => {
 });
 
 // ---------------------------------------------------------------------------
-// toggleSource  (state flows: rendered → source → rendered)
+// toggleSource  (state flows rendered → source → rendered)
 // ---------------------------------------------------------------------------
 describe('toggleSource', () => {
   test('converts innerHTML to raw text (show source)', () => {
@@ -251,28 +223,27 @@ describe('insertImageFromUrl', () => {
 
   test('calls insertImage when the image loads successfully', () => {
     const url = 'https://example.com/image.png';
-    // Mock Image so onload fires synchronously
-    const OriginalImage = global.Image;
-    global.Image = class {
+    const OriginalImage = globalThis.Image;
+    globalThis.Image = class {
       set src(_) { if (this.onload) this.onload(); }
     };
 
     insertImageFromUrl(url);
 
     expect(document.execCommand).toHaveBeenCalledWith('insertImage', false, url);
-    global.Image = OriginalImage;
+    globalThis.Image = OriginalImage;
   });
 
   test('shows an error when the image fails to load', () => {
-    const OriginalImage = global.Image;
-    global.Image = class {
+    const OriginalImage = globalThis.Image;
+    globalThis.Image = class {
       set src(_) { if (this.onerror) this.onerror(); }
     };
 
-    insertImageFromUrl('https://bad-url.example/image.png');
+    insertImageFromUrl('https://bad.example/image.png');
 
     expect(document.getElementById('url-error').textContent).toContain('Could not load image');
-    global.Image = OriginalImage;
+    globalThis.Image = OriginalImage;
   });
 });
 
@@ -298,38 +269,39 @@ describe('updateToolbarState', () => {
 // exportHTML
 // ---------------------------------------------------------------------------
 describe('exportHTML', () => {
-  test('creates a blob URL, sets download filename, clicks the anchor, and revokes the URL', () => {
-    const editorEl = document.getElementById('editor');
-    editorEl.innerHTML = '<p>Test</p>';
+  test('creates a blob URL, sets download filename, clicks anchor, revokes URL', () => {
+    document.getElementById('editor').innerHTML = '<p>Test</p>';
 
-    const mockAnchor = { href: '', download: '', click: jest.fn() };
-    jest.spyOn(document, 'createElement').mockImplementationOnce(() => mockAnchor);
-    global.URL.createObjectURL.mockClear();
-    global.URL.revokeObjectURL.mockClear();
+    const mockAnchor = { href: '', download: '', click: vi.fn() };
+    vi.spyOn(document, 'createElement').mockImplementationOnce(() => mockAnchor);
+    globalThis.URL.createObjectURL.mockClear();
+    globalThis.URL.revokeObjectURL.mockClear();
 
     exportHTML();
 
-    expect(global.URL.createObjectURL).toHaveBeenCalledTimes(1);
+    expect(globalThis.URL.createObjectURL).toHaveBeenCalledTimes(1);
     expect(mockAnchor.download).toBe('document.html');
     expect(mockAnchor.click).toHaveBeenCalled();
-    expect(global.URL.revokeObjectURL).toHaveBeenCalledTimes(1);
+    expect(globalThis.URL.revokeObjectURL).toHaveBeenCalledTimes(1);
   });
 
-  test('wraps editor content in a complete HTML document', () => {
-    const editorEl = document.getElementById('editor');
-    editorEl.innerHTML = '<p>Hello world</p>';
+  test('wraps editor content in a complete HTML document', async () => {
+    document.getElementById('editor').innerHTML = '<p>Hello world</p>';
 
-    // Capture the Blob passed to createObjectURL
     let capturedBlob;
-    global.URL.createObjectURL.mockImplementationOnce((b) => { capturedBlob = b; return 'blob:mock'; });
-    jest.spyOn(document, 'createElement').mockImplementationOnce(() => ({ href: '', download: '', click: jest.fn() }));
+    globalThis.URL.createObjectURL.mockImplementationOnce((b) => {
+      capturedBlob = b;
+      return 'blob:mock';
+    });
+    vi.spyOn(document, 'createElement').mockImplementationOnce(() => ({
+      href: '', download: '', click: vi.fn(),
+    }));
 
     exportHTML();
 
-    return capturedBlob.text().then((text) => {
-      expect(text).toContain('<!DOCTYPE html>');
-      expect(text).toContain('<p>Hello world</p>');
-    });
+    const text = await capturedBlob.text();
+    expect(text).toContain('<!DOCTYPE html>');
+    expect(text).toContain('<p>Hello world</p>');
   });
 });
 
@@ -340,13 +312,13 @@ describe('copyText', () => {
   beforeEach(() => navigator.clipboard.writeText.mockClear());
 
   test('writes selected text to the clipboard', async () => {
-    global.getSelection = jest.fn().mockReturnValue({ toString: () => 'hello' });
+    globalThis.getSelection = vi.fn().mockReturnValue({ toString: () => 'hello' });
     await copyText();
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('hello');
   });
 
   test('does nothing when no text is selected', async () => {
-    global.getSelection = jest.fn().mockReturnValue({ toString: () => '' });
+    globalThis.getSelection = vi.fn().mockReturnValue({ toString: () => '' });
     await copyText();
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
   });
@@ -359,14 +331,14 @@ describe('cutText', () => {
   });
 
   test('writes selected text to clipboard and deletes it', async () => {
-    global.getSelection = jest.fn().mockReturnValue({ toString: () => 'cut me' });
+    globalThis.getSelection = vi.fn().mockReturnValue({ toString: () => 'cut me' });
     await cutText();
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('cut me');
     expect(document.execCommand).toHaveBeenCalledWith('delete');
   });
 
   test('does nothing when no text is selected', async () => {
-    global.getSelection = jest.fn().mockReturnValue({ toString: () => '' });
+    globalThis.getSelection = vi.fn().mockReturnValue({ toString: () => '' });
     await cutText();
     expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
     expect(document.execCommand).not.toHaveBeenCalled();
