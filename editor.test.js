@@ -6,7 +6,8 @@ import { vi, describe, test, expect, beforeEach, beforeAll } from 'vitest';
 let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
-    exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter;
+    exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
+    updateEditorActions;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
@@ -18,6 +19,7 @@ beforeAll(async () => {
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
     exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
+    updateEditorActions,
   } = fns);
 });
 
@@ -551,5 +553,37 @@ describe('toggleMarkdown', () => {
     toggleMarkdown(); // ON
     toggleMarkdown(); // OFF
     expect(document.getElementById('btn-bold').disabled).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// updateEditorActions
+// ---------------------------------------------------------------------------
+describe('updateEditorActions', () => {
+  beforeEach(() => {
+    document.getElementById('editor').innerHTML = '';
+    document.getElementById('btn-print').disabled = false;
+    document.getElementById('btn-export').disabled = false;
+  });
+
+  test('disables print and export when editor is empty', () => {
+    updateEditorActions();
+    expect(document.getElementById('btn-print').disabled).toBe(true);
+    expect(document.getElementById('btn-export').disabled).toBe(true);
+  });
+
+  test('enables print and export when editor has content', () => {
+    document.getElementById('editor').innerHTML = '<p>Hello</p>';
+    updateEditorActions();
+    expect(document.getElementById('btn-print').disabled).toBe(false);
+    expect(document.getElementById('btn-export').disabled).toBe(false);
+  });
+
+  test('disables buttons again after clearAll empties the editor', () => {
+    document.getElementById('editor').innerHTML = '<p>Hello</p>';
+    updateEditorActions();
+    clearAll();
+    expect(document.getElementById('btn-print').disabled).toBe(true);
+    expect(document.getElementById('btn-export').disabled).toBe(true);
   });
 });

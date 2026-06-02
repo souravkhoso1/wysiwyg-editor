@@ -158,11 +158,23 @@ function updateCounter() {
 	el.textContent = 'Words: ' + words + ' | Characters: ' + text.length;
 }
 
-editor.addEventListener('input', updateCounter);
+function updateEditorActions() {
+	var empty = editor.textContent.trim() === '';
+	var btnPrint = document.getElementById('btn-print');
+	var btnExport = document.getElementById('btn-export');
+	if (btnPrint) btnPrint.disabled = empty;
+	if (btnExport) btnExport.disabled = empty;
+}
+
+editor.addEventListener('input', function() {
+	updateCounter();
+	updateEditorActions();
+});
 
 function clearAll() {
 	editor.innerHTML = '';
 	updateCounter();
+	updateEditorActions();
 	editor.focus();
 }
 
@@ -252,5 +264,6 @@ if (typeof module !== 'undefined' && module.exports) {
 		toggleMarkdown,
 		setToolbarDisabled,
 		updateCounter,
+		updateEditorActions,
 	};
 }

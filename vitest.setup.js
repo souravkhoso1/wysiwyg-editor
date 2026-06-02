@@ -11,6 +11,8 @@ document.body.innerHTML = `
     <button id="btn-source"        class="btn btn-sm btn-outline-secondary"></button>
     <button id="btn-markdown"      class="btn btn-sm btn-outline-secondary"></button>
     <button id="btn-toggle-edit"   class="btn btn-sm btn-success">Editing: ON</button>
+    <button id="btn-print"         class="btn btn-sm btn-outline-secondary" disabled></button>
+    <button id="btn-export"        class="btn btn-sm btn-outline-secondary" disabled></button>
   </div>
   <div id="url-bar" style="display:none;">
     <input type="text" id="url-input" value="" />

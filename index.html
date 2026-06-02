@@ -89,8 +89,8 @@
 			<button title="Clear All" class="btn btn-sm btn-outline-danger" onmousedown="event.preventDefault()" onclick="clearAll();">Clear All</button>
 			<div class="vr mx-1"></div>
 			<button id="btn-toggle-edit" title="Toggle Edit Mode" class="btn btn-sm btn-success" onmousedown="event.preventDefault()" onclick="toggleEdit();">Editing: ON</button>
-			<button title="Print" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="window.print();"><i class="fas fa-print"></i></button>
-			<button title="Export as HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();"><i class="fas fa-download"></i></button>
+			<button id="btn-print" title="Print" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="window.print();" disabled><i class="fas fa-print"></i></button>
+			<button id="btn-export" title="Export as HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();" disabled><i class="fas fa-download"></i></button>
 			<button title="Keyboard Shortcuts" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#helpModal"><i class="fas fa-keyboard"></i></button>
 		</div>
 		<div id="url-bar" style="display:none;">
