@@ -4,6 +4,98 @@
 	<meta charset="UTF-8">
 	<title>Rich Text Editor in JS</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<style>
+		*, *::before, *::after { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			padding: 16px;
+			font-family: system-ui, sans-serif;
+			background: #f5f5f5;
+			color: #222;
+		}
+
+		#toolbar {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 4px;
+			background: #fff;
+			border: 1px solid #d0d0d0;
+			border-bottom: none;
+			border-radius: 6px 6px 0 0;
+			padding: 6px 8px;
+		}
+
+		#toolbar button {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 30px;
+			height: 30px;
+			padding: 0 6px;
+			border: 1px solid transparent;
+			border-radius: 4px;
+			background: none;
+			cursor: pointer;
+			font-size: 13px;
+			color: #444;
+			transition: background 0.15s, border-color 0.15s;
+		}
+
+		#toolbar button:hover {
+			background: #e8e8e8;
+			border-color: #c0c0c0;
+		}
+
+		#toolbar button:active,
+		#toolbar button.active {
+			background: #d0e4ff;
+			border-color: #4a90d9;
+			color: #1a5fb4;
+		}
+
+		#toolbar select {
+			height: 30px;
+			padding: 0 4px;
+			border: 1px solid #c0c0c0;
+			border-radius: 4px;
+			background: #fff;
+			font-size: 13px;
+			cursor: pointer;
+		}
+
+		#toolbar input[type="color"] {
+			width: 30px;
+			height: 30px;
+			padding: 2px;
+			border: 1px solid #c0c0c0;
+			border-radius: 4px;
+			cursor: pointer;
+			vertical-align: middle;
+		}
+
+		#toolbar label {
+			font-size: 12px;
+			color: #666;
+		}
+
+		#editor {
+			background: #fff;
+			border: 1px solid #d0d0d0;
+			border-radius: 0 0 6px 6px;
+			padding: 16px;
+			outline: none;
+			min-height: 400px;
+			font-size: 15px;
+			line-height: 1.6;
+		}
+
+		#editor:focus {
+			border-color: #4a90d9;
+			box-shadow: 0 0 0 2px rgba(74,144,217,0.2);
+		}
+	</style>
 </head>
 <body>
 	<div id="toolbar">
@@ -60,12 +152,12 @@
 			<option value="6">6</option>
 			<option value="7">7</option>
 		</select>
-		Fore color:<input type="color" oninput="execCommandWithArg('foreColor', this.value);" />
-		Background color:<input type="color" oninput="execCommandWithArg('hiliteColor', this.value);" />
+		<label>Fore color:<input type="color" oninput="execCommandWithArg('foreColor', this.value);" /></label>
+		<label>Background color:<input type="color" oninput="execCommandWithArg('hiliteColor', this.value);" /></label>
 		<button onmousedown="event.preventDefault()" onclick="execCommandWithArg('insertImage', prompt('Enter the image URL', 'http://'));"><i class="fas fa-image" aria-hidden="true"></i></button>
 		<button onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">Select All</button>
 	</div>
-	<div id="editor" contenteditable="true" style="width:1000px;height:500px;border:1px solid black;overflow:auto;padding:8px;"></div>
+	<div id="editor" contenteditable="true"></div>
 	<script type="text/javascript">
 
 		var showingSourceCode = false;
