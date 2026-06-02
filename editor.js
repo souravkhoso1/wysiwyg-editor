@@ -159,3 +159,24 @@ function toggleEdit() {
 		btn.classList.replace('btn-outline-danger', 'btn-success');
 	}
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+	module.exports = {
+		execCmd,
+		execCommandWithArg,
+		updateToolbarState,
+		restoreSelection,
+		toggleSource,
+		copyText,
+		cutText,
+		pasteText,
+		openUrlBar,
+		confirmUrl,
+		showUrlError,
+		insertImageFromUrl,
+		closeUrlBar,
+		clearAll,
+		exportHTML,
+		toggleEdit,
+	};
+}
