@@ -305,10 +305,14 @@
 
 		function confirmUrl() {
 			var url = document.getElementById('url-input').value.trim();
+			var mode = urlMode;
 			closeUrlBar();
-			if (!url) return;
-			if (urlMode === 'link') execCommandWithArg('createLink', url);
-			else if (urlMode === 'image') execCommandWithArg('insertImage', url);
+			if (!url || !mode) return;
+			if (mode === 'link') {
+				execCommandWithArg('createLink', url);
+			} else if (mode === 'image') {
+				insertImageFromUrl(url);
+			}
 		}
 
 		function closeUrlBar() {
