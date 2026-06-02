@@ -299,7 +299,13 @@ describe('exportHTML', () => {
 
     exportHTML();
 
-    const text = await capturedBlob.text();
+    // jsdom's Blob does not implement .text(); use FileReader instead.
+    const text = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsText(capturedBlob);
+    });
     expect(text).toContain('<!DOCTYPE html>');
     expect(text).toContain('<p>Hello world</p>');
   });
@@ -349,6 +355,14 @@ describe('pasteText', () => {
   beforeEach(() => {
     document.execCommand.mockClear();
     navigator.clipboard.readText.mockClear();
+    globalThis.getSelection = vi.fn().mockReturnValue({
+      toString: () => '',
+      rangeCount: 0,
+      removeAllRanges: vi.fn(),
+      addRange: vi.fn(),
+      getRangeAt: vi.fn(),
+      anchorNode: null,
+    });
   });
 
   test('reads from clipboard and inserts the text', async () => {
