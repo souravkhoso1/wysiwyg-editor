@@ -1,5 +1,6 @@
 var showingSourceCode = false;
 var isInEditMode = true;
+var isMarkdownMode = false;
 var editor = document.getElementById('editor');
 var savedRange = null;
 
@@ -165,6 +166,37 @@ function exportHTML() {
 	URL.revokeObjectURL(a.href);
 }
 
+function toggleMarkdown() {
+	var editorEl = document.getElementById('editor');
+	var counterEl = document.getElementById('editor-counter');
+	var markdownPane = document.getElementById('markdown-pane');
+	var btn = document.getElementById('btn-markdown');
+
+	isMarkdownMode = !isMarkdownMode;
+
+	if (isMarkdownMode) {
+		editorEl.classList.add('d-none');
+		counterEl.classList.add('d-none');
+		markdownPane.classList.remove('d-none');
+		btn.classList.replace('btn-outline-secondary', 'btn-primary');
+		setToolbarDisabled(true, 'btn-markdown');
+		document.getElementById('markdown-input').focus();
+	} else {
+		editorEl.classList.remove('d-none');
+		counterEl.classList.remove('d-none');
+		markdownPane.classList.add('d-none');
+		btn.classList.replace('btn-primary', 'btn-outline-secondary');
+		setToolbarDisabled(false);
+	}
+}
+
+var mdInput = document.getElementById('markdown-input');
+if (mdInput) {
+	mdInput.addEventListener('input', function() {
+		document.getElementById('markdown-preview').innerHTML = marked.parse(this.value);
+	});
+}
+
 function toggleEdit() {
 	var btn = document.getElementById('btn-toggle-edit');
 	if (isInEditMode) {
@@ -198,5 +230,7 @@ if (typeof module !== 'undefined' && module.exports) {
 		clearAll,
 		exportHTML,
 		toggleEdit,
+		toggleMarkdown,
+		setToolbarDisabled,
 	};
 }
