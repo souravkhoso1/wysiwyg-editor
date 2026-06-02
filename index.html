@@ -159,8 +159,7 @@
 		<button title="Redo" onmousedown="event.preventDefault()" onclick="execCmd('redo');"><i class="fas fa-rotate-right" aria-hidden="true"></i></button>
 		<button title="Bullet List" onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul" aria-hidden="true"></i></button>
 		<button title="Numbered List" onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol" aria-hidden="true"></i></button>
-		<button title="Insert Paragraph" onmousedown="event.preventDefault()" onclick="execCmd('insertParagraph');"><i class="fas fa-paragraph" aria-hidden="true"></i></button>
-		<select title="Heading" onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
+<select title="Heading" onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
 			<option value="">Heading</option>
 			<option value="H1">H1</option>
 			<option value="H2">H2</option>
