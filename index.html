@@ -5,26 +5,26 @@
 	<title>Rich Text Editor in JS</title>
 	<script src="https://use.fontawesome.com/8f3ca13943.js"></script>
 </head>
-<body onload="enableEditMode();">
-	<div>
-		<button onclick="execCmd('bold');" ><i class="fa fa-bold" aria-hidden="true"></i></button>
-		<button onclick="execCmd('italic');" ><i class="fa fa-italic" aria-hidden="true"></i></button>
-		<button onclick="execCmd('underline');" ><i class="fa fa-underline" aria-hidden="true"></i></button>
-		<button onclick="execCmd('strikeThrough');" ><i class="fa fa-strikethrough" aria-hidden="true"></i></button>
-		<button onclick="execCmd('justifyLeft');" ><i class="fa fa-align-left" aria-hidden="true"></i></button>
-		<button onclick="execCmd('justifyRight');" ><i class="fa fa-align-right" aria-hidden="true"></i></button>
-		<button onclick="execCmd('justifyFull');" ><i class="fa fa-align-justified" aria-hidden="true"></i></button>
-		<button onclick="execCmd('cut');" ><i class="fa fa-cut" aria-hidden="true"></i></button>
-		<button onclick="execCmd('copy');" ><i class="fa fa-copy" aria-hidden="true"></i></button>
-		<button onclick="execCmd('indent');" ><i class="fa fa-indent" aria-hidden="true"></i></button>
-		<button onclick="execCmd('outdent');" ><i class="fa fa-dedent" aria-hidden="true"></i></button>
-		<button onclick="execCmd('subscript');" ><i class="fa fa-subscript" aria-hidden="true"></i></button>
-		<button onclick="execCmd('superscript');" ><i class="fa fa-superscript" aria-hidden="true"></i></button>
-		<button onclick="execCmd('undo');" ><i class="fa fa-undo" aria-hidden="true"></i></button>
-		<button onclick="execCmd('redo');" ><i class="fa fa-repeat" aria-hidden="true"></i></button>
-		<button onclick="execCmd('insertUnorderedList');" ><i class="fa fa-list-ul" aria-hidden="true"></i></button>
-		<button onclick="execCmd('insertOrderedList');" ><i class="fa fa-list-ol" aria-hidden="true"></i></button>
-		<button onclick="execCmd('insertParagraph');" ><i class="fa fa-paragraph" aria-hidden="true"></i></button>
+<body>
+	<div id="toolbar">
+		<button onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fa fa-bold" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fa fa-italic" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fa fa-underline" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fa fa-strikethrough" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fa fa-align-left" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fa fa-align-right" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fa fa-align-justified" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('cut');"><i class="fa fa-cut" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('copy');"><i class="fa fa-copy" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fa fa-indent" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fa fa-dedent" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fa fa-subscript" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('superscript');"><i class="fa fa-superscript" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('undo');"><i class="fa fa-undo" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('redo');"><i class="fa fa-repeat" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fa fa-list-ul" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('insertParagraph');"><i class="fa fa-paragraph" aria-hidden="true"></i></button>
 		<select onchange="execCommandWithArg('formatBlock', this.value);">
 			<option value="H1">H1</option>
 			<option value="H2">H2</option>
@@ -33,11 +33,11 @@
 			<option value="H5">H5</option>
 			<option value="H6">H6</option>
 		</select>
-		<button onclick="execCmd('insertHorizontalRule');" >HR</button>
-		<button onclick="execCommandWithArg('createLink', prompt('Enter a URL', 'http://'));" ><i class="fa fa-link" aria-hidden="true"></i></button>
-		<button onclick="execCmd('unlink');" ><i class="fa fa-unlink" aria-hidden="true"></i></button>
-		<button onclick="toggleSource();" ><i class="fa fa-code" aria-hidden="true"></i></button>
-		<button onclick="toggleEdit();" >Toggle Edit</button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('insertHorizontalRule');">HR</button>
+		<button onmousedown="event.preventDefault()" onclick="execCommandWithArg('createLink', prompt('Enter a URL', 'http://'));"><i class="fa fa-link" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fa fa-unlink" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fa fa-code" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="toggleEdit();">Toggle Edit</button>
 		<br>
 		<select onchange="execCommandWithArg('fontName', this.value);">
 			<option value="Arial">Arial</option>
@@ -57,45 +57,63 @@
 			<option value="6">6</option>
 			<option value="7">7</option>
 		</select>
-		Fore color:<input type="color" name="" onchange="execCommandWithArg('foreColor', this.value);" />
-		Background color:<input type="color" name="" onchange="execCommandWithArg('hiliteColor', this.value);" />
-		<button onclick="execCommandWithArg('insertImage', prompt('Enter the image URL', 'http://'));" ><i class="fa fa-file-image-o" aria-hidden="true"></i></button>
-		<button onclick="execCmd('selectAll');" >Select All</button>
+		Fore color:<input type="color" onchange="execCommandWithArg('foreColor', this.value);" />
+		Background color:<input type="color" onchange="execCommandWithArg('hiliteColor', this.value);" />
+		<button onmousedown="event.preventDefault()" onclick="execCommandWithArg('insertImage', prompt('Enter the image URL', 'http://'));"><i class="fa fa-file-image-o" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">Select All</button>
 	</div>
-	<iframe name="richTextField" style="width:1000px;height:500px;border:1px solid black" src="" frameborder="0"></iframe>
+	<div id="editor" contenteditable="true" style="width:1000px;height:500px;border:1px solid black;overflow:auto;padding:8px;"></div>
 	<script type="text/javascript">
 
 		var showingSourceCode = false;
 		var isInEditMode = true;
-		
-		function enableEditMode(){
-			richTextField.document.designMode = 'On';
+		var editor = document.getElementById('editor');
+		var savedRange = null;
+
+		document.addEventListener('selectionchange', function() {
+			var sel = window.getSelection();
+			if (sel.rangeCount > 0 && editor.contains(sel.anchorNode)) {
+				savedRange = sel.getRangeAt(0).cloneRange();
+			}
+		});
+
+		function restoreSelection() {
+			editor.focus();
+			if (savedRange) {
+				var sel = window.getSelection();
+				sel.removeAllRanges();
+				sel.addRange(savedRange);
+			}
 		}
 
-		function execCmd(command){
-			richTextField.document.execCommand(command, false, null);
+		function execCmd(command) {
+			restoreSelection();
+			document.execCommand(command, false, null);
 		}
 
-		function execCommandWithArg(command, arg){
-			richTextField.document.execCommand(command, false, arg);
+		function execCommandWithArg(command, arg) {
+			restoreSelection();
+			document.execCommand(command, false, arg);
 		}
 
-		function toggleSource(){
-			if(showingSourceCode){
-				richTextField.document.getElementByTagName('body')[0].innerHTML = richTextField.document.getElementByTagName('body')[0].textContent;
+		function toggleSource() {
+			if (showingSourceCode) {
+				editor.innerHTML = editor.textContent;
+				editor.contentEditable = 'true';
 				showingSourceCode = false;
 			} else {
-				richTextField.document.getElementByTagName('body')[0].textContent = richTextField.document.getElementByTagName('body')[0].innerHTML;
+				editor.textContent = editor.innerHTML;
+				editor.contentEditable = 'false';
 				showingSourceCode = true;
 			}
 		}
 
-		function toggleEdit(){
-			if(isInEditMode){
-				richTextField.document.designMode = 'Off';
+		function toggleEdit() {
+			if (isInEditMode) {
+				editor.contentEditable = 'false';
 				isInEditMode = false;
 			} else {
-				richTextField.document.designMode = 'On';
+				editor.contentEditable = 'true';
 				isInEditMode = true;
 			}
 		}
