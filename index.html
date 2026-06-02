@@ -176,6 +176,7 @@
 		<button title="Toggle Source HTML" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code" aria-hidden="true"></i></button>
 		<button title="Toggle Edit Mode" onmousedown="event.preventDefault()" onclick="toggleEdit();">Toggle Edit</button>
 		<button title="Print" onmousedown="event.preventDefault()" onclick="window.print();"><i class="fas fa-print" aria-hidden="true"></i></button>
+		<button title="Export as HTML" onmousedown="event.preventDefault()" onclick="exportHTML();"><i class="fas fa-download" aria-hidden="true"></i></button>
 		<br>
 		<select title="Font Family" onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
 			<option value="">Font</option>
@@ -298,6 +299,16 @@
 			if (e.key === 'Enter') confirmUrl();
 			if (e.key === 'Escape') closeUrlBar();
 		});
+
+		function exportHTML() {
+			var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + editor.innerHTML + '</body></html>';
+			var blob = new Blob([html], { type: 'text/html' });
+			var a = document.createElement('a');
+			a.href = URL.createObjectURL(blob);
+			a.download = 'document.html';
+			a.click();
+			URL.revokeObjectURL(a.href);
+		}
 
 		function toggleEdit() {
 			if (isInEditMode) {
