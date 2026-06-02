@@ -187,14 +187,15 @@
 			<option value="Times New Roman">Times New Roman</option>
 			<option value="Verdana">Verdana</option>
 		</select>
-		<select title="Font Size" onchange="execCommandWithArg('fontSize', this.value);">
-			<option value="1">1</option>
-			<option value="2">2</option>
-			<option value="3">3</option>
-			<option value="4">4</option>
-			<option value="5">5</option>
-			<option value="6">6</option>
-			<option value="7">7</option>
+		<select title="Font Size" onchange="if(this.value) execCommandWithArg('fontSize', this.value); this.selectedIndex = 0;">
+			<option value="">Size</option>
+			<option value="1">Tiny</option>
+			<option value="2">Small</option>
+			<option value="3">Normal</option>
+			<option value="4">Medium</option>
+			<option value="5">Large</option>
+			<option value="6">X-Large</option>
+			<option value="7">Huge</option>
 		</select>
 		<label>Fore color:<input type="color" oninput="execCommandWithArg('foreColor', this.value);" /></label>
 		<label>Background color:<input type="color" oninput="execCommandWithArg('hiliteColor', this.value);" /></label>
