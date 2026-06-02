@@ -141,10 +141,10 @@
 <body>
 	<div class="editor-wrapper">
 	<div id="toolbar">
-		<button title="Bold" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold" aria-hidden="true"></i></button>
-		<button title="Italic" onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic" aria-hidden="true"></i></button>
-		<button title="Underline" onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fas fa-underline" aria-hidden="true"></i></button>
-		<button title="Strikethrough" onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough" aria-hidden="true"></i></button>
+		<button id="btn-bold" title="Bold" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold" aria-hidden="true"></i></button>
+		<button id="btn-italic" title="Italic" onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic" aria-hidden="true"></i></button>
+		<button id="btn-underline" title="Underline" onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fas fa-underline" aria-hidden="true"></i></button>
+		<button id="btn-strikeThrough" title="Strikethrough" onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough" aria-hidden="true"></i></button>
 		<button title="Align Left" onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fas fa-align-left" aria-hidden="true"></i></button>
 		<button title="Align Center" onmousedown="event.preventDefault()" onclick="execCmd('justifyCenter');"><i class="fas fa-align-center" aria-hidden="true"></i></button>
 		<button title="Align Right" onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fas fa-align-right" aria-hidden="true"></i></button>
@@ -220,8 +220,18 @@
 			var sel = window.getSelection();
 			if (sel.rangeCount > 0 && editor.contains(sel.anchorNode)) {
 				savedRange = sel.getRangeAt(0).cloneRange();
+				updateToolbarState();
 			}
 		});
+
+		var FORMAT_CMDS = ['bold', 'italic', 'underline', 'strikeThrough'];
+
+		function updateToolbarState() {
+			FORMAT_CMDS.forEach(function(cmd) {
+				var btn = document.getElementById('btn-' + cmd);
+				if (btn) btn.classList.toggle('active', document.queryCommandState(cmd));
+			});
+		}
 
 		function restoreSelection() {
 			editor.focus();
