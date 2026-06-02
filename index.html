@@ -202,6 +202,7 @@
 		<label>Background color:<input type="color" oninput="execCommandWithArg('hiliteColor', this.value);" /></label>
 		<button title="Insert Image" onmousedown="event.preventDefault()" onclick="openUrlBar('image');"><i class="fas fa-image" aria-hidden="true"></i></button>
 		<button title="Select All" onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">Select All</button>
+		<button title="Clear All" onmousedown="event.preventDefault()" onclick="clearAll();">Clear All</button>
 	</div>
 	<div id="url-bar" style="display:none;">
 		<input type="text" id="url-input" placeholder="https://" />
@@ -344,6 +345,11 @@
 			if (e.key === 'Enter') confirmUrl();
 			if (e.key === 'Escape') closeUrlBar();
 		});
+
+		function clearAll() {
+			editor.innerHTML = '';
+			editor.focus();
+		}
 
 		function exportHTML() {
 			var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + editor.innerHTML + '</body></html>';
