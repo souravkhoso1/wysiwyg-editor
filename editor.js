@@ -222,6 +222,15 @@ function toggleEdit() {
 	}
 }
 
+(function() {
+	if (!/Mac/i.test(navigator.platform)) return;
+	document.querySelectorAll('.key-mod').forEach(function(el) {
+		el.textContent = '⌘';
+	});
+	var redoCell = document.getElementById('shortcut-redo');
+	if (redoCell) redoCell.innerHTML = '<kbd>⌘ + Shift + Z</kbd>';
+})();
+
 if (typeof module !== 'undefined' && module.exports) {
 	module.exports = {
 		execCmd,
