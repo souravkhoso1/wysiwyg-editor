@@ -1,0 +1,12 @@
+#editor {
+	outline: none;
+	min-height: 400px;
+	font-size: 15px;
+	line-height: 1.6;
+	cursor: text;
+}
+
+#editor:focus {
+	border-color: #86b7fe !important;
+	box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+}
