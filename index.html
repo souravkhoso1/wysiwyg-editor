@@ -105,26 +105,26 @@
 <body>
 	<div class="editor-wrapper">
 	<div id="toolbar">
-		<button onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fas fa-underline" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fas fa-align-left" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyCenter');"><i class="fas fa-align-center" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fas fa-align-right" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fas fa-align-justify" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="cutText();"><i class="fas fa-scissors" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="copyText();"><i class="fas fa-copy" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fas fa-indent" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fas fa-outdent" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fas fa-subscript" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('superscript');"><i class="fas fa-superscript" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('undo');"><i class="fas fa-rotate-left" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('redo');"><i class="fas fa-rotate-right" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('insertParagraph');"><i class="fas fa-paragraph" aria-hidden="true"></i></button>
-		<select onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
+		<button title="Bold" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold" aria-hidden="true"></i></button>
+		<button title="Italic" onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic" aria-hidden="true"></i></button>
+		<button title="Underline" onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fas fa-underline" aria-hidden="true"></i></button>
+		<button title="Strikethrough" onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough" aria-hidden="true"></i></button>
+		<button title="Align Left" onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fas fa-align-left" aria-hidden="true"></i></button>
+		<button title="Align Center" onmousedown="event.preventDefault()" onclick="execCmd('justifyCenter');"><i class="fas fa-align-center" aria-hidden="true"></i></button>
+		<button title="Align Right" onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fas fa-align-right" aria-hidden="true"></i></button>
+		<button title="Justify" onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fas fa-align-justify" aria-hidden="true"></i></button>
+		<button title="Cut" onmousedown="event.preventDefault()" onclick="cutText();"><i class="fas fa-scissors" aria-hidden="true"></i></button>
+		<button title="Copy" onmousedown="event.preventDefault()" onclick="copyText();"><i class="fas fa-copy" aria-hidden="true"></i></button>
+		<button title="Indent" onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fas fa-indent" aria-hidden="true"></i></button>
+		<button title="Outdent" onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fas fa-outdent" aria-hidden="true"></i></button>
+		<button title="Subscript" onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fas fa-subscript" aria-hidden="true"></i></button>
+		<button title="Superscript" onmousedown="event.preventDefault()" onclick="execCmd('superscript');"><i class="fas fa-superscript" aria-hidden="true"></i></button>
+		<button title="Undo" onmousedown="event.preventDefault()" onclick="execCmd('undo');"><i class="fas fa-rotate-left" aria-hidden="true"></i></button>
+		<button title="Redo" onmousedown="event.preventDefault()" onclick="execCmd('redo');"><i class="fas fa-rotate-right" aria-hidden="true"></i></button>
+		<button title="Bullet List" onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul" aria-hidden="true"></i></button>
+		<button title="Numbered List" onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol" aria-hidden="true"></i></button>
+		<button title="Insert Paragraph" onmousedown="event.preventDefault()" onclick="execCmd('insertParagraph');"><i class="fas fa-paragraph" aria-hidden="true"></i></button>
+		<select title="Heading" onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
 			<option value="">Heading</option>
 			<option value="H1">H1</option>
 			<option value="H2">H2</option>
@@ -133,13 +133,13 @@
 			<option value="H5">H5</option>
 			<option value="H6">H6</option>
 		</select>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('insertHorizontalRule');">HR</button>
-		<button onmousedown="event.preventDefault()" onclick="execCommandWithArg('createLink', prompt('Enter a URL', 'http://'));"><i class="fas fa-link" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="toggleEdit();">Toggle Edit</button>
+		<button title="Horizontal Rule" onmousedown="event.preventDefault()" onclick="execCmd('insertHorizontalRule');">HR</button>
+		<button title="Insert Link" onmousedown="event.preventDefault()" onclick="execCommandWithArg('createLink', prompt('Enter a URL', 'http://'));"><i class="fas fa-link" aria-hidden="true"></i></button>
+		<button title="Remove Link" onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash" aria-hidden="true"></i></button>
+		<button title="Toggle Source HTML" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code" aria-hidden="true"></i></button>
+		<button title="Toggle Edit Mode" onmousedown="event.preventDefault()" onclick="toggleEdit();">Toggle Edit</button>
 		<br>
-		<select onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
+		<select title="Font Family" onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
 			<option value="">Font</option>
 			<option value="Arial">Arial</option>
 			<option value="Comic Sans MS">Comic Sans MS</option>
@@ -149,7 +149,7 @@
 			<option value="Times New Roman">Times New Roman</option>
 			<option value="Verdana">Verdana</option>
 		</select>
-		<select onchange="execCommandWithArg('fontSize', this.value);">
+		<select title="Font Size" onchange="execCommandWithArg('fontSize', this.value);">
 			<option value="1">1</option>
 			<option value="2">2</option>
 			<option value="3">3</option>
@@ -160,8 +160,8 @@
 		</select>
 		<label>Fore color:<input type="color" oninput="execCommandWithArg('foreColor', this.value);" /></label>
 		<label>Background color:<input type="color" oninput="execCommandWithArg('hiliteColor', this.value);" /></label>
-		<button onmousedown="event.preventDefault()" onclick="execCommandWithArg('insertImage', prompt('Enter the image URL', 'http://'));"><i class="fas fa-image" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">Select All</button>
+		<button title="Insert Image" onmousedown="event.preventDefault()" onclick="execCommandWithArg('insertImage', prompt('Enter the image URL', 'http://'));"><i class="fas fa-image" aria-hidden="true"></i></button>
+		<button title="Select All" onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">Select All</button>
 	</div>
 	<div id="editor" contenteditable="true"></div>
 	</div>
