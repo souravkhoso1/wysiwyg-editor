@@ -6,376 +6,82 @@
 	<meta name="description" content="A lightweight WYSIWYG rich text editor built with vanilla JavaScript.">
 	<title>WYSIWYG Editor</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<style>
-		*, *::before, *::after { box-sizing: border-box; }
-
-		body {
-			margin: 0;
-			padding: 16px;
-			font-family: system-ui, sans-serif;
-			background: #f5f5f5;
-			color: #222;
-		}
-
-		.editor-wrapper {
-			max-width: 960px;
-			margin: 0 auto;
-		}
-
-		#toolbar {
-			display: flex;
-			flex-wrap: wrap;
-			align-items: center;
-			gap: 4px;
-			background: #fff;
-			border: 1px solid #d0d0d0;
-			border-bottom: none;
-			border-radius: 6px 6px 0 0;
-			padding: 6px 8px;
-		}
-
-		#toolbar button {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			min-width: 30px;
-			height: 30px;
-			padding: 0 6px;
-			border: 1px solid transparent;
-			border-radius: 4px;
-			background: none;
-			cursor: pointer;
-			font-size: 13px;
-			color: #444;
-			transition: background 0.15s, border-color 0.15s;
-		}
-
-		#toolbar button:hover {
-			background: #e8e8e8;
-			border-color: #c0c0c0;
-		}
-
-		#toolbar button:active,
-		#toolbar button.active {
-			background: #d0e4ff;
-			border-color: #4a90d9;
-			color: #1a5fb4;
-		}
-
-		#toolbar select {
-			height: 30px;
-			padding: 0 4px;
-			border: 1px solid #c0c0c0;
-			border-radius: 4px;
-			background: #fff;
-			font-size: 13px;
-			cursor: pointer;
-		}
-
-		#toolbar input[type="color"] {
-			width: 30px;
-			height: 30px;
-			padding: 2px;
-			border: 1px solid #c0c0c0;
-			border-radius: 4px;
-			cursor: pointer;
-			vertical-align: middle;
-		}
-
-		#toolbar label {
-			font-size: 12px;
-			color: #666;
-		}
-
-		#editor {
-			background: #fff;
-			border: 1px solid #d0d0d0;
-			border-radius: 0 0 6px 6px;
-			padding: 16px;
-			outline: none;
-			min-height: 400px;
-			font-size: 15px;
-			line-height: 1.6;
-		}
-
-		#editor:focus {
-			border-color: #4a90d9;
-			box-shadow: 0 0 0 2px rgba(74,144,217,0.2);
-		}
-
-		#url-bar {
-			display: flex;
-			align-items: center;
-			gap: 6px;
-			padding: 6px 8px;
-			background: #eef4ff;
-			border: 1px solid #d0d0d0;
-			border-top: none;
-			border-bottom: none;
-		}
-
-		#url-bar input[type="text"] {
-			flex: 1;
-			height: 30px;
-			padding: 0 8px;
-			border: 1px solid #c0c0c0;
-			border-radius: 4px;
-			font-size: 13px;
-		}
-
-		#url-bar button {
-			height: 30px;
-			padding: 0 12px;
-			border: 1px solid #c0c0c0;
-			border-radius: 4px;
-			background: #fff;
-			cursor: pointer;
-			font-size: 13px;
-		}
-
-		#url-bar button:hover {
-			background: #e8e8e8;
-		}
-	</style>
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 	<div class="editor-wrapper">
-	<div id="toolbar">
-		<button id="btn-bold" title="Bold" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold" aria-hidden="true"></i></button>
-		<button id="btn-italic" title="Italic" onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic" aria-hidden="true"></i></button>
-		<button id="btn-underline" title="Underline" onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fas fa-underline" aria-hidden="true"></i></button>
-		<button id="btn-strikeThrough" title="Strikethrough" onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough" aria-hidden="true"></i></button>
-		<button title="Align Left" onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fas fa-align-left" aria-hidden="true"></i></button>
-		<button title="Align Center" onmousedown="event.preventDefault()" onclick="execCmd('justifyCenter');"><i class="fas fa-align-center" aria-hidden="true"></i></button>
-		<button title="Align Right" onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fas fa-align-right" aria-hidden="true"></i></button>
-		<button title="Justify" onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fas fa-align-justify" aria-hidden="true"></i></button>
-		<button title="Cut" onmousedown="event.preventDefault()" onclick="cutText();"><i class="fas fa-scissors" aria-hidden="true"></i></button>
-		<button title="Copy" onmousedown="event.preventDefault()" onclick="copyText();"><i class="fas fa-copy" aria-hidden="true"></i></button>
-		<button title="Paste" onmousedown="event.preventDefault()" onclick="pasteText();"><i class="fas fa-paste" aria-hidden="true"></i></button>
-		<button title="Indent" onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fas fa-indent" aria-hidden="true"></i></button>
-		<button title="Outdent" onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fas fa-outdent" aria-hidden="true"></i></button>
-		<button title="Subscript" onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fas fa-subscript" aria-hidden="true"></i></button>
-		<button title="Superscript" onmousedown="event.preventDefault()" onclick="execCmd('superscript');"><i class="fas fa-superscript" aria-hidden="true"></i></button>
-		<button title="Undo" onmousedown="event.preventDefault()" onclick="execCmd('undo');"><i class="fas fa-rotate-left" aria-hidden="true"></i></button>
-		<button title="Redo" onmousedown="event.preventDefault()" onclick="execCmd('redo');"><i class="fas fa-rotate-right" aria-hidden="true"></i></button>
-		<button title="Bullet List" onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul" aria-hidden="true"></i></button>
-		<button title="Numbered List" onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol" aria-hidden="true"></i></button>
-<select title="Heading" onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
-			<option value="">Heading</option>
-			<option value="H1">H1</option>
-			<option value="H2">H2</option>
-			<option value="H3">H3</option>
-			<option value="H4">H4</option>
-			<option value="H5">H5</option>
-			<option value="H6">H6</option>
-		</select>
-		<button title="Horizontal Rule" onmousedown="event.preventDefault()" onclick="execCmd('insertHorizontalRule');">HR</button>
-		<button title="Insert Link" onmousedown="event.preventDefault()" onclick="openUrlBar('link');"><i class="fas fa-link" aria-hidden="true"></i></button>
-		<button title="Remove Link" onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash" aria-hidden="true"></i></button>
-		<button title="Clear Formatting" onmousedown="event.preventDefault()" onclick="execCmd('removeFormat');"><i class="fas fa-eraser" aria-hidden="true"></i></button>
-		<button title="Toggle Source HTML" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code" aria-hidden="true"></i></button>
-		<button id="btn-toggle-edit" title="Toggle Edit Mode" onmousedown="event.preventDefault()" onclick="toggleEdit();" class="active">Editing: ON</button>
-		<button title="Print" onmousedown="event.preventDefault()" onclick="window.print();"><i class="fas fa-print" aria-hidden="true"></i></button>
-		<button title="Export as HTML" onmousedown="event.preventDefault()" onclick="exportHTML();"><i class="fas fa-download" aria-hidden="true"></i></button>
-		<br>
-		<select title="Font Family" onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
-			<option value="">Font</option>
-			<option value="Arial">Arial</option>
-			<option value="Comic Sans MS">Comic Sans MS</option>
-			<option value="Courier">Courier</option>
-			<option value="Georgia">Georgia</option>
-			<option value="Tahoma">Tahoma</option>
-			<option value="Times New Roman">Times New Roman</option>
-			<option value="Verdana">Verdana</option>
-		</select>
-		<select title="Font Size" onchange="if(this.value) execCommandWithArg('fontSize', this.value); this.selectedIndex = 0;">
-			<option value="">Size</option>
-			<option value="1">Tiny</option>
-			<option value="2">Small</option>
-			<option value="3">Normal</option>
-			<option value="4">Medium</option>
-			<option value="5">Large</option>
-			<option value="6">X-Large</option>
-			<option value="7">Huge</option>
-		</select>
-		<label>Fore color:<input type="color" oninput="execCommandWithArg('foreColor', this.value);" /></label>
-		<label>Background color:<input type="color" oninput="execCommandWithArg('hiliteColor', this.value);" /></label>
-		<button title="Insert Image" onmousedown="event.preventDefault()" onclick="openUrlBar('image');"><i class="fas fa-image" aria-hidden="true"></i></button>
-		<button title="Select All" onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">Select All</button>
-		<button title="Clear All" onmousedown="event.preventDefault()" onclick="clearAll();">Clear All</button>
+		<div id="toolbar">
+			<button id="btn-bold" title="Bold" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold" aria-hidden="true"></i></button>
+			<button id="btn-italic" title="Italic" onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic" aria-hidden="true"></i></button>
+			<button id="btn-underline" title="Underline" onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fas fa-underline" aria-hidden="true"></i></button>
+			<button id="btn-strikeThrough" title="Strikethrough" onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough" aria-hidden="true"></i></button>
+			<button title="Align Left" onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fas fa-align-left" aria-hidden="true"></i></button>
+			<button title="Align Center" onmousedown="event.preventDefault()" onclick="execCmd('justifyCenter');"><i class="fas fa-align-center" aria-hidden="true"></i></button>
+			<button title="Align Right" onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fas fa-align-right" aria-hidden="true"></i></button>
+			<button title="Justify" onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fas fa-align-justify" aria-hidden="true"></i></button>
+			<button title="Cut" onmousedown="event.preventDefault()" onclick="cutText();"><i class="fas fa-scissors" aria-hidden="true"></i></button>
+			<button title="Copy" onmousedown="event.preventDefault()" onclick="copyText();"><i class="fas fa-copy" aria-hidden="true"></i></button>
+			<button title="Paste" onmousedown="event.preventDefault()" onclick="pasteText();"><i class="fas fa-paste" aria-hidden="true"></i></button>
+			<button title="Indent" onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fas fa-indent" aria-hidden="true"></i></button>
+			<button title="Outdent" onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fas fa-outdent" aria-hidden="true"></i></button>
+			<button title="Subscript" onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fas fa-subscript" aria-hidden="true"></i></button>
+			<button title="Superscript" onmousedown="event.preventDefault()" onclick="execCmd('superscript');"><i class="fas fa-superscript" aria-hidden="true"></i></button>
+			<button title="Undo" onmousedown="event.preventDefault()" onclick="execCmd('undo');"><i class="fas fa-rotate-left" aria-hidden="true"></i></button>
+			<button title="Redo" onmousedown="event.preventDefault()" onclick="execCmd('redo');"><i class="fas fa-rotate-right" aria-hidden="true"></i></button>
+			<button title="Bullet List" onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul" aria-hidden="true"></i></button>
+			<button title="Numbered List" onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol" aria-hidden="true"></i></button>
+			<select title="Heading" onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
+				<option value="">Heading</option>
+				<option value="H1">H1</option>
+				<option value="H2">H2</option>
+				<option value="H3">H3</option>
+				<option value="H4">H4</option>
+				<option value="H5">H5</option>
+				<option value="H6">H6</option>
+			</select>
+			<button title="Horizontal Rule" onmousedown="event.preventDefault()" onclick="execCmd('insertHorizontalRule');">HR</button>
+			<button title="Insert Link" onmousedown="event.preventDefault()" onclick="openUrlBar('link');"><i class="fas fa-link" aria-hidden="true"></i></button>
+			<button title="Remove Link" onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash" aria-hidden="true"></i></button>
+			<button title="Clear Formatting" onmousedown="event.preventDefault()" onclick="execCmd('removeFormat');"><i class="fas fa-eraser" aria-hidden="true"></i></button>
+			<button title="Toggle Source HTML" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code" aria-hidden="true"></i></button>
+			<button id="btn-toggle-edit" title="Toggle Edit Mode" onmousedown="event.preventDefault()" onclick="toggleEdit();" class="active">Editing: ON</button>
+			<button title="Print" onmousedown="event.preventDefault()" onclick="window.print();"><i class="fas fa-print" aria-hidden="true"></i></button>
+			<button title="Export as HTML" onmousedown="event.preventDefault()" onclick="exportHTML();"><i class="fas fa-download" aria-hidden="true"></i></button>
+			<br>
+			<select title="Font Family" onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
+				<option value="">Font</option>
+				<option value="Arial">Arial</option>
+				<option value="Comic Sans MS">Comic Sans MS</option>
+				<option value="Courier">Courier</option>
+				<option value="Georgia">Georgia</option>
+				<option value="Tahoma">Tahoma</option>
+				<option value="Times New Roman">Times New Roman</option>
+				<option value="Verdana">Verdana</option>
+			</select>
+			<select title="Font Size" onchange="if(this.value) execCommandWithArg('fontSize', this.value); this.selectedIndex = 0;">
+				<option value="">Size</option>
+				<option value="1">Tiny</option>
+				<option value="2">Small</option>
+				<option value="3">Normal</option>
+				<option value="4">Medium</option>
+				<option value="5">Large</option>
+				<option value="6">X-Large</option>
+				<option value="7">Huge</option>
+			</select>
+			<label>Fore color:<input type="color" oninput="execCommandWithArg('foreColor', this.value);" /></label>
+			<label>Background color:<input type="color" oninput="execCommandWithArg('hiliteColor', this.value);" /></label>
+			<button title="Insert Image" onmousedown="event.preventDefault()" onclick="openUrlBar('image');"><i class="fas fa-image" aria-hidden="true"></i></button>
+			<button title="Select All" onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">Select All</button>
+			<button title="Clear All" onmousedown="event.preventDefault()" onclick="clearAll();">Clear All</button>
+		</div>
+		<div id="url-bar" style="display:none;">
+			<input type="text" id="url-input" placeholder="https://" />
+			<button onclick="confirmUrl();">Insert</button>
+			<button onclick="closeUrlBar();">Cancel</button>
+			<span id="url-error" style="color:#c0392b;font-size:13px;display:none;"></span>
+		</div>
+		<div id="editor" contenteditable="true"></div>
 	</div>
-	<div id="url-bar" style="display:none;">
-		<input type="text" id="url-input" placeholder="https://" />
-		<button onclick="confirmUrl();">Insert</button>
-		<button onclick="closeUrlBar();">Cancel</button>
-		<span id="url-error" style="color:#c0392b;font-size:13px;display:none;"></span>
-	</div>
-	<div id="editor" contenteditable="true"></div>
-	</div>
-	<script type="text/javascript">
-
-		var showingSourceCode = false;
-		var isInEditMode = true;
-		var editor = document.getElementById('editor');
-		var savedRange = null;
-
-		document.addEventListener('selectionchange', function() {
-			var sel = window.getSelection();
-			if (sel.rangeCount > 0 && editor.contains(sel.anchorNode)) {
-				savedRange = sel.getRangeAt(0).cloneRange();
-				updateToolbarState();
-			}
-		});
-
-		var FORMAT_CMDS = ['bold', 'italic', 'underline', 'strikeThrough'];
-
-		function updateToolbarState() {
-			FORMAT_CMDS.forEach(function(cmd) {
-				var btn = document.getElementById('btn-' + cmd);
-				if (btn) btn.classList.toggle('active', document.queryCommandState(cmd));
-			});
-		}
-
-		function restoreSelection() {
-			editor.focus();
-			if (savedRange) {
-				var sel = window.getSelection();
-				sel.removeAllRanges();
-				sel.addRange(savedRange);
-			}
-		}
-
-		function execCmd(command) {
-			restoreSelection();
-			document.execCommand(command, false, null);
-		}
-
-		function execCommandWithArg(command, arg) {
-			restoreSelection();
-			document.execCommand(command, false, arg);
-		}
-
-		function toggleSource() {
-			if (showingSourceCode) {
-				editor.innerHTML = editor.textContent;
-				editor.contentEditable = 'true';
-				showingSourceCode = false;
-			} else {
-				editor.textContent = editor.innerHTML;
-				editor.contentEditable = 'false';
-				showingSourceCode = true;
-			}
-		}
-
-		async function copyText() {
-			var sel = window.getSelection();
-			if (sel && sel.toString()) {
-				await navigator.clipboard.writeText(sel.toString());
-			}
-		}
-
-		async function pasteText() {
-			try {
-				var text = await navigator.clipboard.readText();
-				restoreSelection();
-				document.execCommand('insertText', false, text);
-			} catch (err) {
-				// clipboard read permission denied or clipboard empty
-			}
-		}
-
-		async function cutText() {
-			var sel = window.getSelection();
-			if (sel && sel.toString()) {
-				await navigator.clipboard.writeText(sel.toString());
-				document.execCommand('delete');
-			}
-		}
-
-		var urlMode = null;
-
-		function openUrlBar(mode) {
-			savedRange = savedRange || (window.getSelection().rangeCount > 0 ? window.getSelection().getRangeAt(0).cloneRange() : null);
-			urlMode = mode;
-			var bar = document.getElementById('url-bar');
-			var input = document.getElementById('url-input');
-			input.value = 'https://';
-			bar.style.display = 'flex';
-			input.focus();
-			input.select();
-		}
-
-		function confirmUrl() {
-			var url = document.getElementById('url-input').value.trim();
-			var mode = urlMode;
-			closeUrlBar();
-			if (!url || !mode) return;
-			if (mode === 'link') {
-				execCommandWithArg('createLink', url);
-			} else if (mode === 'image') {
-				insertImageFromUrl(url);
-			}
-		}
-
-		function showUrlError(msg) {
-			var el = document.getElementById('url-error');
-			el.textContent = msg;
-			el.style.display = 'inline';
-		}
-
-		function insertImageFromUrl(url) {
-			var img = new Image();
-			img.onload = function() {
-				execCommandWithArg('insertImage', url);
-			};
-			img.onerror = function() {
-				openUrlBar('image');
-				showUrlError('Could not load image — please check the URL.');
-			};
-			img.src = url;
-		}
-
-		function closeUrlBar() {
-			document.getElementById('url-bar').style.display = 'none';
-			document.getElementById('url-error').style.display = 'none';
-			urlMode = null;
-		}
-
-		document.getElementById('url-input').addEventListener('keydown', function(e) {
-			if (e.key === 'Enter') confirmUrl();
-			if (e.key === 'Escape') closeUrlBar();
-		});
-
-		function clearAll() {
-			editor.innerHTML = '';
-			editor.focus();
-		}
-
-		function exportHTML() {
-			var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + editor.innerHTML + '</body></html>';
-			var blob = new Blob([html], { type: 'text/html' });
-			var a = document.createElement('a');
-			a.href = URL.createObjectURL(blob);
-			a.download = 'document.html';
-			a.click();
-			URL.revokeObjectURL(a.href);
-		}
-
-		function toggleEdit() {
-			var btn = document.getElementById('btn-toggle-edit');
-			if (isInEditMode) {
-				editor.contentEditable = 'false';
-				isInEditMode = false;
-				btn.textContent = 'Editing: OFF';
-				btn.classList.remove('active');
-			} else {
-				editor.contentEditable = 'true';
-				isInEditMode = true;
-				btn.textContent = 'Editing: ON';
-				btn.classList.add('active');
-			}
-		}
-
-	</script>
+	<script src="editor.js"></script>
 </body>
 </html>
