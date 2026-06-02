@@ -151,6 +151,7 @@
 		<button title="Justify" onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fas fa-align-justify" aria-hidden="true"></i></button>
 		<button title="Cut" onmousedown="event.preventDefault()" onclick="cutText();"><i class="fas fa-scissors" aria-hidden="true"></i></button>
 		<button title="Copy" onmousedown="event.preventDefault()" onclick="copyText();"><i class="fas fa-copy" aria-hidden="true"></i></button>
+		<button title="Paste" onmousedown="event.preventDefault()" onclick="pasteText();"><i class="fas fa-paste" aria-hidden="true"></i></button>
 		<button title="Indent" onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fas fa-indent" aria-hidden="true"></i></button>
 		<button title="Outdent" onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fas fa-outdent" aria-hidden="true"></i></button>
 		<button title="Subscript" onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fas fa-subscript" aria-hidden="true"></i></button>
@@ -268,6 +269,16 @@
 			var sel = window.getSelection();
 			if (sel && sel.toString()) {
 				await navigator.clipboard.writeText(sel.toString());
+			}
+		}
+
+		async function pasteText() {
+			try {
+				var text = await navigator.clipboard.readText();
+				restoreSelection();
+				document.execCommand('insertText', false, text);
+			} catch (err) {
+				// clipboard read permission denied or clipboard empty
 			}
 		}
 
