@@ -3,6 +3,7 @@ var isInEditMode = true;
 var isMarkdownMode = false;
 var editor = document.getElementById('editor');
 var savedRange = null;
+var currentForeColor = null;
 
 document.addEventListener('selectionchange', function() {
 	var sel = window.getSelection();
@@ -37,8 +38,17 @@ function execCmd(command) {
 
 function execCommandWithArg(command, arg) {
 	restoreSelection();
+	if (command === 'foreColor') currentForeColor = arg;
 	document.execCommand(command, false, arg);
 }
+
+editor.addEventListener('keydown', function(e) {
+	if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
+	var sel = window.getSelection();
+	if (sel && sel.isCollapsed && currentForeColor) {
+		document.execCommand('foreColor', false, currentForeColor);
+	}
+});
 
 function setToolbarDisabled(disabled, keepEnabledId) {
 	document.getElementById('toolbar').querySelectorAll('button, select').forEach(function(el) {
@@ -148,11 +158,23 @@ function updateCounter() {
 	el.textContent = 'Words: ' + words + ' | Characters: ' + text.length;
 }
 
-editor.addEventListener('input', updateCounter);
+function updateEditorActions() {
+	var empty = editor.textContent.trim() === '';
+	var btnPrint = document.getElementById('btn-print');
+	var btnExport = document.getElementById('btn-export');
+	if (btnPrint) btnPrint.disabled = empty;
+	if (btnExport) btnExport.disabled = empty;
+}
+
+editor.addEventListener('input', function() {
+	updateCounter();
+	updateEditorActions();
+});
 
 function clearAll() {
 	editor.innerHTML = '';
 	updateCounter();
+	updateEditorActions();
 	editor.focus();
 }
 
@@ -212,6 +234,15 @@ function toggleEdit() {
 	}
 }
 
+(function() {
+	if (!/Mac/i.test(navigator.platform)) return;
+	document.querySelectorAll('.key-mod').forEach(function(el) {
+		el.textContent = '⌘';
+	});
+	var redoCell = document.getElementById('shortcut-redo');
+	if (redoCell) redoCell.innerHTML = '<kbd>⌘ + Shift + Z</kbd>';
+})();
+
 if (typeof module !== 'undefined' && module.exports) {
 	module.exports = {
 		execCmd,
@@ -233,5 +264,6 @@ if (typeof module !== 'undefined' && module.exports) {
 		toggleMarkdown,
 		setToolbarDisabled,
 		updateCounter,
+		updateEditorActions,
 	};
 }

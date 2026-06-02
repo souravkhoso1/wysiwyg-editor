@@ -89,8 +89,8 @@
 			<button title="Clear All" class="btn btn-sm btn-outline-danger" onmousedown="event.preventDefault()" onclick="clearAll();">Clear All</button>
 			<div class="vr mx-1"></div>
 			<button id="btn-toggle-edit" title="Toggle Edit Mode" class="btn btn-sm btn-success" onmousedown="event.preventDefault()" onclick="toggleEdit();">Editing: ON</button>
-			<button title="Print" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="window.print();"><i class="fas fa-print"></i></button>
-			<button title="Export as HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();"><i class="fas fa-download"></i></button>
+			<button id="btn-print" title="Print" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="window.print();" disabled><i class="fas fa-print"></i></button>
+			<button id="btn-export" title="Export as HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();" disabled><i class="fas fa-download"></i></button>
 			<button title="Keyboard Shortcuts" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#helpModal"><i class="fas fa-keyboard"></i></button>
 		</div>
 		<div id="url-bar" style="display:none;">
@@ -124,15 +124,15 @@
 							<tr><th>Shortcut</th><th>Action</th></tr>
 						</thead>
 						<tbody>
-							<tr><td><kbd>Ctrl + B</kbd></td><td>Bold</td></tr>
-							<tr><td><kbd>Ctrl + I</kbd></td><td>Italic</td></tr>
-							<tr><td><kbd>Ctrl + U</kbd></td><td>Underline</td></tr>
-							<tr><td><kbd>Ctrl + Z</kbd></td><td>Undo</td></tr>
-							<tr><td><kbd>Ctrl + Y</kbd></td><td>Redo</td></tr>
-							<tr><td><kbd>Ctrl + A</kbd></td><td>Select All</td></tr>
-							<tr><td><kbd>Ctrl + C</kbd></td><td>Copy</td></tr>
-							<tr><td><kbd>Ctrl + X</kbd></td><td>Cut</td></tr>
-							<tr><td><kbd>Ctrl + V</kbd></td><td>Paste</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + B</kbd></td><td>Bold</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + I</kbd></td><td>Italic</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + U</kbd></td><td>Underline</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + Z</kbd></td><td>Undo</td></tr>
+							<tr><td id="shortcut-redo"><kbd><span class="key-mod">Ctrl</span> + Y</kbd></td><td>Redo</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + A</kbd></td><td>Select All</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + C</kbd></td><td>Copy</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + X</kbd></td><td>Cut</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + V</kbd></td><td>Paste</td></tr>
 							<tr><td><kbd>Enter</kbd> in URL bar</td><td>Confirm insert link / image</td></tr>
 							<tr><td><kbd>Escape</kbd> in URL bar</td><td>Close URL bar</td></tr>
 						</tbody>
