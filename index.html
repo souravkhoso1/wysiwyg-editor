@@ -175,6 +175,7 @@
 		<button title="Clear Formatting" onmousedown="event.preventDefault()" onclick="execCmd('removeFormat');"><i class="fas fa-eraser" aria-hidden="true"></i></button>
 		<button title="Toggle Source HTML" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code" aria-hidden="true"></i></button>
 		<button title="Toggle Edit Mode" onmousedown="event.preventDefault()" onclick="toggleEdit();">Toggle Edit</button>
+		<button title="Print" onmousedown="event.preventDefault()" onclick="window.print();"><i class="fas fa-print" aria-hidden="true"></i></button>
 		<br>
 		<select title="Font Family" onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
 			<option value="">Font</option>
