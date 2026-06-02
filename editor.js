@@ -39,15 +39,24 @@ function execCommandWithArg(command, arg) {
 	document.execCommand(command, false, arg);
 }
 
+function setToolbarDisabled(disabled, keepEnabledId) {
+	document.getElementById('toolbar').querySelectorAll('button, select').forEach(function(el) {
+		if (keepEnabledId && el.id === keepEnabledId) return;
+		el.disabled = disabled;
+	});
+}
+
 function toggleSource() {
 	if (showingSourceCode) {
 		editor.innerHTML = editor.textContent;
 		editor.contentEditable = 'true';
 		showingSourceCode = false;
+		setToolbarDisabled(false);
 	} else {
 		editor.textContent = editor.innerHTML;
 		editor.contentEditable = 'false';
 		showingSourceCode = true;
+		setToolbarDisabled(true, 'btn-source');
 	}
 }
 
