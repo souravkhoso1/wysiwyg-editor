@@ -139,8 +139,19 @@ document.getElementById('url-input').addEventListener('keydown', function(e) {
 	if (e.key === 'Escape') closeUrlBar();
 });
 
+function updateCounter() {
+	var el = document.getElementById('editor-counter');
+	if (!el) return;
+	var text = editor.innerText || '';
+	var words = text.trim() ? text.trim().split(/\s+/).length : 0;
+	el.textContent = 'Words: ' + words + ' | Characters: ' + text.length;
+}
+
+editor.addEventListener('input', updateCounter);
+
 function clearAll() {
 	editor.innerHTML = '';
+	updateCounter();
 	editor.focus();
 }
 
