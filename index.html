@@ -25,7 +25,8 @@
 		<button onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fa fa-list-ul" aria-hidden="true"></i></button>
 		<button onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
 		<button onmousedown="event.preventDefault()" onclick="execCmd('insertParagraph');"><i class="fa fa-paragraph" aria-hidden="true"></i></button>
-		<select onchange="execCommandWithArg('formatBlock', this.value);">
+		<select onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
+			<option value="">Heading</option>
 			<option value="H1">H1</option>
 			<option value="H2">H2</option>
 			<option value="H3">H3</option>
@@ -39,7 +40,8 @@
 		<button onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fa fa-code" aria-hidden="true"></i></button>
 		<button onmousedown="event.preventDefault()" onclick="toggleEdit();">Toggle Edit</button>
 		<br>
-		<select onchange="execCommandWithArg('fontName', this.value);">
+		<select onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
+			<option value="">Font</option>
 			<option value="Arial">Arial</option>
 			<option value="Comic Sans MS">Comic Sans MS</option>
 			<option value="Courier">Courier</option>
