@@ -143,7 +143,7 @@ document.getElementById('url-input').addEventListener('keydown', function(e) {
 function updateCounter() {
 	var el = document.getElementById('editor-counter');
 	if (!el) return;
-	var text = editor.innerText || '';
+	var text = editor.textContent || '';
 	var words = text.trim() ? text.trim().split(/\s+/).length : 0;
 	el.textContent = 'Words: ' + words + ' | Characters: ' + text.length;
 }
@@ -232,5 +232,6 @@ if (typeof module !== 'undefined' && module.exports) {
 		toggleEdit,
 		toggleMarkdown,
 		setToolbarDisabled,
+		updateCounter,
 	};
 }

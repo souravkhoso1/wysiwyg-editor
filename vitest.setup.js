@@ -8,6 +8,8 @@ document.body.innerHTML = `
     <button id="btn-italic"        class="btn btn-sm btn-outline-secondary"></button>
     <button id="btn-underline"     class="btn btn-sm btn-outline-secondary"></button>
     <button id="btn-strikeThrough" class="btn btn-sm btn-outline-secondary"></button>
+    <button id="btn-source"        class="btn btn-sm btn-outline-secondary"></button>
+    <button id="btn-markdown"      class="btn btn-sm btn-outline-secondary"></button>
     <button id="btn-toggle-edit"   class="btn btn-sm btn-success">Editing: ON</button>
   </div>
   <div id="url-bar" style="display:none;">
@@ -15,6 +17,11 @@ document.body.innerHTML = `
     <div id="url-error" style="display:none;"></div>
   </div>
   <div id="editor" contenteditable="true"></div>
+  <div id="markdown-pane" class="d-none">
+    <textarea id="markdown-input"></textarea>
+    <div id="markdown-preview"></div>
+  </div>
+  <div id="editor-counter">Words: 0 | Characters: 0</div>
 `;
 
 document.execCommand      = vi.fn().mockReturnValue(true);

@@ -6,7 +6,7 @@ import { vi, describe, test, expect, beforeEach, beforeAll } from 'vitest';
 let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
-    exportHTML, toggleEdit;
+    exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
@@ -17,7 +17,7 @@ beforeAll(async () => {
     execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
-    exportHTML, toggleEdit,
+    exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
   } = fns);
 });
 
@@ -375,5 +375,130 @@ describe('pasteText', () => {
   test('does not throw when clipboard read is denied', async () => {
     navigator.clipboard.readText.mockRejectedValue(new Error('denied'));
     await expect(pasteText()).resolves.not.toThrow();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// setToolbarDisabled
+// ---------------------------------------------------------------------------
+describe('setToolbarDisabled', () => {
+  afterEach(() => setToolbarDisabled(false));
+
+  test('disables all toolbar buttons', () => {
+    setToolbarDisabled(true);
+    expect(document.getElementById('btn-bold').disabled).toBe(true);
+    expect(document.getElementById('btn-italic').disabled).toBe(true);
+    expect(document.getElementById('btn-toggle-edit').disabled).toBe(true);
+  });
+
+  test('re-enables all toolbar buttons', () => {
+    setToolbarDisabled(true);
+    setToolbarDisabled(false);
+    expect(document.getElementById('btn-bold').disabled).toBe(false);
+    expect(document.getElementById('btn-italic').disabled).toBe(false);
+  });
+
+  test('keeps the specified button enabled while disabling the rest', () => {
+    setToolbarDisabled(true, 'btn-source');
+    expect(document.getElementById('btn-source').disabled).toBe(false);
+    expect(document.getElementById('btn-bold').disabled).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// toggleSource — toolbar disable behaviour
+// ---------------------------------------------------------------------------
+describe('toggleSource toolbar behaviour', () => {
+  test('disables all toolbar buttons except btn-source when entering source mode', () => {
+    document.getElementById('editor').innerHTML = '<p>test</p>';
+    toggleSource(); // ON
+    expect(document.getElementById('btn-bold').disabled).toBe(true);
+    expect(document.getElementById('btn-source').disabled).toBe(false);
+    toggleSource(); // OFF — cleanup
+  });
+
+  test('re-enables toolbar buttons when exiting source mode', () => {
+    toggleSource(); // ON
+    toggleSource(); // OFF
+    expect(document.getElementById('btn-bold').disabled).toBe(false);
+    expect(document.getElementById('btn-source').disabled).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// updateCounter
+// ---------------------------------------------------------------------------
+describe('updateCounter', () => {
+  beforeEach(() => { document.getElementById('editor').innerHTML = ''; });
+
+  test('shows zero counts for an empty editor', () => {
+    updateCounter();
+    expect(document.getElementById('editor-counter').textContent).toBe('Words: 0 | Characters: 0');
+  });
+
+  test('counts words correctly', () => {
+    document.getElementById('editor').innerHTML = 'hello world foo';
+    updateCounter();
+    expect(document.getElementById('editor-counter').textContent).toContain('Words: 3');
+  });
+
+  test('counts characters correctly', () => {
+    document.getElementById('editor').innerHTML = 'hello';
+    updateCounter();
+    expect(document.getElementById('editor-counter').textContent).toContain('Characters: 5');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// toggleMarkdown
+// ---------------------------------------------------------------------------
+describe('toggleMarkdown', () => {
+  afterEach(() => {
+    // Ensure we leave markdown mode OFF after every test
+    const pane = document.getElementById('markdown-pane');
+    if (!pane.classList.contains('d-none')) toggleMarkdown();
+    setToolbarDisabled(false);
+  });
+
+  test('hides editor and counter, shows markdown pane', () => {
+    toggleMarkdown();
+    expect(document.getElementById('editor').classList.contains('d-none')).toBe(true);
+    expect(document.getElementById('editor-counter').classList.contains('d-none')).toBe(true);
+    expect(document.getElementById('markdown-pane').classList.contains('d-none')).toBe(false);
+  });
+
+  test('disables toolbar buttons but keeps btn-markdown enabled', () => {
+    toggleMarkdown();
+    expect(document.getElementById('btn-bold').disabled).toBe(true);
+    expect(document.getElementById('btn-markdown').disabled).toBe(false);
+  });
+
+  test('switches btn-markdown to active style', () => {
+    toggleMarkdown();
+    const btn = document.getElementById('btn-markdown');
+    expect(btn.classList.contains('btn-primary')).toBe(true);
+    expect(btn.classList.contains('btn-outline-secondary')).toBe(false);
+  });
+
+  test('restores editor and counter, hides markdown pane when toggled off', () => {
+    toggleMarkdown(); // ON
+    toggleMarkdown(); // OFF
+    expect(document.getElementById('editor').classList.contains('d-none')).toBe(false);
+    expect(document.getElementById('editor-counter').classList.contains('d-none')).toBe(false);
+    expect(document.getElementById('markdown-pane').classList.contains('d-none')).toBe(true);
+  });
+
+  test('restores btn-markdown to outline style when toggled off', () => {
+    toggleMarkdown(); // ON
+    toggleMarkdown(); // OFF
+    const btn = document.getElementById('btn-markdown');
+    expect(btn.classList.contains('btn-outline-secondary')).toBe(true);
+    expect(btn.classList.contains('btn-primary')).toBe(false);
+  });
+
+  test('re-enables toolbar buttons when toggled off', () => {
+    toggleMarkdown(); // ON
+    toggleMarkdown(); // OFF
+    expect(document.getElementById('btn-bold').disabled).toBe(false);
   });
 });
