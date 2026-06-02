@@ -151,11 +151,11 @@ function toggleEdit() {
 		editor.contentEditable = 'false';
 		isInEditMode = false;
 		btn.textContent = 'Editing: OFF';
-		btn.classList.remove('active');
+		btn.classList.replace('btn-success', 'btn-outline-danger');
 	} else {
 		editor.contentEditable = 'true';
 		isInEditMode = true;
 		btn.textContent = 'Editing: ON';
-		btn.classList.add('active');
+		btn.classList.replace('btn-outline-danger', 'btn-success');
 	}
 }
