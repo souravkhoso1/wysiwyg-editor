@@ -173,7 +173,7 @@
 		<button title="Remove Link" onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash" aria-hidden="true"></i></button>
 		<button title="Clear Formatting" onmousedown="event.preventDefault()" onclick="execCmd('removeFormat');"><i class="fas fa-eraser" aria-hidden="true"></i></button>
 		<button title="Toggle Source HTML" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code" aria-hidden="true"></i></button>
-		<button title="Toggle Edit Mode" onmousedown="event.preventDefault()" onclick="toggleEdit();">Toggle Edit</button>
+		<button id="btn-toggle-edit" title="Toggle Edit Mode" onmousedown="event.preventDefault()" onclick="toggleEdit();" class="active">Editing: ON</button>
 		<button title="Print" onmousedown="event.preventDefault()" onclick="window.print();"><i class="fas fa-print" aria-hidden="true"></i></button>
 		<button title="Export as HTML" onmousedown="event.preventDefault()" onclick="exportHTML();"><i class="fas fa-download" aria-hidden="true"></i></button>
 		<br>
@@ -321,12 +321,17 @@
 		}
 
 		function toggleEdit() {
+			var btn = document.getElementById('btn-toggle-edit');
 			if (isInEditMode) {
 				editor.contentEditable = 'false';
 				isInEditMode = false;
+				btn.textContent = 'Editing: OFF';
+				btn.classList.remove('active');
 			} else {
 				editor.contentEditable = 'true';
 				isInEditMode = true;
+				btn.textContent = 'Editing: ON';
+				btn.classList.add('active');
 			}
 		}
 
