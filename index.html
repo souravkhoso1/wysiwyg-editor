@@ -207,6 +207,7 @@
 		<input type="text" id="url-input" placeholder="https://" />
 		<button onclick="confirmUrl();">Insert</button>
 		<button onclick="closeUrlBar();">Cancel</button>
+		<span id="url-error" style="color:#c0392b;font-size:13px;display:none;"></span>
 	</div>
 	<div id="editor" contenteditable="true"></div>
 	</div>
@@ -315,8 +316,27 @@
 			}
 		}
 
+		function showUrlError(msg) {
+			var el = document.getElementById('url-error');
+			el.textContent = msg;
+			el.style.display = 'inline';
+		}
+
+		function insertImageFromUrl(url) {
+			var img = new Image();
+			img.onload = function() {
+				execCommandWithArg('insertImage', url);
+			};
+			img.onerror = function() {
+				openUrlBar('image');
+				showUrlError('Could not load image — please check the URL.');
+			};
+			img.src = url;
+		}
+
 		function closeUrlBar() {
 			document.getElementById('url-bar').style.display = 'none';
+			document.getElementById('url-error').style.display = 'none';
 			urlMode = null;
 		}
 
