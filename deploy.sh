@@ -17,7 +17,11 @@ elif git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null 2>&1; then
   git worktree add "$WORKTREE" "$BRANCH"
 else
   echo "Creating orphan $BRANCH branch..."
-  git worktree add --orphan -b "$BRANCH" "$WORKTREE"
+  # --orphan for worktree requires Git 2.41+; create the branch manually instead
+  EMPTY_TREE=$(git hash-object -t tree /dev/null)
+  EMPTY_COMMIT=$(git commit-tree "$EMPTY_TREE" -m "Initial gh-pages commit")
+  git branch "$BRANCH" "$EMPTY_COMMIT"
+  git worktree add "$WORKTREE" "$BRANCH"
 fi
 
 # Wipe existing content (git internals stay untouched)
