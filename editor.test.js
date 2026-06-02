@@ -379,6 +379,57 @@ describe('pasteText', () => {
 });
 
 // ---------------------------------------------------------------------------
+// foreColor persistence
+// ---------------------------------------------------------------------------
+describe('foreColor persistence on keydown', () => {
+  beforeEach(() => {
+    document.execCommand.mockClear();
+    globalThis.getSelection = vi.fn().mockReturnValue({
+      isCollapsed: true,
+      rangeCount: 1,
+      toString: () => '',
+      removeAllRanges: vi.fn(),
+      addRange: vi.fn(),
+      getRangeAt: vi.fn().mockReturnValue({ cloneRange: vi.fn().mockReturnValue({}) }),
+      anchorNode: document.getElementById('editor'),
+    });
+  });
+
+  test('re-applies tracked foreColor before each typed character', () => {
+    execCommandWithArg('foreColor', '#ff0000');
+    document.execCommand.mockClear();
+
+    document.getElementById('editor').dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'a', bubbles: true }),
+    );
+
+    expect(document.execCommand).toHaveBeenCalledWith('foreColor', false, '#ff0000');
+  });
+
+  test('does not apply foreColor when a Ctrl modifier is held (e.g. Ctrl+B)', () => {
+    execCommandWithArg('foreColor', '#ff0000');
+    document.execCommand.mockClear();
+
+    document.getElementById('editor').dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'b', ctrlKey: true, bubbles: true }),
+    );
+
+    expect(document.execCommand).not.toHaveBeenCalled();
+  });
+
+  test('does not apply foreColor for non-character keys (e.g. Shift)', () => {
+    execCommandWithArg('foreColor', '#ff0000');
+    document.execCommand.mockClear();
+
+    document.getElementById('editor').dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }),
+    );
+
+    expect(document.execCommand).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
 // setToolbarDisabled
 // ---------------------------------------------------------------------------
 describe('setToolbarDisabled', () => {

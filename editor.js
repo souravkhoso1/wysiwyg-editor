@@ -3,6 +3,7 @@ var isInEditMode = true;
 var isMarkdownMode = false;
 var editor = document.getElementById('editor');
 var savedRange = null;
+var currentForeColor = null;
 
 document.addEventListener('selectionchange', function() {
 	var sel = window.getSelection();
@@ -37,8 +38,17 @@ function execCmd(command) {
 
 function execCommandWithArg(command, arg) {
 	restoreSelection();
+	if (command === 'foreColor') currentForeColor = arg;
 	document.execCommand(command, false, arg);
 }
+
+editor.addEventListener('keydown', function(e) {
+	if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
+	var sel = window.getSelection();
+	if (sel && sel.isCollapsed && currentForeColor) {
+		document.execCommand('foreColor', false, currentForeColor);
+	}
+});
 
 function setToolbarDisabled(disabled, keepEnabledId) {
 	document.getElementById('toolbar').querySelectorAll('button, select').forEach(function(el) {
