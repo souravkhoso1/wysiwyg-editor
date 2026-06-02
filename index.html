@@ -14,8 +14,8 @@
 		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fa fa-align-left" aria-hidden="true"></i></button>
 		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fa fa-align-right" aria-hidden="true"></i></button>
 		<button onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fa fa-align-justified" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('cut');"><i class="fa fa-cut" aria-hidden="true"></i></button>
-		<button onmousedown="event.preventDefault()" onclick="execCmd('copy');"><i class="fa fa-copy" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="cutText();"><i class="fa fa-cut" aria-hidden="true"></i></button>
+		<button onmousedown="event.preventDefault()" onclick="copyText();"><i class="fa fa-copy" aria-hidden="true"></i></button>
 		<button onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fa fa-indent" aria-hidden="true"></i></button>
 		<button onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fa fa-dedent" aria-hidden="true"></i></button>
 		<button onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fa fa-subscript" aria-hidden="true"></i></button>
@@ -105,6 +105,21 @@
 				editor.textContent = editor.innerHTML;
 				editor.contentEditable = 'false';
 				showingSourceCode = true;
+			}
+		}
+
+		async function copyText() {
+			var sel = window.getSelection();
+			if (sel && sel.toString()) {
+				await navigator.clipboard.writeText(sel.toString());
+			}
+		}
+
+		async function cutText() {
+			var sel = window.getSelection();
+			if (sel && sel.toString()) {
+				await navigator.clipboard.writeText(sel.toString());
+				document.execCommand('delete');
 			}
 		}
 
