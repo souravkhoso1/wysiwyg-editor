@@ -1,5 +1,6 @@
 var showingSourceCode = false;
 var isInEditMode = true;
+var isMarkdownMode = false;
 var editor = document.getElementById('editor');
 var savedRange = null;
 
@@ -39,15 +40,24 @@ function execCommandWithArg(command, arg) {
 	document.execCommand(command, false, arg);
 }
 
+function setToolbarDisabled(disabled, keepEnabledId) {
+	document.getElementById('toolbar').querySelectorAll('button, select').forEach(function(el) {
+		if (keepEnabledId && el.id === keepEnabledId) return;
+		el.disabled = disabled;
+	});
+}
+
 function toggleSource() {
 	if (showingSourceCode) {
 		editor.innerHTML = editor.textContent;
 		editor.contentEditable = 'true';
 		showingSourceCode = false;
+		setToolbarDisabled(false);
 	} else {
 		editor.textContent = editor.innerHTML;
 		editor.contentEditable = 'false';
 		showingSourceCode = true;
+		setToolbarDisabled(true, 'btn-source');
 	}
 }
 
@@ -130,8 +140,19 @@ document.getElementById('url-input').addEventListener('keydown', function(e) {
 	if (e.key === 'Escape') closeUrlBar();
 });
 
+function updateCounter() {
+	var el = document.getElementById('editor-counter');
+	if (!el) return;
+	var text = editor.textContent || '';
+	var words = text.trim() ? text.trim().split(/\s+/).length : 0;
+	el.textContent = 'Words: ' + words + ' | Characters: ' + text.length;
+}
+
+editor.addEventListener('input', updateCounter);
+
 function clearAll() {
 	editor.innerHTML = '';
+	updateCounter();
 	editor.focus();
 }
 
@@ -143,6 +164,37 @@ function exportHTML() {
 	a.download = 'document.html';
 	a.click();
 	URL.revokeObjectURL(a.href);
+}
+
+function toggleMarkdown() {
+	var editorEl = document.getElementById('editor');
+	var counterEl = document.getElementById('editor-counter');
+	var markdownPane = document.getElementById('markdown-pane');
+	var btn = document.getElementById('btn-markdown');
+
+	isMarkdownMode = !isMarkdownMode;
+
+	if (isMarkdownMode) {
+		editorEl.classList.add('d-none');
+		counterEl.classList.add('d-none');
+		markdownPane.classList.remove('d-none');
+		btn.classList.replace('btn-outline-secondary', 'btn-primary');
+		setToolbarDisabled(true, 'btn-markdown');
+		document.getElementById('markdown-input').focus();
+	} else {
+		editorEl.classList.remove('d-none');
+		counterEl.classList.remove('d-none');
+		markdownPane.classList.add('d-none');
+		btn.classList.replace('btn-primary', 'btn-outline-secondary');
+		setToolbarDisabled(false);
+	}
+}
+
+var mdInput = document.getElementById('markdown-input');
+if (mdInput) {
+	mdInput.addEventListener('input', function() {
+		document.getElementById('markdown-preview').innerHTML = marked.parse(this.value);
+	});
 }
 
 function toggleEdit() {
@@ -178,5 +230,8 @@ if (typeof module !== 'undefined' && module.exports) {
 		clearAll,
 		exportHTML,
 		toggleEdit,
+		toggleMarkdown,
+		setToolbarDisabled,
+		updateCounter,
 	};
 }
