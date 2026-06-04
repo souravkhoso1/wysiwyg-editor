@@ -225,11 +225,14 @@ function toggleEdit() {
 		isInEditMode = false;
 		btn.textContent = 'Editing: OFF';
 		btn.classList.replace('btn-success', 'btn-outline-danger');
+		setToolbarDisabled(true, 'btn-toggle-edit');
 	} else {
 		editor.contentEditable = 'true';
 		isInEditMode = true;
 		btn.textContent = 'Editing: ON';
 		btn.classList.replace('btn-outline-danger', 'btn-success');
+		setToolbarDisabled(false);
+		updateEditorActions();
 	}
 }
 

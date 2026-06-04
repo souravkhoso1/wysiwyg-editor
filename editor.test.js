@@ -103,6 +103,19 @@ describe('toggleEdit', () => {
     expect(btn.classList.contains('btn-success')).toBe(true);
     expect(btn.classList.contains('btn-outline-danger')).toBe(false);
   });
+
+  test('disables toolbar buttons (except the edit toggle) when switching to edit OFF', () => {
+    toggleEdit(); // ON → OFF
+    expect(document.getElementById('btn-bold').disabled).toBe(true);
+    expect(document.getElementById('btn-toggle-edit').disabled).toBe(false);
+    toggleEdit(); // cleanup
+  });
+
+  test('re-enables toolbar buttons when switching back to edit ON', () => {
+    toggleEdit(); // ON → OFF
+    toggleEdit(); // OFF → ON
+    expect(document.getElementById('btn-bold').disabled).toBe(false);
+  });
 });
 
 // ---------------------------------------------------------------------------
