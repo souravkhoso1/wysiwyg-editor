@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DEPLOY_FILES=(index.html styles.css editor.js .nojekyll)
+DEPLOY_FILES=(index.html styles.css editor.js .nojekyll CNAME)
 BRANCH="gh-pages"
 WORKTREE="/tmp/wysiwyg-gh-pages"
 
