@@ -39,7 +39,7 @@ if git diff --cached --quiet; then
   echo "Nothing new to deploy — gh-pages is already up to date."
 else
   git -c commit.gpgsign=false commit -m "Deploy to GitHub Pages"
-  git push origin "$BRANCH"
+  git push origin "$BRANCH" --force
   echo "Deployed successfully to $BRANCH branch."
 fi
 
