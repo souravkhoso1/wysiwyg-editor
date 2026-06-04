@@ -240,7 +240,8 @@ function toggleEdit() {
 }
 
 (function() {
-	if (!/Mac/i.test(navigator.platform)) return;
+	var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+	if (!/Mac/i.test(platform)) return;
 	document.querySelectorAll('.key-mod').forEach(function(el) {
 		el.textContent = '⌘';
 	});
