@@ -74,6 +74,16 @@ describe('clearAll', () => {
     document.getElementById('editor').innerHTML = '';
     expect(() => clearAll()).not.toThrow();
   });
+
+  test('resets active fore-colour so new text after clear has no forced colour', () => {
+    execCommandWithArg('foreColor', '#ff0000');
+    clearAll();
+    document.execCommand.mockClear();
+    document.getElementById('editor').dispatchEvent(
+      new InputEvent('beforeinput', { inputType: 'insertText', data: 'x', bubbles: true, cancelable: true }),
+    );
+    expect(document.execCommand).not.toHaveBeenCalled();
+  });
 });
 
 // ---------------------------------------------------------------------------

@@ -176,6 +176,7 @@ function clearAll() {
 	editor.focus();
 	document.execCommand('selectAll');
 	document.execCommand('delete');
+	currentForeColor = null;
 	updateCounter();
 	updateEditorActions();
 }
