@@ -383,48 +383,50 @@ describe('pasteText', () => {
 // ---------------------------------------------------------------------------
 // foreColor persistence
 // ---------------------------------------------------------------------------
-describe('foreColor persistence on keydown', () => {
+describe('foreColor persistence on beforeinput', () => {
   beforeEach(() => {
     document.execCommand.mockClear();
-    globalThis.getSelection = vi.fn().mockReturnValue({
-      isCollapsed: true,
-      rangeCount: 1,
-      toString: () => '',
-      removeAllRanges: vi.fn(),
-      addRange: vi.fn(),
-      getRangeAt: vi.fn().mockReturnValue({ cloneRange: vi.fn().mockReturnValue({}) }),
-      anchorNode: document.getElementById('editor'),
-    });
   });
 
-  test('re-applies tracked foreColor before each typed character', () => {
+  test('inserts character wrapped in font tag with tracked foreColor', () => {
     execCommandWithArg('foreColor', '#ff0000');
     document.execCommand.mockClear();
 
     document.getElementById('editor').dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'a', bubbles: true }),
+      new InputEvent('beforeinput', { inputType: 'insertText', data: 'a', bubbles: true, cancelable: true }),
     );
 
-    expect(document.execCommand).toHaveBeenCalledWith('foreColor', false, '#ff0000');
+    expect(document.execCommand).toHaveBeenCalledWith('insertHTML', false, '<font color="#ff0000">a</font>');
   });
 
-  test('does not apply foreColor when a Ctrl modifier is held (e.g. Ctrl+B)', () => {
+  test('escapes HTML special characters in typed data', () => {
+    execCommandWithArg('foreColor', '#00ff00');
+    document.execCommand.mockClear();
+
+    document.getElementById('editor').dispatchEvent(
+      new InputEvent('beforeinput', { inputType: 'insertText', data: '<b>', bubbles: true, cancelable: true }),
+    );
+
+    expect(document.execCommand).toHaveBeenCalledWith('insertHTML', false, '<font color="#00ff00">&lt;b&gt;</font>');
+  });
+
+  test('does not intercept non-insertText input events', () => {
     execCommandWithArg('foreColor', '#ff0000');
     document.execCommand.mockClear();
 
     document.getElementById('editor').dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'b', ctrlKey: true, bubbles: true }),
+      new InputEvent('beforeinput', { inputType: 'insertParagraph', bubbles: true, cancelable: true }),
     );
 
     expect(document.execCommand).not.toHaveBeenCalled();
   });
 
-  test('does not apply foreColor for non-character keys (e.g. Shift)', () => {
+  test('does not intercept when input data is null', () => {
     execCommandWithArg('foreColor', '#ff0000');
     document.execCommand.mockClear();
 
     document.getElementById('editor').dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'Shift', bubbles: true }),
+      new InputEvent('beforeinput', { inputType: 'insertText', data: null, bubbles: true, cancelable: true }),
     );
 
     expect(document.execCommand).not.toHaveBeenCalled();

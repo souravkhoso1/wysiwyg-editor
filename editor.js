@@ -42,12 +42,11 @@ function execCommandWithArg(command, arg) {
 	document.execCommand(command, false, arg);
 }
 
-editor.addEventListener('keydown', function(e) {
-	if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
-	var sel = window.getSelection();
-	if (sel && sel.isCollapsed && currentForeColor) {
-		document.execCommand('foreColor', false, currentForeColor);
-	}
+editor.addEventListener('beforeinput', function(e) {
+	if (e.inputType !== 'insertText' || !e.data || !currentForeColor) return;
+	e.preventDefault();
+	var escaped = e.data.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	document.execCommand('insertHTML', false, '<font color="' + currentForeColor + '">' + escaped + '</font>');
 });
 
 function setToolbarDisabled(disabled, keepEnabledId) {
