@@ -217,7 +217,7 @@ function toggleMarkdown() {
 var mdInput = document.getElementById('markdown-input');
 if (mdInput) {
 	mdInput.addEventListener('input', function() {
-		document.getElementById('markdown-preview').innerHTML = marked.parse(this.value);
+		document.getElementById('markdown-preview').innerHTML = DOMPurify.sanitize(marked.parse(this.value));
 	});
 }
 

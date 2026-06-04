@@ -39,3 +39,5 @@ Object.defineProperty(navigator, 'clipboard', {
 
 globalThis.URL.createObjectURL = vi.fn().mockReturnValue('blob:mock');
 globalThis.URL.revokeObjectURL = vi.fn();
+
+globalThis.DOMPurify = { sanitize: vi.fn(function(html) { return html; }) };
