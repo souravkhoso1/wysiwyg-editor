@@ -491,6 +491,15 @@ describe('toggleSource toolbar behaviour', () => {
     expect(document.getElementById('btn-bold').disabled).toBe(false);
     expect(document.getElementById('btn-source').disabled).toBe(false);
   });
+
+  test('refreshes counter and print/export state when exiting source mode', () => {
+    document.getElementById('editor').innerHTML = '';
+    document.getElementById('btn-print').disabled = false;
+    toggleSource(); // ON
+    toggleSource(); // OFF
+    expect(document.getElementById('editor-counter').textContent).toContain('Words: 0');
+    expect(document.getElementById('btn-print').disabled).toBe(true);
+  });
 });
 
 // ---------------------------------------------------------------------------

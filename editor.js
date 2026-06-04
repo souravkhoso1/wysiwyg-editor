@@ -62,6 +62,8 @@ function toggleSource() {
 		editor.contentEditable = 'true';
 		showingSourceCode = false;
 		setToolbarDisabled(false);
+		updateCounter();
+		updateEditorActions();
 	} else {
 		editor.textContent = editor.innerHTML;
 		editor.contentEditable = 'false';
