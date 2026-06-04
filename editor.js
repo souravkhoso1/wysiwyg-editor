@@ -42,12 +42,11 @@ function execCommandWithArg(command, arg) {
 	document.execCommand(command, false, arg);
 }
 
-editor.addEventListener('keydown', function(e) {
-	if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) return;
-	var sel = window.getSelection();
-	if (sel && sel.isCollapsed && currentForeColor) {
-		document.execCommand('foreColor', false, currentForeColor);
-	}
+editor.addEventListener('beforeinput', function(e) {
+	if (e.inputType !== 'insertText' || !e.data || !currentForeColor) return;
+	e.preventDefault();
+	var escaped = e.data.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	document.execCommand('insertHTML', false, '<font color="' + currentForeColor + '">' + escaped + '</font>');
 });
 
 function setToolbarDisabled(disabled, keepEnabledId) {
@@ -63,6 +62,8 @@ function toggleSource() {
 		editor.contentEditable = 'true';
 		showingSourceCode = false;
 		setToolbarDisabled(false);
+		updateCounter();
+		updateEditorActions();
 	} else {
 		editor.textContent = editor.innerHTML;
 		editor.contentEditable = 'false';
@@ -172,10 +173,12 @@ editor.addEventListener('input', function() {
 });
 
 function clearAll() {
-	editor.innerHTML = '';
+	editor.focus();
+	document.execCommand('selectAll');
+	document.execCommand('delete');
+	currentForeColor = null;
 	updateCounter();
 	updateEditorActions();
-	editor.focus();
 }
 
 function exportHTML() {
@@ -215,7 +218,7 @@ function toggleMarkdown() {
 var mdInput = document.getElementById('markdown-input');
 if (mdInput) {
 	mdInput.addEventListener('input', function() {
-		document.getElementById('markdown-preview').innerHTML = marked.parse(this.value);
+		document.getElementById('markdown-preview').innerHTML = DOMPurify.sanitize(marked.parse(this.value));
 	});
 }
 
@@ -226,16 +229,20 @@ function toggleEdit() {
 		isInEditMode = false;
 		btn.textContent = 'Editing: OFF';
 		btn.classList.replace('btn-success', 'btn-outline-danger');
+		setToolbarDisabled(true, 'btn-toggle-edit');
 	} else {
 		editor.contentEditable = 'true';
 		isInEditMode = true;
 		btn.textContent = 'Editing: ON';
 		btn.classList.replace('btn-outline-danger', 'btn-success');
+		setToolbarDisabled(false);
+		updateEditorActions();
 	}
 }
 
 (function() {
-	if (!/Mac/i.test(navigator.platform)) return;
+	var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+	if (!/Mac/i.test(platform)) return;
 	document.querySelectorAll('.key-mod').forEach(function(el) {
 		el.textContent = '⌘';
 	});
