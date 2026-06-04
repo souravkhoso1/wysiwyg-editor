@@ -61,18 +61,18 @@ describe('execCommandWithArg', () => {
 // clearAll
 // ---------------------------------------------------------------------------
 describe('clearAll', () => {
-  test('empties the editor innerHTML', () => {
-    const editorEl = document.getElementById('editor');
-    editorEl.innerHTML = '<p>Some content</p>';
+  beforeEach(() => document.execCommand.mockClear());
+
+  test('uses selectAll + delete so the action is undoable via Ctrl+Z', () => {
+    document.getElementById('editor').innerHTML = '<p>Some content</p>';
     clearAll();
-    expect(editorEl.innerHTML).toBe('');
+    expect(document.execCommand).toHaveBeenCalledWith('selectAll');
+    expect(document.execCommand).toHaveBeenCalledWith('delete');
   });
 
-  test('works when the editor is already empty', () => {
-    const editorEl = document.getElementById('editor');
-    editorEl.innerHTML = '';
-    clearAll();
-    expect(editorEl.innerHTML).toBe('');
+  test('does not throw when editor is already empty', () => {
+    document.getElementById('editor').innerHTML = '';
+    expect(() => clearAll()).not.toThrow();
   });
 });
 
@@ -603,10 +603,11 @@ describe('updateEditorActions', () => {
     expect(document.getElementById('btn-export').disabled).toBe(false);
   });
 
-  test('disables buttons again after clearAll empties the editor', () => {
+  test('disables buttons again once content is removed', () => {
     document.getElementById('editor').innerHTML = '<p>Hello</p>';
     updateEditorActions();
-    clearAll();
+    document.getElementById('editor').innerHTML = '';
+    updateEditorActions();
     expect(document.getElementById('btn-print').disabled).toBe(true);
     expect(document.getElementById('btn-export').disabled).toBe(true);
   });

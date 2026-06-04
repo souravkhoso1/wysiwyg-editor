@@ -173,10 +173,11 @@ editor.addEventListener('input', function() {
 });
 
 function clearAll() {
-	editor.innerHTML = '';
+	editor.focus();
+	document.execCommand('selectAll');
+	document.execCommand('delete');
 	updateCounter();
 	updateEditorActions();
-	editor.focus();
 }
 
 function exportHTML() {
