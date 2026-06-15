@@ -3,8 +3,52 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="A lightweight WYSIWYG rich text editor built with vanilla JavaScript.">
-	<title>WYSIWYG Editor</title>
+	<title>Free Online Rich Text Editor | RichText.online</title>
+	<meta name="description" content="Format, style and export text right in your browser — no sign-up, no install. Bold, italic, colour, headings, lists, links, images, Markdown mode and more.">
+	<meta name="keywords" content="online rich text editor, WYSIWYG editor, free text editor online, online word processor, text formatter, rich text, HTML editor">
+	<link rel="canonical" href="https://richtext.online">
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://richtext.online">
+	<meta property="og:title" content="Free Online Rich Text Editor | RichText.online">
+	<meta property="og:description" content="Format, style and export text right in your browser — no sign-up, no install. Bold, italic, colour, headings, lists, links, images and more.">
+	<meta property="og:image" content="https://richtext.online/social-preview.png">
+
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="https://richtext.online">
+	<meta name="twitter:title" content="Free Online Rich Text Editor | RichText.online">
+	<meta name="twitter:description" content="Format, style and export text right in your browser — no sign-up, no install.">
+	<meta name="twitter:image" content="https://richtext.online/social-preview.png">
+
+	<!-- Structured data -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "RichText.online",
+		"url": "https://richtext.online",
+		"description": "Free online rich text editor. Format text with bold, italic, colour, headings, lists, links and images directly in your browser — no account required.",
+		"applicationCategory": "UtilitiesApplication",
+		"operatingSystem": "All",
+		"browserRequirements": "Any modern browser",
+		"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+		"featureList": [
+			"Bold, italic, underline, strikethrough",
+			"Font family and size",
+			"Text and background colour",
+			"Headings H1–H6",
+			"Bullet and numbered lists",
+			"Insert links and images",
+			"Markdown mode with live preview",
+			"Export as HTML",
+			"Print support",
+			"Word and character counter"
+		]
+	}
+	</script>
+
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 	<link rel="stylesheet" href="styles.css">
@@ -20,6 +64,10 @@
 </script>
 <body class="bg-light py-4">
 	<div class="container-lg">
+		<header class="mb-3">
+			<h1 class="h4 fw-bold mb-1">RichText.online</h1>
+			<p class="text-muted small mb-0">Free online rich text editor — format, export and print without sign-up or install.</p>
+		</header>
 		<div id="toolbar" class="d-flex flex-wrap align-items-center gap-1 p-2 bg-white border border-bottom-0 rounded-top">
 			<button id="btn-bold" title="Bold" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold"></i></button>
 			<button id="btn-italic" title="Italic" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic"></i></button>
@@ -119,6 +167,9 @@
 			</div>
 		</div>
 		<div id="editor-counter" class="bg-white border border-top-0 rounded-bottom px-3 py-1 text-end small text-muted">Words: 0 | Characters: 0</div>
+		<footer class="mt-4 pt-3 border-top text-muted small">
+			<p class="mb-1"><strong>RichText.online</strong> is a free, browser-based WYSIWYG rich text editor. Write and format documents with bold, italic, underline, strikethrough, headings (H1–H6), bullet and numbered lists, text colour, background colour, font family, font size, links, images and horizontal rules. Switch to Markdown mode for a live split-pane preview, toggle source HTML view, or export your document as a standalone HTML file — all without creating an account.</p>
+		</footer>
 	</div>
 	<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
