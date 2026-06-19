@@ -318,6 +318,82 @@ if (mdInput) {
 	});
 }
 
+function insertTable(rows, cols) {
+	var html = '<table><tbody>';
+	for (var r = 0; r < rows; r++) {
+		html += '<tr>';
+		for (var c = 0; c < cols; c++) {
+			html += r === 0 ? '<th><br></th>' : '<td><br></td>';
+		}
+		html += '</tr>';
+	}
+	html += '</tbody></table><p></p>';
+	restoreSelection();
+	document.execCommand('insertHTML', false, html);
+}
+
+function getTableCell() {
+	var sel = window.getSelection();
+	if (!sel || sel.rangeCount === 0) return null;
+	var node = sel.anchorNode;
+	while (node && node !== editor) {
+		if (node.nodeName === 'TD' || node.nodeName === 'TH') return node;
+		node = node.parentNode;
+	}
+	return null;
+}
+
+function tableAddRowAfter() {
+	var cell = getTableCell();
+	if (!cell) return;
+	var row = cell.closest('tr');
+	var colCount = row.cells.length;
+	var newRow = document.createElement('tr');
+	for (var i = 0; i < colCount; i++) {
+		var td = document.createElement('td');
+		td.innerHTML = '<br>';
+		newRow.appendChild(td);
+	}
+	row.parentNode.insertBefore(newRow, row.nextSibling);
+}
+
+function tableDeleteRow() {
+	var cell = getTableCell();
+	if (!cell) return;
+	var row = cell.closest('tr');
+	var tbody = row.parentNode;
+	if (tbody.rows.length === 1) {
+		tbody.closest('table').remove();
+	} else {
+		row.remove();
+	}
+}
+
+function tableAddColAfter() {
+	var cell = getTableCell();
+	if (!cell) return;
+	var table = cell.closest('table');
+	var colIndex = cell.cellIndex;
+	Array.from(table.rows).forEach(function(row) {
+		var newCell = row.insertCell(colIndex + 1);
+		newCell.innerHTML = '<br>';
+	});
+}
+
+function tableDeleteCol() {
+	var cell = getTableCell();
+	if (!cell) return;
+	var table = cell.closest('table');
+	var colIndex = cell.cellIndex;
+	if (table.rows[0] && table.rows[0].cells.length === 1) {
+		table.remove();
+		return;
+	}
+	Array.from(table.rows).forEach(function(row) {
+		if (row.cells[colIndex]) row.deleteCell(colIndex);
+	});
+}
+
 var isCharPickerOpen = false;
 
 function openCharPicker() {
@@ -540,6 +616,12 @@ if (typeof module !== 'undefined' && module.exports) {
 		toggleFullscreen,
 		insertImageFromFile,
 		exportPDF,
+		insertTable,
+		getTableCell,
+		tableAddRowAfter,
+		tableDeleteRow,
+		tableAddColAfter,
+		tableDeleteCol,
 		getVideoEmbedUrl,
 		insertVideo,
 		openCharPicker,

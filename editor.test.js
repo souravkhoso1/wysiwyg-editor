@@ -12,7 +12,8 @@ let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
     cleanPastedHtml, toggleDarkMode,
     openCharPicker, closeCharPicker, insertChar,
-    getVideoEmbedUrl, insertVideo;
+    getVideoEmbedUrl, insertVideo,
+    insertTable, tableAddRowAfter, tableDeleteRow, tableAddColAfter, tableDeleteCol;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
@@ -28,6 +29,7 @@ beforeAll(async () => {
     cleanPastedHtml, toggleDarkMode,
     openCharPicker, closeCharPicker, insertChar,
     getVideoEmbedUrl, insertVideo,
+    insertTable, tableAddRowAfter, tableDeleteRow, tableAddColAfter, tableDeleteCol,
   } = fns);
 });
 
@@ -1056,5 +1058,116 @@ describe('insertVideo', () => {
   test('shows error and reopens URL bar for an unsupported URL', () => {
     insertVideo('https://example.com/not-a-video');
     expect(document.getElementById('url-error').style.display).toBe('inline');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Table support
+// ---------------------------------------------------------------------------
+describe('insertTable', () => {
+  beforeEach(() => { document.execCommand.mockClear(); });
+
+  test('calls insertHTML with a table containing the right row/col count', () => {
+    insertTable(2, 3);
+    const call = document.execCommand.mock.calls.find(c => c[0] === 'insertHTML');
+    expect(call).toBeTruthy();
+    const html = call[2];
+    expect(html).toContain('<table>');
+    const tdCount = (html.match(/<td/g) || []).length;
+    const thCount = (html.match(/<th/g) || []).length;
+    expect(thCount).toBe(3);
+    expect(tdCount).toBe(3);
+  });
+
+  test('first row uses <th> cells', () => {
+    insertTable(3, 2);
+    const call = document.execCommand.mock.calls.find(c => c[0] === 'insertHTML');
+    expect(call[2]).toContain('<th>');
+  });
+});
+
+describe('tableAddRowAfter / tableDeleteRow', () => {
+  function buildTable(rows, cols) {
+    var html = '<table><tbody>';
+    for (var r = 0; r < rows; r++) {
+      html += '<tr>';
+      for (var c = 0; c < cols; c++) html += r === 0 ? '<th>h</th>' : '<td>x</td>';
+      html += '</tr>';
+    }
+    return html + '</tbody></table>';
+  }
+
+  function mockCellFocus(rowIndex, colIndex) {
+    const table = document.getElementById('editor').querySelector('table');
+    const cell = table.rows[rowIndex].cells[colIndex];
+    vi.spyOn(window, 'getSelection').mockReturnValue({ rangeCount: 1, anchorNode: cell });
+  }
+
+  afterEach(() => { vi.restoreAllMocks(); });
+
+  beforeEach(() => {
+    document.getElementById('editor').innerHTML = buildTable(2, 3);
+  });
+
+  test('tableAddRowAfter adds a row below the current row', () => {
+    mockCellFocus(0, 0);
+    tableAddRowAfter();
+    expect(document.getElementById('editor').querySelector('table').rows.length).toBe(3);
+  });
+
+  test('tableDeleteRow removes the current row', () => {
+    mockCellFocus(1, 0);
+    tableDeleteRow();
+    expect(document.getElementById('editor').querySelector('table').rows.length).toBe(1);
+  });
+
+  test('tableDeleteRow removes the whole table when only one row remains', () => {
+    document.getElementById('editor').innerHTML = buildTable(1, 2);
+    mockCellFocus(0, 0);
+    tableDeleteRow();
+    expect(document.getElementById('editor').querySelector('table')).toBeNull();
+  });
+});
+
+describe('tableAddColAfter / tableDeleteCol', () => {
+  function buildTable(rows, cols) {
+    var html = '<table><tbody>';
+    for (var r = 0; r < rows; r++) {
+      html += '<tr>';
+      for (var c = 0; c < cols; c++) html += '<td>x</td>';
+      html += '</tr>';
+    }
+    return html + '</tbody></table>';
+  }
+
+  function mockCellFocus(rowIndex, colIndex) {
+    const table = document.getElementById('editor').querySelector('table');
+    const cell = table.rows[rowIndex].cells[colIndex];
+    vi.spyOn(window, 'getSelection').mockReturnValue({ rangeCount: 1, anchorNode: cell });
+  }
+
+  afterEach(() => { vi.restoreAllMocks(); });
+
+  beforeEach(() => {
+    document.getElementById('editor').innerHTML = buildTable(2, 3);
+  });
+
+  test('tableAddColAfter adds a column after the current one', () => {
+    mockCellFocus(0, 1);
+    tableAddColAfter();
+    expect(document.getElementById('editor').querySelector('table').rows[0].cells.length).toBe(4);
+  });
+
+  test('tableDeleteCol removes the current column', () => {
+    mockCellFocus(0, 2);
+    tableDeleteCol();
+    expect(document.getElementById('editor').querySelector('table').rows[0].cells.length).toBe(2);
+  });
+
+  test('tableDeleteCol removes the whole table when only one column remains', () => {
+    document.getElementById('editor').innerHTML = buildTable(2, 1);
+    mockCellFocus(0, 0);
+    tableDeleteCol();
+    expect(document.getElementById('editor').querySelector('table')).toBeNull();
   });
 });

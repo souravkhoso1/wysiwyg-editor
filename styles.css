@@ -102,6 +102,34 @@ body.dark-mode footer {
 	min-height: calc(100vh - 220px);
 }
 
+#editor table {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 0.5em 0;
+}
+
+#editor th,
+#editor td {
+	border: 1px solid #dee2e6;
+	padding: 6px 10px;
+	min-width: 60px;
+	vertical-align: top;
+}
+
+#editor th {
+	background: #f8f9fa;
+	font-weight: 600;
+}
+
+body.dark-mode #editor th {
+	background: var(--bg-bar);
+}
+
+body.dark-mode #editor th,
+body.dark-mode #editor td {
+	border-color: var(--border);
+}
+
 .video-embed {
 	margin: 0.5em 0;
 	max-width: 100%;
