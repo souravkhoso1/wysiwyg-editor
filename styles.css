@@ -1,5 +1,12 @@
-/* Dark mode — Bootstrap 5.3 handles most components via data-bs-theme="dark".
-   We only need to override bg-white surfaces and the contenteditable editor. */
+/* Dark mode — Bootstrap 5.3's data-bs-theme="dark" handles buttons, dropdowns,
+   forms and modals. We override bg-light/bg-white which Bootstrap 5.3.3 does
+   NOT automatically theme, plus the page background and editor surface. */
+[data-bs-theme="dark"] body,
+[data-bs-theme="dark"] .bg-light {
+	background-color: #1a1a2e !important;
+	color: #e2e8f0 !important;
+}
+
 [data-bs-theme="dark"] #toolbar,
 [data-bs-theme="dark"] #editor,
 [data-bs-theme="dark"] #editor-counter,
