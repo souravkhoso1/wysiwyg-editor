@@ -192,6 +192,28 @@ function updateEditorActions() {
 	});
 }
 
+function cleanPastedHtml(html) {
+	return html
+		.replace(/<o:[^>]*>[\s\S]*?<\/o:[^>]*>/gi, '')   // Word <o:p> tags
+		.replace(/<\/?(o|w|m):[^>]*>/gi, '')              // remaining Office namespace tags
+		.replace(/\s*mso-[^:;}"']+:[^;}"']+;?/gi, '')    // MSO CSS properties
+		.replace(/\s*MARGIN:\s*0[^;]*;?/gi, '')           // Word default margin resets
+		.replace(/<!--\[if[^\]]*\]>[\s\S]*?<!\[endif\]-->/gi, '') // conditional comments
+		.replace(/<!--.*?-->/gs, '')                       // remaining HTML comments
+		.replace(/<span\s*style="\s*"[^>]*>/gi, '<span>') // empty style attrs on span
+		.replace(/<span>(<\/span>)?/gi, '$1')             // now-empty spans
+		.replace(/style="[^"]*font-family[^"]*"/gi, '')   // strip font-family (Word fonts)
+		.replace(/\s{2,}/g, ' ');                         // collapse whitespace
+}
+
+editor.addEventListener('paste', function(e) {
+	var html = e.clipboardData && e.clipboardData.getData('text/html');
+	if (!html) return;
+	e.preventDefault();
+	var cleaned = cleanPastedHtml(html);
+	document.execCommand('insertHTML', false, cleaned);
+});
+
 editor.addEventListener('input', function() {
 	updateCounter();
 	updateEditorActions();
@@ -460,6 +482,7 @@ if (typeof module !== 'undefined' && module.exports) {
 		toggleFullscreen,
 		insertImageFromFile,
 		exportPDF,
+		cleanPastedHtml,
 		openFindReplace,
 		closeFindReplace,
 		clearFindHighlights,

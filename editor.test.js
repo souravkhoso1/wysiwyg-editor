@@ -9,7 +9,8 @@ let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     exportHTML, exportPDF, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
     updateEditorActions, toggleFullscreen, insertImageFromFile,
     openFindReplace, closeFindReplace, clearFindHighlights, highlightMatches,
-    findNext, findPrev, replaceOne, replaceAll, updateFindStatus;
+    findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
+    cleanPastedHtml;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
@@ -22,6 +23,7 @@ beforeAll(async () => {
     updateEditorActions, toggleFullscreen, insertImageFromFile, exportPDF,
     openFindReplace, closeFindReplace, clearFindHighlights, highlightMatches,
     findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
+    cleanPastedHtml,
   } = fns);
 });
 
@@ -894,5 +896,42 @@ describe('openFindReplace / closeFindReplace', () => {
     closeFindReplace();
     expect(document.getElementById('find-replace-bar').style.display).toBe('none');
     expect(document.getElementById('find-status').textContent).toBe('');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// cleanPastedHtml
+// ---------------------------------------------------------------------------
+describe('cleanPastedHtml', () => {
+  test('removes Word <o:p> tags and their content', () => {
+    const result = cleanPastedHtml('<p>Hello<o:p></o:p></p>');
+    expect(result).not.toContain('<o:p>');
+    expect(result).toContain('Hello');
+  });
+
+  test('strips MSO CSS properties from style attributes', () => {
+    const result = cleanPastedHtml('<p style="mso-margin-top:0cm; color:red;">text</p>');
+    expect(result).not.toContain('mso-margin-top');
+    expect(result).toContain('color:red');
+  });
+
+  test('removes Word conditional comments', () => {
+    const result = cleanPastedHtml('<!--[if gte mso 9]><xml>junk</xml><![endif]-->text');
+    expect(result).not.toContain('[if');
+    expect(result).toContain('text');
+  });
+
+  test('strips Office namespace opening and closing tags', () => {
+    const html = '<w:sdt><w:sdtPr/></w:sdt><p>body</p>';
+    const result = cleanPastedHtml(html);
+    expect(result).not.toContain('<w:');
+    expect(result).toContain('body');
+  });
+
+  test('passes through clean HTML unchanged (no junk removed)', () => {
+    const clean = '<p><strong>Hello</strong> <em>world</em></p>';
+    const result = cleanPastedHtml(clean);
+    expect(result).toContain('<strong>Hello</strong>');
+    expect(result).toContain('<em>world</em>');
   });
 });
