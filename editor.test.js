@@ -11,7 +11,8 @@ let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     openFindReplace, closeFindReplace, clearFindHighlights, highlightMatches,
     findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
     cleanPastedHtml, toggleDarkMode,
-    openCharPicker, closeCharPicker, insertChar;
+    openCharPicker, closeCharPicker, insertChar,
+    getVideoEmbedUrl, insertVideo;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
@@ -26,6 +27,7 @@ beforeAll(async () => {
     findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
     cleanPastedHtml, toggleDarkMode,
     openCharPicker, closeCharPicker, insertChar,
+    getVideoEmbedUrl, insertVideo,
   } = fns);
 });
 
@@ -1004,5 +1006,55 @@ describe('insertChar', () => {
   test('calls insertText with emoji character', () => {
     insertChar('🎉');
     expect(document.execCommand).toHaveBeenCalledWith('insertText', false, '🎉');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Video embed
+// ---------------------------------------------------------------------------
+describe('getVideoEmbedUrl', () => {
+  test('converts YouTube watch URL to embed URL', () => {
+    const result = getVideoEmbedUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    expect(result).toBe('https://www.youtube.com/embed/dQw4w9WgXcQ');
+  });
+
+  test('converts youtu.be short URL to embed URL', () => {
+    const result = getVideoEmbedUrl('https://youtu.be/dQw4w9WgXcQ');
+    expect(result).toBe('https://www.youtube.com/embed/dQw4w9WgXcQ');
+  });
+
+  test('converts Vimeo URL to embed URL', () => {
+    const result = getVideoEmbedUrl('https://vimeo.com/123456789');
+    expect(result).toBe('https://player.vimeo.com/video/123456789');
+  });
+
+  test('returns null for unsupported URL', () => {
+    expect(getVideoEmbedUrl('https://example.com/video')).toBeNull();
+  });
+
+  test('returns null for empty string', () => {
+    expect(getVideoEmbedUrl('')).toBeNull();
+  });
+});
+
+describe('insertVideo', () => {
+  beforeEach(() => {
+    document.execCommand.mockClear();
+    document.getElementById('editor').innerHTML = '';
+    document.getElementById('url-input').value = '';
+    document.getElementById('url-error').style.display = 'none';
+  });
+
+  test('inserts iframe HTML for a valid YouTube URL', () => {
+    insertVideo('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+    const call = document.execCommand.mock.calls.find(c => c[0] === 'insertHTML');
+    expect(call).toBeTruthy();
+    expect(call[2]).toContain('youtube.com/embed/dQw4w9WgXcQ');
+    expect(call[2]).toContain('<iframe');
+  });
+
+  test('shows error and reopens URL bar for an unsupported URL', () => {
+    insertVideo('https://example.com/not-a-video');
+    expect(document.getElementById('url-error').style.display).toBe('inline');
   });
 });

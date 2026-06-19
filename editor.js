@@ -123,6 +123,30 @@ function openUrlBar(mode) {
 	input.select();
 }
 
+function getVideoEmbedUrl(url) {
+	var ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+	if (ytMatch) return 'https://www.youtube.com/embed/' + ytMatch[1];
+	var vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+	if (vimeoMatch) return 'https://player.vimeo.com/video/' + vimeoMatch[1];
+	return null;
+}
+
+function insertVideo(url) {
+	var embedUrl = getVideoEmbedUrl(url);
+	if (!embedUrl) {
+		openUrlBar('video');
+		showUrlError('Unsupported URL — paste a YouTube or Vimeo link.');
+		return;
+	}
+	restoreSelection();
+	document.execCommand('insertHTML', false,
+		'<div class="video-embed" contenteditable="false">' +
+		'<iframe src="' + embedUrl + '" width="560" height="315" ' +
+		'frameborder="0" allowfullscreen loading="lazy"></iframe>' +
+		'</div><p></p>'
+	);
+}
+
 function confirmUrl() {
 	var url = document.getElementById('url-input').value.trim();
 	var mode = urlMode;
@@ -132,6 +156,8 @@ function confirmUrl() {
 		execCommandWithArg('createLink', url);
 	} else if (mode === 'image') {
 		insertImageFromUrl(url);
+	} else if (mode === 'video') {
+		insertVideo(url);
 	}
 }
 
@@ -514,6 +540,8 @@ if (typeof module !== 'undefined' && module.exports) {
 		toggleFullscreen,
 		insertImageFromFile,
 		exportPDF,
+		getVideoEmbedUrl,
+		insertVideo,
 		openCharPicker,
 		closeCharPicker,
 		insertChar,

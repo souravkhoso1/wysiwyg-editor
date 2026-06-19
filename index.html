@@ -110,6 +110,7 @@
 			<button title="Remove Link" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash"></i></button>
 			<button title="Insert Image from URL" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('image');"><i class="fas fa-image"></i></button>
 			<label title="Upload Image from File" class="btn btn-sm btn-outline-secondary mb-0" onmousedown="event.preventDefault()"><i class="fas fa-file-image"></i><input type="file" accept="image/*" style="display:none" onchange="insertImageFromFile(this)"></label>
+			<button title="Embed YouTube / Vimeo Video" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('video');"><i class="fas fa-video"></i></button>
 			<div class="vr mx-1"></div>
 			<button title="Clear Formatting" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('removeFormat');"><i class="fas fa-eraser"></i></button>
 			<button id="btn-source" title="Toggle Source HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code"></i></button>

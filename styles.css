@@ -102,6 +102,16 @@ body.dark-mode footer {
 	min-height: calc(100vh - 220px);
 }
 
+.video-embed {
+	margin: 0.5em 0;
+	max-width: 100%;
+}
+
+.video-embed iframe {
+	max-width: 100%;
+	display: block;
+}
+
 mark.find-match {
 	background: #fff3cd;
 	color: inherit;
