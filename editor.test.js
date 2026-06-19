@@ -75,6 +75,12 @@ describe('clearAll', () => {
     expect(() => clearAll()).not.toThrow();
   });
 
+  test('removes saved content from localStorage', () => {
+    localStorage.setItem('richtext-online-content', '<p>old</p>');
+    clearAll();
+    expect(localStorage.getItem('richtext-online-content')).toBeNull();
+  });
+
   test('resets active fore-colour so new text after clear has no forced colour', () => {
     execCommandWithArg('foreColor', '#ff0000');
     clearAll();

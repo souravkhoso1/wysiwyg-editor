@@ -4,6 +4,19 @@ var isMarkdownMode = false;
 var editor = document.getElementById('editor');
 var savedRange = null;
 var currentForeColor = null;
+var STORAGE_KEY = 'richtext-online-content';
+var saveTimer = null;
+
+(function restoreFromStorage() {
+	try {
+		var saved = localStorage.getItem(STORAGE_KEY);
+		if (saved) {
+			editor.innerHTML = saved;
+			updateCounter();
+			updateEditorActions();
+		}
+	} catch (e) {}
+})();
 
 document.addEventListener('selectionchange', function() {
 	var sel = window.getSelection();
@@ -170,6 +183,10 @@ function updateEditorActions() {
 editor.addEventListener('input', function() {
 	updateCounter();
 	updateEditorActions();
+	clearTimeout(saveTimer);
+	saveTimer = setTimeout(function() {
+		try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) {}
+	}, 500);
 });
 
 function clearAll() {
@@ -177,6 +194,7 @@ function clearAll() {
 	document.execCommand('selectAll');
 	document.execCommand('delete');
 	currentForeColor = null;
+	try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
 	updateCounter();
 	updateEditorActions();
 }
