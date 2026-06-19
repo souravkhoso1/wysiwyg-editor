@@ -94,10 +94,29 @@
 				<option value="H6">H6</option>
 			</select>
 			<button title="Horizontal Rule" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertHorizontalRule');">HR</button>
+			<div class="dropdown d-inline-block">
+				<button title="Insert Table" class="btn btn-sm btn-outline-secondary dropdown-toggle" onmousedown="event.preventDefault()" data-bs-toggle="dropdown"><i class="fas fa-table"></i></button>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(2,2);return false;">2 × 2</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(2,3);return false;">2 × 3</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(3,3);return false;">3 × 3</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(3,4);return false;">3 × 4</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(4,4);return false;">4 × 4</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableAddRowAfter();return false;">Add row below</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableDeleteRow();return false;">Delete row</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableAddColAfter();return false;">Add column right</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableDeleteCol();return false;">Delete column</a></li>
+				</ul>
+			</div>
+			<button title="Blockquote" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCommandWithArg('formatBlock', 'BLOCKQUOTE');"><i class="fas fa-quote-right"></i></button>
+			<button title="Code Block" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCommandWithArg('formatBlock', 'PRE');"><i class="fas fa-terminal"></i></button>
 			<div class="vr mx-1"></div>
 			<button title="Insert Link" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('link');"><i class="fas fa-link"></i></button>
 			<button title="Remove Link" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash"></i></button>
-			<button title="Insert Image" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('image');"><i class="fas fa-image"></i></button>
+			<button title="Insert Image from URL" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('image');"><i class="fas fa-image"></i></button>
+			<label title="Upload Image from File" class="btn btn-sm btn-outline-secondary mb-0" onmousedown="event.preventDefault()"><i class="fas fa-file-image"></i><input type="file" accept="image/*" style="display:none" onchange="insertImageFromFile(this)"></label>
+			<button title="Embed YouTube / Vimeo Video" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('video');"><i class="fas fa-video"></i></button>
 			<div class="vr mx-1"></div>
 			<button title="Clear Formatting" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('removeFormat');"><i class="fas fa-eraser"></i></button>
 			<button id="btn-source" title="Toggle Source HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code"></i></button>
@@ -139,7 +158,12 @@
 			<button id="btn-toggle-edit" title="Toggle Edit Mode" class="btn btn-sm btn-success" onmousedown="event.preventDefault()" onclick="toggleEdit();">Editing: ON</button>
 			<button id="btn-print" title="Print" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="window.print();" disabled><i class="fas fa-print"></i></button>
 			<button id="btn-export" title="Export as HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();" disabled><i class="fas fa-download"></i></button>
+			<button id="btn-export-pdf" title="Export as PDF" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportPDF();" disabled><i class="fas fa-file-pdf"></i></button>
+			<button id="btn-char-picker" title="Special Characters &amp; Emoji" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openCharPicker();"><i class="fas fa-smile"></i></button>
+			<button id="btn-find" title="Find &amp; Replace (Ctrl+H)" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openFindReplace();"><i class="fas fa-search"></i></button>
 			<button title="Keyboard Shortcuts" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#helpModal"><i class="fas fa-keyboard"></i></button>
+			<button id="btn-dark-mode" title="Dark Mode" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleDarkMode();"><i class="fas fa-moon"></i></button>
+			<button id="btn-fullscreen" title="Fullscreen" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleFullscreen();"><i class="fas fa-expand"></i></button>
 		</div>
 		<div id="url-bar" style="display:none;">
 			<div class="input-group input-group-sm p-2 bg-light border border-top-0 border-bottom-0">
@@ -148,6 +172,66 @@
 				<button class="btn btn-outline-secondary" onclick="closeUrlBar();">Cancel</button>
 			</div>
 			<div id="url-error" class="text-danger small px-3 pb-1 bg-light border border-top-0 border-bottom-0" style="display:none;"></div>
+		</div>
+		<div id="find-replace-bar" style="display:none;">
+			<div class="d-flex flex-wrap align-items-center gap-2 p-2 bg-light border border-top-0 border-bottom-0">
+				<input type="text" id="find-input" class="form-control form-control-sm" style="max-width:180px" placeholder="Find..." />
+				<button class="btn btn-sm btn-outline-secondary" onclick="findPrev();" title="Previous match">&#8593;</button>
+				<button class="btn btn-sm btn-outline-secondary" onclick="findNext();" title="Next match">&#8595;</button>
+				<div class="vr"></div>
+				<input type="text" id="replace-input" class="form-control form-control-sm" style="max-width:180px" placeholder="Replace..." />
+				<button class="btn btn-sm btn-primary" onclick="replaceOne();">Replace</button>
+				<button class="btn btn-sm btn-outline-secondary" onclick="replaceAll();">Replace All</button>
+				<span id="find-status" class="small text-muted"></span>
+				<button class="btn btn-sm btn-outline-secondary ms-auto" onclick="closeFindReplace();" title="Close">&times;</button>
+			</div>
+		</div>
+		<div id="char-picker" style="display:none;">
+			<div class="p-2 bg-light border border-top-0 border-bottom-0">
+				<div class="d-flex flex-wrap gap-1 mb-1">
+					<span class="small text-muted me-1 align-self-center">Symbols:</span>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('©')">©</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('®')">®</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('™')">™</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('€')">€</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('£')">£</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¥')">¥</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('°')">°</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('±')">±</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('×')">×</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('÷')">÷</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('→')">→</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('←')">←</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('↑')">↑</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('↓')">↓</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('…')">…</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('—')">—</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('–')">–</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('"')">"</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('"')">"</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('½')">½</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¼')">¼</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¾')">¾</button>
+				</div>
+				<div class="d-flex flex-wrap gap-1">
+					<span class="small text-muted me-1 align-self-center">Emoji:</span>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('😀')">😀</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('😂')">😂</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('❤️')">❤️</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('👍')">👍</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🎉')">🎉</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🔥')">🔥</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('✅')">✅</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('⭐')">⭐</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🚀')">🚀</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('💡')">💡</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('📌')">📌</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('📝')">📝</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🎯')">🎯</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('⚠️')">⚠️</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('ℹ️')">ℹ️</button>
+				</div>
+			</div>
 		</div>
 		<div id="editor" class="bg-white border border-bottom-0 p-3" contenteditable="true"></div>
 		<div id="markdown-pane" class="d-none">
