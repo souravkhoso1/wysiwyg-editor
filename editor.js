@@ -240,6 +240,19 @@ if (mdInput) {
 	});
 }
 
+var isFullscreen = false;
+
+function toggleFullscreen() {
+	var container = document.querySelector('.container-lg');
+	var btn = document.getElementById('btn-fullscreen');
+	isFullscreen = !isFullscreen;
+	container.classList.toggle('editor-fullscreen', isFullscreen);
+	if (btn) {
+		btn.innerHTML = isFullscreen ? '<i class="fas fa-compress"></i>' : '<i class="fas fa-expand"></i>';
+		btn.title = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen';
+	}
+}
+
 function toggleEdit() {
 	var btn = document.getElementById('btn-toggle-edit');
 	if (isInEditMode) {
@@ -270,6 +283,7 @@ function toggleEdit() {
 
 if (typeof module !== 'undefined' && module.exports) {
 	module.exports = {
+		toggleFullscreen,
 		execCmd,
 		execCommandWithArg,
 		updateToolbarState,

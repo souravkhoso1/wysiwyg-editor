@@ -13,17 +13,20 @@ document.body.innerHTML = `
     <button id="btn-toggle-edit"   class="btn btn-sm btn-success">Editing: ON</button>
     <button id="btn-print"         class="btn btn-sm btn-outline-secondary" disabled></button>
     <button id="btn-export"        class="btn btn-sm btn-outline-secondary" disabled></button>
+    <button id="btn-fullscreen"    class="btn btn-sm btn-outline-secondary"></button>
   </div>
-  <div id="url-bar" style="display:none;">
-    <input type="text" id="url-input" value="" />
-    <div id="url-error" style="display:none;"></div>
+  <div class="container-lg">
+    <div id="url-bar" style="display:none;">
+      <input type="text" id="url-input" value="" />
+      <div id="url-error" style="display:none;"></div>
+    </div>
+    <div id="editor" contenteditable="true"></div>
+    <div id="markdown-pane" class="d-none">
+      <textarea id="markdown-input"></textarea>
+      <div id="markdown-preview"></div>
+    </div>
+    <div id="editor-counter">Words: 0 | Characters: 0</div>
   </div>
-  <div id="editor" contenteditable="true"></div>
-  <div id="markdown-pane" class="d-none">
-    <textarea id="markdown-input"></textarea>
-    <div id="markdown-preview"></div>
-  </div>
-  <div id="editor-counter">Words: 0 | Characters: 0</div>
 `;
 
 document.execCommand      = vi.fn().mockReturnValue(true);

@@ -7,19 +7,17 @@ let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
     exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
-    updateEditorActions;
+    updateEditorActions, toggleFullscreen;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
-  // Vite re-exports CJS module.exports properties as named ESM exports.
-  // Fallback to .default in case the environment wraps it differently.
   const fns = mod.execCmd ? mod : mod.default;
   ({
     execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
     exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
-    updateEditorActions,
+    updateEditorActions, toggleFullscreen,
   } = fns);
 });
 
@@ -459,6 +457,35 @@ describe('foreColor persistence on beforeinput', () => {
     );
 
     expect(document.execCommand).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// toggleFullscreen
+// ---------------------------------------------------------------------------
+describe('toggleFullscreen', () => {
+  afterEach(() => {
+    const c = document.querySelector('.container-lg');
+    if (c && c.classList.contains('editor-fullscreen')) toggleFullscreen();
+  });
+
+  test('adds editor-fullscreen class to container when entering fullscreen', () => {
+    toggleFullscreen();
+    expect(document.querySelector('.container-lg').classList.contains('editor-fullscreen')).toBe(true);
+  });
+
+  test('removes editor-fullscreen class when exiting fullscreen', () => {
+    toggleFullscreen(); // enter
+    toggleFullscreen(); // exit
+    expect(document.querySelector('.container-lg').classList.contains('editor-fullscreen')).toBe(false);
+  });
+
+  test('swaps button icon between expand and compress', () => {
+    const btn = document.getElementById('btn-fullscreen');
+    toggleFullscreen();
+    expect(btn.innerHTML).toContain('fa-compress');
+    toggleFullscreen();
+    expect(btn.innerHTML).toContain('fa-expand');
   });
 });
 
