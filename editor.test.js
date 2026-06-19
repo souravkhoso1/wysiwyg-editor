@@ -7,7 +7,7 @@ let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
     exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
-    updateEditorActions, toggleFullscreen;
+    updateEditorActions, toggleFullscreen, insertImageFromFile;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
@@ -17,7 +17,7 @@ beforeAll(async () => {
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
     exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
-    updateEditorActions, toggleFullscreen,
+    updateEditorActions, toggleFullscreen, insertImageFromFile,
   } = fns);
 });
 
@@ -273,6 +273,30 @@ describe('insertImageFromUrl', () => {
 
     expect(document.getElementById('url-error').textContent).toContain('Could not load image');
     globalThis.Image = OriginalImage;
+  });
+});
+
+// ---------------------------------------------------------------------------
+// insertImageFromFile
+// ---------------------------------------------------------------------------
+describe('insertImageFromFile', () => {
+  beforeEach(() => document.execCommand.mockClear());
+
+  test('reads file as data URL and inserts it as an image', () => {
+    const OriginalFileReader = globalThis.FileReader;
+    globalThis.FileReader = class {
+      readAsDataURL() { this.onload({ target: { result: 'data:image/png;base64,abc' } }); }
+    };
+
+    insertImageFromFile({ files: [new Blob([''], { type: 'image/png' })], value: '' });
+
+    expect(document.execCommand).toHaveBeenCalledWith('insertImage', false, 'data:image/png;base64,abc');
+    globalThis.FileReader = OriginalFileReader;
+  });
+
+  test('does nothing when no file is selected', () => {
+    insertImageFromFile({ files: [] });
+    expect(document.execCommand).not.toHaveBeenCalled();
   });
 });
 

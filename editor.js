@@ -153,6 +153,18 @@ function insertImageFromUrl(url) {
 	img.src = url;
 }
 
+function insertImageFromFile(input) {
+	var file = input.files && input.files[0];
+	if (!file) return;
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		restoreSelection();
+		document.execCommand('insertImage', false, e.target.result);
+	};
+	reader.readAsDataURL(file);
+	input.value = '';
+}
+
 function closeUrlBar() {
 	document.getElementById('url-bar').style.display = 'none';
 	document.getElementById('url-error').style.display = 'none';
@@ -284,6 +296,7 @@ function toggleEdit() {
 if (typeof module !== 'undefined' && module.exports) {
 	module.exports = {
 		toggleFullscreen,
+		insertImageFromFile,
 		execCmd,
 		execCommandWithArg,
 		updateToolbarState,
