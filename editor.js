@@ -292,6 +292,26 @@ if (mdInput) {
 	});
 }
 
+var isCharPickerOpen = false;
+
+function openCharPicker() {
+	var panel = document.getElementById('char-picker');
+	isCharPickerOpen = !isCharPickerOpen;
+	panel.style.display = isCharPickerOpen ? 'block' : 'none';
+}
+
+function closeCharPicker() {
+	isCharPickerOpen = false;
+	var panel = document.getElementById('char-picker');
+	if (panel) panel.style.display = 'none';
+}
+
+function insertChar(ch) {
+	restoreSelection();
+	document.execCommand('insertText', false, ch);
+	editor.focus();
+}
+
 var isDarkMode = false;
 
 function toggleDarkMode() {
@@ -494,6 +514,9 @@ if (typeof module !== 'undefined' && module.exports) {
 		toggleFullscreen,
 		insertImageFromFile,
 		exportPDF,
+		openCharPicker,
+		closeCharPicker,
+		insertChar,
 		toggleDarkMode,
 		cleanPastedHtml,
 		openFindReplace,

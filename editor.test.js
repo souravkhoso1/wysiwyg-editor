@@ -10,7 +10,8 @@ let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     updateEditorActions, toggleFullscreen, insertImageFromFile,
     openFindReplace, closeFindReplace, clearFindHighlights, highlightMatches,
     findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
-    cleanPastedHtml, toggleDarkMode;
+    cleanPastedHtml, toggleDarkMode,
+    openCharPicker, closeCharPicker, insertChar;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
@@ -24,6 +25,7 @@ beforeAll(async () => {
     openFindReplace, closeFindReplace, clearFindHighlights, highlightMatches,
     findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
     cleanPastedHtml, toggleDarkMode,
+    openCharPicker, closeCharPicker, insertChar,
   } = fns);
 });
 
@@ -964,5 +966,43 @@ describe('toggleDarkMode', () => {
     toggleDarkMode();
     toggleDarkMode();
     expect(document.getElementById('btn-dark-mode').innerHTML).toContain('fa-moon');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Special characters / emoji picker
+// ---------------------------------------------------------------------------
+describe('openCharPicker / closeCharPicker', () => {
+  afterEach(() => { closeCharPicker(); });
+
+  test('openCharPicker shows the panel on first call', () => {
+    openCharPicker();
+    expect(document.getElementById('char-picker').style.display).toBe('block');
+  });
+
+  test('openCharPicker toggles the panel closed on second call', () => {
+    openCharPicker();
+    openCharPicker();
+    expect(document.getElementById('char-picker').style.display).toBe('none');
+  });
+
+  test('closeCharPicker hides the panel', () => {
+    openCharPicker();
+    closeCharPicker();
+    expect(document.getElementById('char-picker').style.display).toBe('none');
+  });
+});
+
+describe('insertChar', () => {
+  beforeEach(() => { document.execCommand.mockClear(); });
+
+  test('calls insertText execCommand with the given character', () => {
+    insertChar('©');
+    expect(document.execCommand).toHaveBeenCalledWith('insertText', false, '©');
+  });
+
+  test('calls insertText with emoji character', () => {
+    insertChar('🎉');
+    expect(document.execCommand).toHaveBeenCalledWith('insertText', false, '🎉');
   });
 });
