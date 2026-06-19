@@ -292,6 +292,18 @@ if (mdInput) {
 	});
 }
 
+var isDarkMode = false;
+
+function toggleDarkMode() {
+	isDarkMode = !isDarkMode;
+	document.body.classList.toggle('dark-mode', isDarkMode);
+	var btn = document.getElementById('btn-dark-mode');
+	if (btn) {
+		btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+		btn.title = isDarkMode ? 'Light Mode' : 'Dark Mode';
+	}
+}
+
 var isFullscreen = false;
 
 var findMatches = [];
@@ -482,6 +494,7 @@ if (typeof module !== 'undefined' && module.exports) {
 		toggleFullscreen,
 		insertImageFromFile,
 		exportPDF,
+		toggleDarkMode,
 		cleanPastedHtml,
 		openFindReplace,
 		closeFindReplace,

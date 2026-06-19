@@ -10,7 +10,7 @@ let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     updateEditorActions, toggleFullscreen, insertImageFromFile,
     openFindReplace, closeFindReplace, clearFindHighlights, highlightMatches,
     findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
-    cleanPastedHtml;
+    cleanPastedHtml, toggleDarkMode;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
@@ -23,7 +23,7 @@ beforeAll(async () => {
     updateEditorActions, toggleFullscreen, insertImageFromFile, exportPDF,
     openFindReplace, closeFindReplace, clearFindHighlights, highlightMatches,
     findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
-    cleanPastedHtml,
+    cleanPastedHtml, toggleDarkMode,
   } = fns);
 });
 
@@ -933,5 +933,36 @@ describe('cleanPastedHtml', () => {
     const result = cleanPastedHtml(clean);
     expect(result).toContain('<strong>Hello</strong>');
     expect(result).toContain('<em>world</em>');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// toggleDarkMode
+// ---------------------------------------------------------------------------
+describe('toggleDarkMode', () => {
+  afterEach(() => {
+    if (document.body.classList.contains('dark-mode')) toggleDarkMode();
+  });
+
+  test('adds dark-mode class to body on first toggle', () => {
+    toggleDarkMode();
+    expect(document.body.classList.contains('dark-mode')).toBe(true);
+  });
+
+  test('removes dark-mode class on second toggle', () => {
+    toggleDarkMode();
+    toggleDarkMode();
+    expect(document.body.classList.contains('dark-mode')).toBe(false);
+  });
+
+  test('updates btn-dark-mode icon to sun in dark mode', () => {
+    toggleDarkMode();
+    expect(document.getElementById('btn-dark-mode').innerHTML).toContain('fa-sun');
+  });
+
+  test('restores moon icon when switching back to light mode', () => {
+    toggleDarkMode();
+    toggleDarkMode();
+    expect(document.getElementById('btn-dark-mode').innerHTML).toContain('fa-moon');
   });
 });

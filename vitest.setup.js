@@ -14,6 +14,7 @@ document.body.innerHTML = `
     <button id="btn-print"         class="btn btn-sm btn-outline-secondary" disabled></button>
     <button id="btn-export"        class="btn btn-sm btn-outline-secondary" disabled></button>
     <button id="btn-export-pdf"    class="btn btn-sm btn-outline-secondary" disabled></button>
+    <button id="btn-dark-mode"     class="btn btn-sm btn-outline-secondary"></button>
     <button id="btn-fullscreen"    class="btn btn-sm btn-outline-secondary"></button>
   </div>
   <div class="container-lg">
