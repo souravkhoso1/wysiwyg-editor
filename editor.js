@@ -272,6 +272,137 @@ if (mdInput) {
 
 var isFullscreen = false;
 
+var findMatches = [];
+var findIndex = -1;
+var lastFindTerm = '';
+
+function openFindReplace() {
+	var bar = document.getElementById('find-replace-bar');
+	bar.style.display = 'block';
+	document.getElementById('find-input').focus();
+}
+
+function closeFindReplace() {
+	document.getElementById('find-replace-bar').style.display = 'none';
+	clearFindHighlights();
+	findMatches = [];
+	findIndex = -1;
+	lastFindTerm = '';
+	document.getElementById('find-status').textContent = '';
+}
+
+function clearFindHighlights() {
+	editor.querySelectorAll('mark.find-match').forEach(function(m) {
+		var parent = m.parentNode;
+		while (m.firstChild) parent.insertBefore(m.firstChild, m);
+		parent.removeChild(m);
+		parent.normalize();
+	});
+}
+
+function highlightMatches(term) {
+	clearFindHighlights();
+	findMatches = [];
+	lastFindTerm = term;
+	findIndex = -1;
+	if (!term) return;
+	editor.normalize();
+	var walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT, null);
+	var nodes = [];
+	var node;
+	while ((node = walker.nextNode())) nodes.push(node);
+	var lowerTerm = term.toLowerCase();
+	nodes.forEach(function(textNode) {
+		var text = textNode.nodeValue;
+		var lowerText = text.toLowerCase();
+		var lastIndex = 0;
+		var idx;
+		var frag = document.createDocumentFragment();
+		var didSplit = false;
+		while ((idx = lowerText.indexOf(lowerTerm, lastIndex)) !== -1) {
+			if (idx > lastIndex) frag.appendChild(document.createTextNode(text.slice(lastIndex, idx)));
+			var mark = document.createElement('mark');
+			mark.className = 'find-match';
+			mark.textContent = text.slice(idx, idx + term.length);
+			findMatches.push(mark);
+			frag.appendChild(mark);
+			lastIndex = idx + term.length;
+			didSplit = true;
+		}
+		if (didSplit) {
+			if (lastIndex < text.length) frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+			textNode.parentNode.replaceChild(frag, textNode);
+		}
+	});
+}
+
+function updateFindStatus() {
+	var el = document.getElementById('find-status');
+	if (!el) return;
+	if (findMatches.length === 0) {
+		el.textContent = lastFindTerm ? 'No matches' : '';
+	} else {
+		el.textContent = (findIndex + 1) + ' of ' + findMatches.length;
+	}
+}
+
+function scrollToMatch(idx) {
+	findMatches.forEach(function(m, i) {
+		m.classList.toggle('find-match-current', i === idx);
+	});
+	if (findMatches[idx] && findMatches[idx].scrollIntoView) {
+		findMatches[idx].scrollIntoView({ block: 'center', behavior: 'smooth' });
+	}
+}
+
+function findNext() {
+	var term = document.getElementById('find-input').value;
+	if (term !== lastFindTerm) highlightMatches(term);
+	if (findMatches.length === 0) { updateFindStatus(); return; }
+	findIndex = (findIndex + 1) % findMatches.length;
+	scrollToMatch(findIndex);
+	updateFindStatus();
+}
+
+function findPrev() {
+	var term = document.getElementById('find-input').value;
+	if (term !== lastFindTerm) highlightMatches(term);
+	if (findMatches.length === 0) { updateFindStatus(); return; }
+	findIndex = (findIndex - 1 + findMatches.length) % findMatches.length;
+	scrollToMatch(findIndex);
+	updateFindStatus();
+}
+
+function replaceOne() {
+	var term = document.getElementById('find-input').value;
+	var replacement = document.getElementById('replace-input').value;
+	if (term !== lastFindTerm) highlightMatches(term);
+	if (findMatches.length === 0) { updateFindStatus(); return; }
+	if (findIndex < 0) findIndex = 0;
+	var match = findMatches[findIndex];
+	match.parentNode.replaceChild(document.createTextNode(replacement), match);
+	var savedIndex = findIndex;
+	highlightMatches(term);
+	findIndex = findMatches.length > 0 ? Math.min(savedIndex, findMatches.length - 1) : -1;
+	if (findIndex >= 0) scrollToMatch(findIndex);
+	updateFindStatus();
+}
+
+function replaceAll() {
+	var term = document.getElementById('find-input').value;
+	var replacement = document.getElementById('replace-input').value;
+	if (term !== lastFindTerm) highlightMatches(term);
+	if (findMatches.length === 0) { updateFindStatus(); return; }
+	findMatches.forEach(function(match) {
+		match.parentNode.replaceChild(document.createTextNode(replacement), match);
+	});
+	findMatches = [];
+	findIndex = -1;
+	lastFindTerm = '';
+	var el = document.getElementById('find-status');
+	if (el) el.textContent = 'All replaced';
+}
+
 function toggleFullscreen() {
 	var container = document.querySelector('.container-lg');
 	var btn = document.getElementById('btn-fullscreen');
@@ -301,6 +432,19 @@ function toggleEdit() {
 	}
 }
 
+document.addEventListener('keydown', function(e) {
+	var mod = e.ctrlKey || e.metaKey;
+	if (mod && e.key === 'h') {
+		e.preventDefault();
+		openFindReplace();
+	}
+});
+
+document.getElementById('find-input') && document.getElementById('find-input').addEventListener('keydown', function(e) {
+	if (e.key === 'Enter') { e.shiftKey ? findPrev() : findNext(); }
+	if (e.key === 'Escape') closeFindReplace();
+});
+
 (function() {
 	var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
 	if (!/Mac/i.test(platform)) return;
@@ -316,6 +460,15 @@ if (typeof module !== 'undefined' && module.exports) {
 		toggleFullscreen,
 		insertImageFromFile,
 		exportPDF,
+		openFindReplace,
+		closeFindReplace,
+		clearFindHighlights,
+		highlightMatches,
+		findNext,
+		findPrev,
+		replaceOne,
+		replaceAll,
+		updateFindStatus,
 		execCmd,
 		execCommandWithArg,
 		updateToolbarState,

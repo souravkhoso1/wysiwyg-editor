@@ -21,6 +21,11 @@ document.body.innerHTML = `
       <input type="text" id="url-input" value="" />
       <div id="url-error" style="display:none;"></div>
     </div>
+    <div id="find-replace-bar" style="display:none;">
+      <input type="text" id="find-input" value="" />
+      <input type="text" id="replace-input" value="" />
+      <span id="find-status"></span>
+    </div>
     <div id="editor" contenteditable="true"></div>
     <div id="markdown-pane" class="d-none">
       <textarea id="markdown-input"></textarea>

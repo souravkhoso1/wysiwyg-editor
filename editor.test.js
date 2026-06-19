@@ -7,7 +7,9 @@ let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
     exportHTML, exportPDF, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
-    updateEditorActions, toggleFullscreen, insertImageFromFile;
+    updateEditorActions, toggleFullscreen, insertImageFromFile,
+    openFindReplace, closeFindReplace, clearFindHighlights, highlightMatches,
+    findNext, findPrev, replaceOne, replaceAll, updateFindStatus;
 
 beforeAll(async () => {
   const mod = await import('./editor.js');
@@ -18,6 +20,8 @@ beforeAll(async () => {
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
     exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
     updateEditorActions, toggleFullscreen, insertImageFromFile, exportPDF,
+    openFindReplace, closeFindReplace, clearFindHighlights, highlightMatches,
+    findNext, findPrev, replaceOne, replaceAll, updateFindStatus,
   } = fns);
 });
 
@@ -745,5 +749,150 @@ describe('exportPDF', () => {
   test('does nothing if window.open returns null (popup blocked)', () => {
     window.open.mockReturnValue(null);
     expect(() => exportPDF()).not.toThrow();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Find & Replace
+// ---------------------------------------------------------------------------
+describe('highlightMatches', () => {
+  beforeEach(() => {
+    closeFindReplace();
+    document.getElementById('editor').innerHTML = 'hello world hello';
+    document.getElementById('find-input').value = '';
+  });
+
+  afterEach(() => {
+    closeFindReplace();
+  });
+
+  test('wraps all case-insensitive matches in mark.find-match elements', () => {
+    highlightMatches('hello');
+    const marks = document.getElementById('editor').querySelectorAll('mark.find-match');
+    expect(marks.length).toBe(2);
+  });
+
+  test('leaves editor unchanged when search term is empty', () => {
+    highlightMatches('');
+    const marks = document.getElementById('editor').querySelectorAll('mark.find-match');
+    expect(marks.length).toBe(0);
+  });
+
+  test('is case-insensitive', () => {
+    document.getElementById('editor').innerHTML = 'Hello HELLO hello';
+    highlightMatches('hello');
+    const marks = document.getElementById('editor').querySelectorAll('mark.find-match');
+    expect(marks.length).toBe(3);
+  });
+});
+
+describe('clearFindHighlights', () => {
+  beforeEach(() => { closeFindReplace(); });
+  afterEach(() => { closeFindReplace(); });
+
+  test('removes mark elements and restores plain text', () => {
+    document.getElementById('editor').innerHTML = 'hello world hello';
+    highlightMatches('hello');
+    clearFindHighlights();
+    const marks = document.getElementById('editor').querySelectorAll('mark.find-match');
+    expect(marks.length).toBe(0);
+    expect(document.getElementById('editor').textContent).toBe('hello world hello');
+  });
+});
+
+describe('findNext / findPrev', () => {
+  beforeEach(() => {
+    closeFindReplace();
+    document.getElementById('editor').innerHTML = 'foo bar foo baz foo';
+    document.getElementById('find-input').value = 'foo';
+  });
+
+  afterEach(() => {
+    closeFindReplace();
+  });
+
+  test('findNext advances through matches and updates status', () => {
+    findNext();
+    expect(document.getElementById('find-status').textContent).toBe('1 of 3');
+    findNext();
+    expect(document.getElementById('find-status').textContent).toBe('2 of 3');
+  });
+
+  test('findNext wraps around to first match after the last', () => {
+    findNext(); findNext(); findNext();
+    expect(document.getElementById('find-status').textContent).toBe('3 of 3');
+    findNext();
+    expect(document.getElementById('find-status').textContent).toBe('1 of 3');
+  });
+
+  test('findPrev shows "No matches" for term not in editor', () => {
+    document.getElementById('find-input').value = 'zzz';
+    findPrev();
+    expect(document.getElementById('find-status').textContent).toBe('No matches');
+  });
+});
+
+describe('replaceOne', () => {
+  beforeEach(() => {
+    closeFindReplace();
+    document.getElementById('editor').innerHTML = 'cat sat cat';
+    document.getElementById('find-input').value = 'cat';
+    document.getElementById('replace-input').value = 'dog';
+  });
+
+  afterEach(() => {
+    closeFindReplace();
+  });
+
+  test('replaces the current match', () => {
+    findNext();
+    replaceOne();
+    expect(document.getElementById('editor').textContent).toContain('dog');
+    expect(document.getElementById('editor').textContent).toContain('cat');
+  });
+
+  test('reduces match count by one after replacement', () => {
+    findNext();
+    replaceOne();
+    expect(document.getElementById('find-status').textContent).toBe('1 of 1');
+  });
+});
+
+describe('replaceAll', () => {
+  beforeEach(() => {
+    closeFindReplace();
+    document.getElementById('editor').innerHTML = 'cat sat cat mat cat';
+    document.getElementById('find-input').value = 'cat';
+    document.getElementById('replace-input').value = 'dog';
+  });
+
+  afterEach(() => {
+    closeFindReplace();
+  });
+
+  test('replaces every occurrence', () => {
+    replaceAll();
+    expect(document.getElementById('editor').textContent).not.toContain('cat');
+    expect(document.getElementById('editor').textContent).toBe('dog sat dog mat dog');
+  });
+
+  test('sets status to "All replaced"', () => {
+    replaceAll();
+    expect(document.getElementById('find-status').textContent).toBe('All replaced');
+  });
+});
+
+describe('openFindReplace / closeFindReplace', () => {
+  test('openFindReplace shows the panel', () => {
+    openFindReplace();
+    expect(document.getElementById('find-replace-bar').style.display).toBe('block');
+  });
+
+  test('closeFindReplace hides the panel and clears status', () => {
+    openFindReplace();
+    document.getElementById('find-status').textContent = '2 of 5';
+    closeFindReplace();
+    expect(document.getElementById('find-replace-bar').style.display).toBe('none');
+    expect(document.getElementById('find-status').textContent).toBe('');
   });
 });

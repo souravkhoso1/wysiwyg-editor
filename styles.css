@@ -41,6 +41,19 @@
 	min-height: calc(100vh - 220px);
 }
 
+mark.find-match {
+	background: #fff3cd;
+	color: inherit;
+	border-radius: 2px;
+}
+
+mark.find-match-current {
+	background: #fd7e14;
+	color: white;
+	outline: 2px solid #dc6502;
+	border-radius: 2px;
+}
+
 #editor:focus {
 	border-color: #86b7fe !important;
 	box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
