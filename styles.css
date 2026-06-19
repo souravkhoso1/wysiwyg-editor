@@ -1,62 +1,19 @@
-:root {
-	--bg-page:    #f8f9fa;
-	--bg-surface: #ffffff;
-	--bg-bar:     #ffffff;
-	--border:     #dee2e6;
-	--text:       #212529;
-	--text-muted: #6c757d;
+/* Dark mode — Bootstrap 5.3's data-bs-theme="dark" handles buttons, dropdowns,
+   forms and modals. We override bg-light/bg-white which Bootstrap 5.3.3 does
+   NOT automatically theme, plus the page background and editor surface. */
+[data-bs-theme="dark"] body,
+[data-bs-theme="dark"] .bg-light {
+	background-color: #1a1a2e !important;
+	color: #e2e8f0 !important;
 }
 
-body.dark-mode {
-	--bg-page:    #1a1a2e;
-	--bg-surface: #16213e;
-	--bg-bar:     #0f3460;
-	--border:     #334155;
-	--text:       #e2e8f0;
-	--text-muted: #94a3b8;
-}
-
-body {
-	background-color: var(--bg-page) !important;
-	color: var(--text);
-}
-
-body.dark-mode #toolbar,
-body.dark-mode #url-bar > div,
-body.dark-mode #find-replace-bar > div {
-	background-color: var(--bg-bar) !important;
-	border-color: var(--border) !important;
-}
-
-body.dark-mode #toolbar .btn-outline-secondary {
-	color: var(--text);
-	border-color: var(--border);
-}
-
-body.dark-mode #toolbar .btn-outline-secondary:hover {
-	background-color: var(--border);
-}
-
-body.dark-mode #editor,
-body.dark-mode #editor-counter {
-	background-color: var(--bg-surface) !important;
-	border-color: var(--border) !important;
-	color: var(--text);
-}
-
-body.dark-mode .form-control,
-body.dark-mode .form-select {
-	background-color: var(--bg-surface);
-	border-color: var(--border);
-	color: var(--text);
-}
-
-body.dark-mode .text-muted {
-	color: var(--text-muted) !important;
-}
-
-body.dark-mode footer {
-	border-color: var(--border) !important;
+[data-bs-theme="dark"] #toolbar,
+[data-bs-theme="dark"] #editor,
+[data-bs-theme="dark"] #editor-counter,
+[data-bs-theme="dark"] .bg-white {
+	background-color: #1e293b !important;
+	border-color: #334155 !important;
+	color: #e2e8f0 !important;
 }
 
 #editor {
@@ -121,13 +78,13 @@ body.dark-mode footer {
 	font-weight: 600;
 }
 
-body.dark-mode #editor th {
-	background: var(--bg-bar);
+[data-bs-theme="dark"] #editor th {
+	background: #0f172a;
 }
 
-body.dark-mode #editor th,
-body.dark-mode #editor td {
-	border-color: var(--border);
+[data-bs-theme="dark"] #editor th,
+[data-bs-theme="dark"] #editor td {
+	border-color: #334155;
 }
 
 .video-embed {

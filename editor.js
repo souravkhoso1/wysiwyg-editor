@@ -418,6 +418,7 @@ var isDarkMode = false;
 
 function toggleDarkMode() {
 	isDarkMode = !isDarkMode;
+	document.documentElement.setAttribute('data-bs-theme', isDarkMode ? 'dark' : 'light');
 	document.body.classList.toggle('dark-mode', isDarkMode);
 	var btn = document.getElementById('btn-dark-mode');
 	if (btn) {
