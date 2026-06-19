@@ -186,10 +186,10 @@ function updateCounter() {
 
 function updateEditorActions() {
 	var empty = editor.textContent.trim() === '';
-	var btnPrint = document.getElementById('btn-print');
-	var btnExport = document.getElementById('btn-export');
-	if (btnPrint) btnPrint.disabled = empty;
-	if (btnExport) btnExport.disabled = empty;
+	['btn-print', 'btn-export', 'btn-export-pdf'].forEach(function(id) {
+		var btn = document.getElementById(id);
+		if (btn) btn.disabled = empty;
+	});
 }
 
 editor.addEventListener('input', function() {
@@ -209,6 +209,24 @@ function clearAll() {
 	try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
 	updateCounter();
 	updateEditorActions();
+}
+
+function exportPDF() {
+	var win = window.open('', '_blank');
+	if (!win) return;
+	win.document.write(
+		'<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Document</title>' +
+		'<style>body{font-family:sans-serif;padding:2cm;line-height:1.6;max-width:800px;margin:auto}' +
+		'img{max-width:100%}table{border-collapse:collapse;width:100%}' +
+		'td,th{border:1px solid #ccc;padding:8px}' +
+		'pre{background:#f0f0f0;padding:1em;border-radius:4px;white-space:pre-wrap}' +
+		'blockquote{border-left:4px solid #ccc;margin:0;padding:0 1em;color:#555;font-style:italic}' +
+		'</style></head><body>' + editor.innerHTML + '</body></html>'
+	);
+	win.document.close();
+	win.focus();
+	win.print();
+	win.close();
 }
 
 function exportHTML() {
@@ -297,6 +315,7 @@ if (typeof module !== 'undefined' && module.exports) {
 	module.exports = {
 		toggleFullscreen,
 		insertImageFromFile,
+		exportPDF,
 		execCmd,
 		execCommandWithArg,
 		updateToolbarState,

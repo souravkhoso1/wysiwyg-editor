@@ -1,4 +1,4 @@
-import { vi, describe, test, expect, beforeEach, beforeAll } from 'vitest';
+import { vi, describe, test, expect, beforeEach, afterEach, beforeAll } from 'vitest';
 
 // editor.js is loaded dynamically inside beforeAll so that vitest.setup.js
 // has already populated the DOM before editor.js runs its top-level
@@ -6,7 +6,7 @@ import { vi, describe, test, expect, beforeEach, beforeAll } from 'vitest';
 let execCmd, execCommandWithArg, updateToolbarState, toggleSource,
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
-    exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
+    exportHTML, exportPDF, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
     updateEditorActions, toggleFullscreen, insertImageFromFile;
 
 beforeAll(async () => {
@@ -17,7 +17,7 @@ beforeAll(async () => {
     copyText, cutText, pasteText, openUrlBar, confirmUrl,
     showUrlError, insertImageFromUrl, closeUrlBar, clearAll,
     exportHTML, toggleEdit, toggleMarkdown, setToolbarDisabled, updateCounter,
-    updateEditorActions, toggleFullscreen, insertImageFromFile,
+    updateEditorActions, toggleFullscreen, insertImageFromFile, exportPDF,
   } = fns);
 });
 
@@ -365,6 +365,28 @@ describe('exportHTML', () => {
 });
 
 // ---------------------------------------------------------------------------
+// exportPDF
+// ---------------------------------------------------------------------------
+describe('exportPDF', () => {
+  test('opens a new window and calls print on it', () => {
+    const mockWin = { document: { write: vi.fn(), close: vi.fn() }, focus: vi.fn(), print: vi.fn(), close: vi.fn() };
+    globalThis.window.open = vi.fn().mockReturnValue(mockWin);
+    document.getElementById('editor').innerHTML = '<p>PDF content</p>';
+
+    exportPDF();
+
+    expect(window.open).toHaveBeenCalledWith('', '_blank');
+    expect(mockWin.document.write).toHaveBeenCalledWith(expect.stringContaining('<p>PDF content</p>'));
+    expect(mockWin.print).toHaveBeenCalled();
+  });
+
+  test('does nothing when window.open is blocked (returns null)', () => {
+    globalThis.window.open = vi.fn().mockReturnValue(null);
+    expect(() => exportPDF()).not.toThrow();
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Clipboard: copyText, cutText, pasteText
 // ---------------------------------------------------------------------------
 describe('copyText', () => {
@@ -655,19 +677,22 @@ describe('updateEditorActions', () => {
     document.getElementById('editor').innerHTML = '';
     document.getElementById('btn-print').disabled = false;
     document.getElementById('btn-export').disabled = false;
+    document.getElementById('btn-export-pdf').disabled = false;
   });
 
-  test('disables print and export when editor is empty', () => {
+  test('disables print, export, and export-pdf when editor is empty', () => {
     updateEditorActions();
     expect(document.getElementById('btn-print').disabled).toBe(true);
     expect(document.getElementById('btn-export').disabled).toBe(true);
+    expect(document.getElementById('btn-export-pdf').disabled).toBe(true);
   });
 
-  test('enables print and export when editor has content', () => {
+  test('enables print, export, and export-pdf when editor has content', () => {
     document.getElementById('editor').innerHTML = '<p>Hello</p>';
     updateEditorActions();
     expect(document.getElementById('btn-print').disabled).toBe(false);
     expect(document.getElementById('btn-export').disabled).toBe(false);
+    expect(document.getElementById('btn-export-pdf').disabled).toBe(false);
   });
 
   test('disables buttons again once content is removed', () => {
@@ -677,5 +702,48 @@ describe('updateEditorActions', () => {
     updateEditorActions();
     expect(document.getElementById('btn-print').disabled).toBe(true);
     expect(document.getElementById('btn-export').disabled).toBe(true);
+    expect(document.getElementById('btn-export-pdf').disabled).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// exportPDF
+// ---------------------------------------------------------------------------
+describe('exportPDF', () => {
+  let mockWin;
+
+  beforeEach(() => {
+    mockWin = {
+      document: { write: vi.fn(), close: vi.fn() },
+      focus: vi.fn(),
+      print: vi.fn(),
+      close: vi.fn(),
+    };
+    globalThis.window = globalThis.window || {};
+    vi.spyOn(window, 'open').mockReturnValue(mockWin);
+    document.getElementById('editor').innerHTML = '<p>Hello PDF</p>';
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test('opens a new window and calls print', () => {
+    exportPDF();
+    expect(window.open).toHaveBeenCalledWith('', '_blank');
+    expect(mockWin.document.write).toHaveBeenCalled();
+    expect(mockWin.print).toHaveBeenCalled();
+    expect(mockWin.close).toHaveBeenCalled();
+  });
+
+  test('writes editor content into the new window', () => {
+    exportPDF();
+    const written = mockWin.document.write.mock.calls[0][0];
+    expect(written).toContain('Hello PDF');
+  });
+
+  test('does nothing if window.open returns null (popup blocked)', () => {
+    window.open.mockReturnValue(null);
+    expect(() => exportPDF()).not.toThrow();
   });
 });
