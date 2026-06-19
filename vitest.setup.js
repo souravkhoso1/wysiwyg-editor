@@ -42,4 +42,15 @@ globalThis.URL.revokeObjectURL = vi.fn();
 
 globalThis.DOMPurify = { sanitize: vi.fn(function(html) { return html; }) };
 
+// localStorage is not available in jsdom under vitest 4 without --localstorage-file
+const _lsStore = {};
+Object.defineProperty(globalThis, 'localStorage', {
+  value: {
+    getItem:    (k) => Object.prototype.hasOwnProperty.call(_lsStore, k) ? _lsStore[k] : null,
+    setItem:    (k, v) => { _lsStore[k] = String(v); },
+    removeItem: (k) => { delete _lsStore[k]; },
+    clear:      () => { Object.keys(_lsStore).forEach(k => delete _lsStore[k]); },
+  },
+  configurable: true,
+});
 localStorage.clear();
