@@ -7,16 +7,158 @@ var currentForeColor = null;
 var STORAGE_KEY = 'richtext-online-content';
 var saveTimer = null;
 
-(function restoreFromStorage() {
+// URL length above which we warn and suggest GitHub Gist
+var URL_SHARE_THRESHOLD = 2000;
+
+(function initContent() {
+	var params = new URLSearchParams(window.location.search);
+	var gistId = params.get('gist');
+	var hash = window.location.hash;
+	if (gistId) {
+		restoreFromGist(gistId);
+	} else if (hash && hash.startsWith('#v1:')) {
+		restoreFromHash(hash.slice(4));
+	} else {
+		restoreFromStorage();
+	}
+	updateCounter();
+	updateEditorActions();
+})();
+
+function restoreFromStorage() {
 	try {
 		var saved = localStorage.getItem(STORAGE_KEY);
-		if (saved) {
-			editor.innerHTML = saved;
-			updateCounter();
-			updateEditorActions();
+		if (saved) editor.innerHTML = saved;
+	} catch (e) {}
+}
+
+function restoreFromHash(compressed) {
+	try {
+		var html = LZString.decompressFromEncodedURIComponent(compressed);
+		if (html) {
+			editor.innerHTML = DOMPurify.sanitize(html);
+			showSharedBanner();
+			return;
 		}
 	} catch (e) {}
-})();
+	restoreFromStorage();
+}
+
+function restoreFromGist(gistId) {
+	editor.innerHTML = '<p class="text-muted"><em>Loading shared document…</em></p>';
+	fetch('https://api.github.com/gists/' + gistId)
+		.then(function(r) { return r.json(); })
+		.then(function(data) {
+			var files = data.files;
+			var file = files && (files['document.html'] || Object.values(files)[0]);
+			if (file && file.content) {
+				editor.innerHTML = DOMPurify.sanitize(file.content);
+				updateCounter();
+				updateEditorActions();
+				showSharedBanner();
+			} else {
+				editor.innerHTML = '<p class="text-danger">Could not load the shared document.</p>';
+			}
+		})
+		.catch(function() {
+			editor.innerHTML = '<p class="text-danger">Could not load the shared document.</p>';
+		});
+}
+
+function showSharedBanner() {
+	var banner = document.getElementById('shared-banner');
+	if (banner) banner.classList.remove('d-none');
+}
+
+function dismissSharedBanner() {
+	var banner = document.getElementById('shared-banner');
+	if (banner) banner.classList.add('d-none');
+}
+
+function newDocument() {
+	editor.innerHTML = '';
+	history.replaceState(null, '', location.pathname);
+	dismissSharedBanner();
+	try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+	updateCounter();
+	updateEditorActions();
+}
+
+// ── Share modal ──────────────────────────────────────────────────────────────
+
+function openShareModal() {
+	if (!editor.textContent.trim()) return;
+	var compressed = LZString.compressToEncodedURIComponent(editor.innerHTML);
+	var shareUrl = location.origin + location.pathname + '#v1:' + compressed;
+	document.getElementById('share-url-input').value = shareUrl;
+	document.getElementById('share-copy-feedback').textContent = '';
+	var tooLong = shareUrl.length > URL_SHARE_THRESHOLD;
+	document.getElementById('share-url-warning').style.display = tooLong ? '' : 'none';
+	document.getElementById('share-gist-section').style.display = tooLong ? '' : 'none';
+	document.getElementById('gist-error').style.display = 'none';
+	document.getElementById('gist-success').style.display = 'none';
+	document.getElementById('gist-token-input').value = '';
+	new bootstrap.Modal(document.getElementById('shareModal')).show();
+}
+
+function copyShareUrl() {
+	var url = document.getElementById('share-url-input').value;
+	navigator.clipboard.writeText(url).then(function() {
+		document.getElementById('share-copy-feedback').textContent = 'Copied!';
+	});
+}
+
+function showGistSection() {
+	document.getElementById('share-gist-section').style.display = '';
+}
+
+async function shareViaGist() {
+	var token = document.getElementById('gist-token-input').value.trim();
+	var errorEl = document.getElementById('gist-error');
+	var successEl = document.getElementById('gist-success');
+	var btn = document.getElementById('btn-share-gist');
+	errorEl.style.display = 'none';
+	successEl.style.display = 'none';
+	if (!token) {
+		errorEl.textContent = 'Please enter a GitHub personal access token.';
+		errorEl.style.display = '';
+		return;
+	}
+	btn.disabled = true;
+	btn.textContent = 'Creating…';
+	try {
+		var resp = await fetch('https://api.github.com/gists', {
+			method: 'POST',
+			headers: {
+				'Authorization': 'token ' + token,
+				'Content-Type': 'application/json',
+				'Accept': 'application/vnd.github+json'
+			},
+			body: JSON.stringify({
+				description: 'RichText.online shared document',
+				public: true,
+				files: { 'document.html': { content: editor.innerHTML } }
+			})
+		});
+		if (!resp.ok) {
+			var err = await resp.json().catch(function() { return {}; });
+			throw new Error(err.message || 'GitHub API error (' + resp.status + ')');
+		}
+		var data = await resp.json();
+		var shareUrl = location.origin + location.pathname + '?gist=' + data.id;
+		document.getElementById('share-url-input').value = shareUrl;
+		document.getElementById('share-url-warning').style.display = 'none';
+		document.getElementById('share-gist-section').style.display = 'none';
+		successEl.textContent = 'Gist created! URL updated above — copy and share it.';
+		successEl.style.display = '';
+	} catch (e) {
+		errorEl.textContent = e.message || 'Failed to create Gist.';
+		errorEl.style.display = '';
+	} finally {
+		btn.disabled = false;
+		btn.textContent = 'Create Gist';
+	}
+}
 
 document.addEventListener('selectionchange', function() {
 	var sel = window.getSelection();
@@ -212,7 +354,7 @@ function updateCounter() {
 
 function updateEditorActions() {
 	var empty = editor.textContent.trim() === '';
-	['btn-print', 'btn-export', 'btn-export-pdf'].forEach(function(id) {
+	['btn-print', 'btn-export', 'btn-export-pdf', 'btn-share'].forEach(function(id) {
 		var btn = document.getElementById(id);
 		if (btn) btn.disabled = empty;
 	});
@@ -659,5 +801,14 @@ if (typeof module !== 'undefined' && module.exports) {
 		setToolbarDisabled,
 		updateCounter,
 		updateEditorActions,
+		openShareModal,
+		copyShareUrl,
+		showGistSection,
+		shareViaGist,
+		restoreFromHash,
+		restoreFromGist,
+		newDocument,
+		showSharedBanner,
+		dismissSharedBanner,
 	};
 }

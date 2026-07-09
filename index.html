@@ -36,15 +36,25 @@
 		"browserRequirements": "Any modern browser",
 		"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
 		"featureList": [
-			"Bold, italic, underline, strikethrough",
+			"Bold, italic, underline, strikethrough, subscript, superscript",
 			"Font family and size",
 			"Text and background colour",
 			"Headings H1–H6",
-			"Bullet and numbered lists",
-			"Insert links and images",
-			"Markdown mode with live preview",
+			"Bullet and numbered lists with indent and outdent",
+			"Insert links, images from URL or file upload",
+			"Embed YouTube and Vimeo videos",
+			"Insert and edit tables",
+			"Blockquote and code block formatting",
+			"Find and replace with step-through highlighting",
+			"Markdown mode with live split-pane preview",
+			"Source HTML view and edit",
+			"Share document via URL (no account required)",
 			"Export as HTML",
-			"Print support",
+			"Print and PDF export",
+			"Dark mode",
+			"Fullscreen mode",
+			"Special characters and emoji picker",
+			"Auto-save to browser local storage",
 			"Word and character counter"
 		]
 	}
@@ -170,6 +180,7 @@
 			<button id="btn-print" title="Print" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="window.print();" disabled><i class="fas fa-print"></i></button>
 			<button id="btn-export" title="Export as HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();" disabled><i class="fas fa-download"></i></button>
 			<button id="btn-export-pdf" title="Export as PDF" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportPDF();" disabled><i class="fas fa-file-pdf"></i></button>
+			<button id="btn-share" title="Share Document" class="btn btn-sm btn-outline-primary" onmousedown="event.preventDefault()" onclick="openShareModal();" disabled><i class="fas fa-share-nodes"></i></button>
 			<button id="btn-char-picker" title="Special Characters &amp; Emoji" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openCharPicker();"><i class="fas fa-smile"></i></button>
 			<button id="btn-find" title="Find &amp; Replace (Ctrl+H)" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openFindReplace();"><i class="fas fa-search"></i></button>
 			<button title="Keyboard Shortcuts" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#helpModal"><i class="fas fa-keyboard"></i></button>
@@ -244,7 +255,13 @@
 				</div>
 			</div>
 		</div>
-		<div id="editor" class="bg-white border border-bottom-0 p-3" contenteditable="true"></div>
+		<div id="shared-banner" class="alert alert-info alert-dismissible d-none d-flex align-items-center gap-2 py-2 px-3 border border-top-0 border-info rounded-0 mb-0" role="alert">
+			<i class="fas fa-circle-info flex-shrink-0"></i>
+			<span class="small">You're viewing a shared document.</span>
+			<button class="btn btn-sm btn-outline-info ms-2" onmousedown="event.preventDefault()" onclick="newDocument();">New Document</button>
+			<button type="button" class="btn-close ms-auto" onclick="dismissSharedBanner();"></button>
+		</div>
+		<div id="editor" class="bg-white border border-bottom-0 p-3" contenteditable="true"><h2>Welcome to RichText.online</h2><p><strong>Start typing here</strong> — this placeholder text disappears as soon as you write something. Your work is saved automatically to your browser, so you can come back anytime without losing progress.</p><h3>What you can do with this editor</h3><ul><li><strong>Format text</strong> — bold, italic, underline, strikethrough, subscript and superscript from the toolbar.</li><li><strong>Structure your document</strong> — apply Heading 1 through Heading 6 for clear sections and hierarchy.</li><li><strong>Add lists</strong> — unordered (bullet) or ordered (numbered) lists in one click.</li><li><strong>Control fonts and colours</strong> — choose from seven font families, seven size presets, and pick any foreground or background colour.</li><li><strong>Insert links and images</strong> — paste a URL to create a hyperlink, embed an image from the web, or upload one from your device.</li><li><strong>Embed videos</strong> — paste a YouTube or Vimeo link to embed a playable video inline.</li><li><strong>Build tables</strong> — insert grids up to 4 × 4, then add or remove rows and columns at any time.</li><li><strong>Find and replace</strong> — search your document with step-through highlighting and single or bulk replacement.</li><li><strong>Switch to Markdown</strong> — write in Markdown with a live split-pane preview, then switch back to rich text at any time.</li><li><strong>Share with a link</strong> — click the Share button to generate a URL that restores your exact document for anyone who opens it.</li><li><strong>Export</strong> — download your document as a standalone HTML file or open a print-ready PDF view.</li></ul><p>No account, no installation and no file management required. Everything runs directly in your browser.</p></div>
 		<div id="markdown-pane" class="d-none">
 			<div class="d-flex bg-white border border-top-0 rounded-bottom overflow-hidden" style="min-height: 400px;">
 				<textarea id="markdown-input" class="border-0 p-3 font-monospace" style="flex:1; resize:none; outline:none; min-height:400px;" placeholder="Write Markdown here..."></textarea>
@@ -253,8 +270,152 @@
 			</div>
 		</div>
 		<div id="editor-counter" class="bg-white border border-top-0 rounded-bottom px-3 py-1 text-end small text-muted">Words: 0 | Characters: 0</div>
-		<footer class="mt-4 pt-3 border-top text-muted small">
-			<p class="mb-1"><strong>RichText.online</strong> is a free, browser-based WYSIWYG rich text editor. Write and format documents with bold, italic, underline, strikethrough, headings (H1–H6), bullet and numbered lists, text colour, background colour, font family, font size, links, images and horizontal rules. Switch to Markdown mode for a live split-pane preview, toggle source HTML view, or export your document as a standalone HTML file — all without creating an account.</p>
+		<footer class="mt-5 pt-4 border-top">
+
+			<p class="text-muted small mb-5"><strong>RichText.online</strong> is a free, browser-based WYSIWYG rich text editor. Write and format documents with bold, italic, underline, strikethrough, headings (H1–H6), bullet and numbered lists, text colour, background colour, font family, font size, links, images and horizontal rules. Switch to Markdown mode for a live split-pane preview, toggle source HTML view, or export your document as a standalone HTML file — all without creating an account.</p>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Full feature list</h2>
+				<div class="row g-4">
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Text formatting</h3>
+						<p class="small">Apply <strong>bold</strong>, <em>italic</em>, <u>underline</u> and <s>strikethrough</s> to any selection. Raise or lower characters with superscript and subscript for scientific notation, footnotes and chemical formulae. Remove all inline formatting at once with the Clear Formatting button.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Headings and paragraph structure</h3>
+						<p class="small">Use the Heading dropdown to apply H1 through H6 heading levels. Well-structured headings make long documents easier to navigate and improve accessibility for screen-reader users.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Lists</h3>
+						<p class="small">Create unordered (bullet) lists for collections of items and ordered (numbered) lists for step-by-step instructions. Use Indent and Outdent to create nested sub-lists with multiple levels of hierarchy.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Fonts and colours</h3>
+						<p class="small">Choose from seven font families — Arial, Comic Sans MS, Courier, Georgia, Tahoma, Times New Roman and Verdana — and seven size presets from Tiny to Huge. Pick any colour for text foreground and background highlight using the native colour picker.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Links and images</h3>
+						<p class="small">Highlight text and click the link icon to wrap it in a hyperlink, or remove a link with one click. Insert images from a web URL, upload a file directly from your device, or embed a YouTube or Vimeo video by pasting its URL — all without leaving the editor.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Tables</h3>
+						<p class="small">Insert a table of up to 4 × 4 cells from the toolbar menu. Once inserted, place your cursor in any cell and use the Table menu to add a row below, delete a row, add a column to the right, or delete a column. The first row is automatically formatted as a header row.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Blockquotes and code blocks</h3>
+						<p class="small">Format a paragraph as a blockquote to pull out a citation or highlight an important passage. Switch any paragraph to a code/pre block for displaying command-line instructions, code snippets or other monospace content.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Find and replace</h3>
+						<p class="small">Open the Find &amp; Replace bar (or press Ctrl+H / ⌘+H) to search your document with highlighted matches. Step through results one at a time with the arrow buttons, replace individual matches, or replace all occurrences at once.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Markdown mode</h3>
+						<p class="small">Toggle Markdown mode to write in plain Markdown syntax with a live-rendered preview pane beside it. The preview updates as you type. Switch back to rich-text mode at any time to continue formatting with the toolbar.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Source HTML view</h3>
+						<p class="small">Click the Source button to view and edit the raw HTML behind your document. This is useful for pasting content from other systems, troubleshooting formatting, or hand-crafting HTML elements the toolbar does not expose.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Export and print</h3>
+						<p class="small">Download your document as a self-contained HTML file you can open in any browser — useful for archiving or sharing offline. Open a print-ready PDF view to print directly or save as a PDF using your browser's print dialog.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Share via URL</h3>
+						<p class="small">Click the Share button to compress your document content and encode it into a shareable URL. Anyone who opens the link sees the same document, ready to read or edit — no account, no server, no file attachment required. For very long documents, an optional GitHub Gist fallback generates a shorter link.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Auto-save</h3>
+						<p class="small">Your content is saved automatically to your browser's local storage as you type, with a short debounce delay to avoid excessive writes. Closing and reopening the tab restores exactly where you left off, without any manual save step.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Dark mode and fullscreen</h3>
+						<p class="small">Toggle Dark mode for comfortable editing in low-light environments. Switch to Fullscreen to expand the editor to the full browser window, hiding everything else for a distraction-free writing experience.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Special characters and emoji</h3>
+						<p class="small">Open the character picker to insert commonly used symbols — copyright ©, registered ®, trademark ™, currency signs, arrows, fractions, typographic punctuation — as well as a curated set of emoji, all at a single click.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Keyboard shortcuts</h3>
+						<p class="small">Standard keyboard shortcuts work throughout the editor: Ctrl+B for bold, Ctrl+I for italic, Ctrl+U for underline, Ctrl+Z to undo, Ctrl+Y (or ⌘+Shift+Z on Mac) to redo, Ctrl+H to open Find &amp; Replace. Press Enter in the URL bar to confirm, and Escape to dismiss it.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">How to use RichText.online</h2>
+				<ol class="small">
+					<li class="mb-2"><strong>Open the editor.</strong> The editor is ready to use as soon as the page loads — no sign-in, no extension, no installation needed. If you have visited before, your previous content is restored automatically.</li>
+					<li class="mb-2"><strong>Write your content.</strong> Click anywhere in the editing area and start typing. The editor behaves like a word processor: press Enter for a new paragraph, Tab for indentation inside lists.</li>
+					<li class="mb-2"><strong>Apply formatting.</strong> Select any text with your mouse or keyboard, then click a toolbar button to apply bold, italic, underline, a heading level, a colour, or any other format. Formatting is applied to the selection immediately.</li>
+					<li class="mb-2"><strong>Insert links and media.</strong> Click the link icon to attach a URL to selected text. Click the image icon to embed an image from a web address, or use the file-upload icon to pick an image from your computer. Paste a YouTube or Vimeo URL into the video embed bar to add a playable video.</li>
+					<li class="mb-2"><strong>Organise with tables.</strong> Click the table icon to insert a grid. Click inside any cell to position your cursor, then use the Table menu to add or remove rows and columns as your data grows.</li>
+					<li class="mb-2"><strong>Share your document.</strong> Click the blue Share button in the toolbar to open the share dialog. Copy the generated URL and send it to anyone — they will open the same document in their browser without needing an account.</li>
+					<li class="mb-2"><strong>Export when finished.</strong> Click the download icon to save your document as an HTML file, or click the PDF icon to open a print view. Use your browser's Print dialog to save as PDF or send to a printer.</li>
+				</ol>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Common use cases</h2>
+				<div class="row g-3 small">
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Blog post drafts</h3>
+						<p>Write and format a draft with headings, subheadings, bold emphasis and hyperlinks. When finished, export as HTML to paste directly into your CMS or send the share URL to an editor for review.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Formatted emails</h3>
+						<p>Compose an email with bullet points, coloured text and an embedded image. Copy the formatted content from the editor and paste it into your email client to preserve the rich formatting.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Quick notes and meeting minutes</h3>
+						<p>Open the editor in a browser tab and capture meeting notes with numbered action items. Auto-save keeps your content safe and the share link lets you distribute minutes to the whole team instantly.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Reports and documentation</h3>
+						<p>Build structured reports using heading hierarchy, data tables, blockquotes for sourced material and horizontal rules to separate sections. Export as HTML for embedding in internal tools or wikis.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Content collaboration</h3>
+						<p>Write a document, click Share, and send the URL to a colleague. They open it in their browser, make edits, and share it back — no shared drives, no version files, no login required on either end.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Markdown authoring</h3>
+						<p>Prefer to write in Markdown? Toggle Markdown mode for a live split-screen: raw Markdown on the left, rendered HTML on the right. Copy the rendered output or switch to rich-text mode to continue editing with the toolbar.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Frequently asked questions</h2>
+				<div class="small">
+					<h3 class="h6 fw-semibold">Is RichText.online free to use?</h3>
+					<p>Yes — completely free with no usage limits, no paid plan and no account required. Open the page and start writing immediately.</p>
+
+					<h3 class="h6 fw-semibold">Where is my content stored?</h3>
+					<p>Your content is saved automatically to your browser's local storage on your own device. Nothing is sent to any server. Clearing your browser data will remove the saved content, so use Export or Share to create a permanent copy.</p>
+
+					<h3 class="h6 fw-semibold">How does sharing work?</h3>
+					<p>Clicking Share compresses your document's HTML and encodes it directly into the URL. The recipient's browser decompresses it and displays the document — no server is involved, and no data is stored anywhere. For very large documents where the URL would be impractically long, the optional GitHub Gist fallback stores the content on GitHub and generates a short link instead.</p>
+
+					<h3 class="h6 fw-semibold">Can I paste content from Word or Google Docs?</h3>
+					<p>Yes. The editor automatically cleans Microsoft Word's proprietary markup when you paste, removing hidden XML tags, inline styles and conditional comments that would otherwise break the layout. Basic formatting — bold, italic, headings, lists and links — is preserved.</p>
+
+					<h3 class="h6 fw-semibold">Does it work offline?</h3>
+					<p>Once the page has loaded, you can write and format content without an internet connection. The toolbar, auto-save, export and print all function offline. The Share feature (URL hash method) also works offline for generating the link, but the GitHub Gist method requires a network connection to call the GitHub API.</p>
+
+					<h3 class="h6 fw-semibold">Can I use it on mobile?</h3>
+					<p>Yes. The toolbar is responsive and wraps on smaller screens. The editing area works with mobile keyboards. For the best experience on mobile, use a current version of Chrome, Safari or Firefox.</p>
+
+					<h3 class="h6 fw-semibold">How do I insert an image?</h3>
+					<p>There are two ways. Click the image-from-URL icon (picture frame) to paste a web address for an externally hosted image. Click the file-upload icon (photo with a plus) to select an image file from your device — it is embedded directly into the document as a base-64 data URI, so no external hosting is needed.</p>
+
+					<h3 class="h6 fw-semibold">What is Markdown mode?</h3>
+					<p>Markdown mode replaces the editor with a split view: a plain-text area on the left where you write in Markdown syntax, and a live HTML preview on the right that updates as you type. It is useful if you prefer writing in Markdown but want to see the rendered output immediately. Toggle the MD button to switch between Markdown and rich-text modes.</p>
+				</div>
+			</section>
+
 		</footer>
 	</div>
 	<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
@@ -287,9 +448,47 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="shareModalLabel"><i class="fas fa-share-nodes me-2"></i>Share Document</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">Anyone with this link can view and edit a copy of your document — no account needed.</p>
+					<label class="form-label fw-semibold small">Shareable URL</label>
+					<div class="input-group mb-1">
+						<input type="text" id="share-url-input" class="form-control form-control-sm font-monospace" readonly>
+						<button class="btn btn-outline-secondary btn-sm" onclick="copyShareUrl();" title="Copy URL"><i class="fas fa-copy"></i></button>
+					</div>
+					<div class="d-flex align-items-center justify-content-between mb-2">
+						<span id="share-copy-feedback" class="small text-success"></span>
+						<button class="btn btn-link btn-sm text-muted p-0 small" onclick="showGistSection();">Use GitHub Gist instead &rsaquo;</button>
+					</div>
+					<div id="share-url-warning" class="alert alert-warning small py-2 px-3 mb-2" style="display:none;">
+						<i class="fas fa-triangle-exclamation me-1"></i>
+						This URL is over 2&thinsp;000 characters and may be truncated by some apps or email clients. Use GitHub Gist below for a shorter link.
+					</div>
+					<div id="share-gist-section" style="display:none;">
+						<hr class="my-3">
+						<label class="form-label fw-semibold small">GitHub Gist <span class="fw-normal text-muted">(shorter URL)</span></label>
+						<p class="small text-muted mb-2">Create a <a href="https://github.com/settings/tokens/new?scopes=gist&description=RichText.online" target="_blank" rel="noopener noreferrer">GitHub token</a> with the <code>gist</code> scope and paste it below. Your token is never stored.</p>
+						<div class="input-group mb-2">
+							<input type="password" id="gist-token-input" class="form-control form-control-sm" placeholder="ghp_…" autocomplete="off">
+							<button id="btn-share-gist" class="btn btn-primary btn-sm" onclick="shareViaGist();">Create Gist</button>
+						</div>
+						<div id="gist-error" class="text-danger small" style="display:none;"></div>
+						<div id="gist-success" class="text-success small" style="display:none;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
 	<script src="editor.js"></script>
 </body>
 </html>
