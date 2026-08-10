@@ -86,9 +86,14 @@
 </script>
 <body class="bg-light py-4">
 	<div class="container-lg">
-		<header class="mb-3">
-			<h1 class="h4 fw-bold mb-1">RichText.online</h1>
-			<p class="text-muted small mb-0">Free online rich text editor — format, export and print without sign-up or install.</p>
+		<header class="mb-3 d-flex justify-content-between align-items-start flex-wrap gap-2">
+			<div>
+				<h1 class="h4 fw-bold mb-1">RichText.online</h1>
+				<p class="text-muted small mb-0">Free online rich text editor — format, export and print without sign-up or install.</p>
+			</div>
+			<a href="https://buymeacoffee.com/souravkhoso1" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-warning fw-semibold text-nowrap">
+				<i class="fas fa-mug-hot me-1"></i>Buy me a coffee
+			</a>
 		</header>
 		<div id="toolbar" class="d-flex flex-wrap align-items-center gap-1 p-2 bg-white border border-bottom-0 rounded-top">
 			<button id="btn-bold" title="Bold" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold"></i></button>
