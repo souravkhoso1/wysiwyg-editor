@@ -6,6 +6,11 @@ var savedRange = null;
 var currentForeColor = null;
 var STORAGE_KEY = 'richtext-online-content';
 var saveTimer = null;
+var HISTORY_KEY = 'richtext-online-history';
+var HISTORY_MAX = 8;
+var HISTORY_INTERVAL_MS = 2 * 60 * 1000;
+var historyTimer = null;
+var lastSnapshotContent = null;
 
 // URL length above which we warn and suggest GitHub Gist
 var URL_SHARE_THRESHOLD = 2000;
@@ -80,8 +85,125 @@ function newDocument() {
 	history.replaceState(null, '', location.pathname);
 	dismissSharedBanner();
 	try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+	clearHistory();
 	updateCounter();
 	updateEditorActions();
+}
+
+// ── Version history ──────────────────────────────────────────────────────────
+
+function getHistory() {
+	try {
+		var raw = localStorage.getItem(HISTORY_KEY);
+		return raw ? JSON.parse(raw) : [];
+	} catch (e) {
+		return [];
+	}
+}
+
+function setHistory(list) {
+	try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); } catch (e) {}
+}
+
+function clearHistory() {
+	lastSnapshotContent = null;
+	try { localStorage.removeItem(HISTORY_KEY); } catch (e) {}
+}
+
+function takeSnapshot(content) {
+	content = content !== undefined ? content : editor.innerHTML;
+	if (!content || !content.trim()) return;
+	if (content === lastSnapshotContent) return;
+	var list = getHistory();
+	list.push({ time: Date.now(), content: content });
+	while (list.length > HISTORY_MAX) list.shift();
+	setHistory(list);
+	lastSnapshotContent = content;
+}
+
+function scheduleHistorySnapshot() {
+	if (historyTimer) return;
+	historyTimer = setTimeout(function() {
+		historyTimer = null;
+		takeSnapshot();
+	}, HISTORY_INTERVAL_MS);
+}
+
+function relativeTime(timestamp) {
+	var diff = Math.max(0, Date.now() - timestamp);
+	var mins = Math.round(diff / 60000);
+	if (mins < 1) return 'Just now';
+	if (mins === 1) return '1 minute ago';
+	if (mins < 60) return mins + ' minutes ago';
+	var hours = Math.round(mins / 60);
+	if (hours === 1) return '1 hour ago';
+	if (hours < 24) return hours + ' hours ago';
+	var days = Math.round(hours / 24);
+	if (days === 1) return 'Yesterday';
+	return days + ' days ago';
+}
+
+function snapshotPreviewText(content) {
+	var div = document.createElement('div');
+	div.innerHTML = content;
+	var text = (div.textContent || '').trim().replace(/\s+/g, ' ');
+	return text.length > 120 ? text.slice(0, 120) + '…' : (text || '(empty document)');
+}
+
+function openHistoryModal() {
+	takeSnapshot(); // capture current state so it's not lost when restoring
+	renderHistoryList();
+	new bootstrap.Modal(document.getElementById('historyModal')).show();
+}
+
+function renderHistoryList() {
+	var listEl = document.getElementById('history-list');
+	var emptyEl = document.getElementById('history-empty');
+	if (!listEl) return;
+	var list = getHistory().slice().reverse(); // newest first
+	listEl.innerHTML = '';
+	if (list.length === 0) {
+		emptyEl.style.display = '';
+		return;
+	}
+	emptyEl.style.display = 'none';
+	list.forEach(function(snap) {
+		var item = document.createElement('div');
+		item.className = 'list-group-item d-flex justify-content-between align-items-center gap-2';
+		var info = document.createElement('div');
+		info.className = 'flex-grow-1 overflow-hidden';
+		var timeEl = document.createElement('div');
+		timeEl.className = 'fw-semibold small';
+		timeEl.textContent = relativeTime(snap.time);
+		var previewEl = document.createElement('div');
+		previewEl.className = 'text-muted small text-truncate';
+		previewEl.textContent = snapshotPreviewText(snap.content);
+		info.appendChild(timeEl);
+		info.appendChild(previewEl);
+		var btn = document.createElement('button');
+		btn.className = 'btn btn-sm btn-outline-primary flex-shrink-0';
+		btn.textContent = 'Restore';
+		btn.onclick = function() { restoreSnapshot(snap.time); };
+		item.appendChild(info);
+		item.appendChild(btn);
+		listEl.appendChild(item);
+	});
+}
+
+function restoreSnapshot(timestamp) {
+	var list = getHistory();
+	var snap = list.find(function(s) { return s.time === timestamp; });
+	if (!snap) return;
+	// Preserve current content as a snapshot before overwriting, so restoring is non-destructive.
+	takeSnapshot();
+	editor.innerHTML = DOMPurify.sanitize(snap.content);
+	lastSnapshotContent = editor.innerHTML;
+	try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) {}
+	updateCounter();
+	updateEditorActions();
+	var modalEl = document.getElementById('historyModal');
+	var modal = bootstrap.Modal.getInstance(modalEl);
+	if (modal) modal.hide();
 }
 
 // ── Share modal ──────────────────────────────────────────────────────────────
@@ -389,6 +511,7 @@ editor.addEventListener('input', function() {
 	saveTimer = setTimeout(function() {
 		try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) {}
 	}, 500);
+	scheduleHistorySnapshot();
 });
 
 function clearAll() {
@@ -397,6 +520,7 @@ function clearAll() {
 	document.execCommand('delete');
 	currentForeColor = null;
 	try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+	clearHistory();
 	updateCounter();
 	updateEditorActions();
 }
@@ -810,5 +934,15 @@ if (typeof module !== 'undefined' && module.exports) {
 		newDocument,
 		showSharedBanner,
 		dismissSharedBanner,
+		getHistory,
+		setHistory,
+		clearHistory,
+		takeSnapshot,
+		scheduleHistorySnapshot,
+		relativeTime,
+		snapshotPreviewText,
+		openHistoryModal,
+		renderHistoryList,
+		restoreSnapshot,
 	};
 }
