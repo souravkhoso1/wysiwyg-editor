@@ -15,6 +15,257 @@ var lastSnapshotContent = null;
 // URL length above which we warn and suggest GitHub Gist
 var URL_SHARE_THRESHOLD = 2000;
 
+// ── Usage metrics ────────────────────────────────────────────────────────────
+
+function trackEvent(name, params) {
+	if (typeof gtag === 'function') gtag('event', name, params || {});
+}
+
+// ── Auth and cloud persistence (Firebase) ────────────────────────────────────
+
+var currentUser = null;
+var currentCloudDocId = null;
+var currentCloudTitle = null;
+
+function getDb() {
+	return firebase.firestore();
+}
+
+firebase.auth().onAuthStateChanged(function(user) {
+	currentUser = user;
+	if (!user) {
+		currentCloudDocId = null;
+		currentCloudTitle = null;
+	}
+	updateAccountUI(user);
+	updateCloudButtons();
+});
+
+function signInWithGoogle() {
+	var provider = new firebase.auth.GoogleAuthProvider();
+	firebase.auth().signInWithPopup(provider)
+		.then(function() { trackEvent('login', { method: 'Google' }); })
+		.catch(function(e) {
+			if (e.code !== 'auth/cancelled-popup-request' && e.code !== 'auth/popup-closed-by-user') {
+				alert('Sign-in failed: ' + e.message);
+			}
+		});
+}
+
+function signOutUser() {
+	firebase.auth().signOut().then(function() { trackEvent('logout'); });
+}
+
+function updateAccountUI(user) {
+	var signInBtn = document.getElementById('btn-signin');
+	var widget = document.getElementById('account-widget');
+	var btn = document.getElementById('btn-account');
+	var menu = document.getElementById('account-menu');
+	if (!signInBtn || !widget || !btn || !menu) return;
+	menu.innerHTML = '';
+	if (user) {
+		signInBtn.classList.add('d-none');
+		widget.classList.remove('d-none');
+
+		btn.innerHTML = '';
+		if (user.photoURL) {
+			var img = document.createElement('img');
+			img.src = user.photoURL;
+			img.alt = '';
+			img.style.width = '20px';
+			img.style.height = '20px';
+			img.style.borderRadius = '50%';
+			img.style.objectFit = 'cover';
+			btn.appendChild(img);
+		} else {
+			btn.innerHTML = '<i class="fas fa-circle-user"></i>';
+		}
+		btn.title = user.displayName || user.email || 'Account';
+
+		var emailItem = document.createElement('li');
+		var emailText = document.createElement('span');
+		emailText.className = 'dropdown-item-text small text-muted';
+		emailText.textContent = user.email || '';
+		emailItem.appendChild(emailText);
+
+		var docsItem = document.createElement('li');
+		var docsBtn = document.createElement('button');
+		docsBtn.className = 'dropdown-item';
+		docsBtn.textContent = 'My Documents';
+		docsBtn.onclick = openDocumentsModal;
+		docsItem.appendChild(docsBtn);
+
+		var dividerItem = document.createElement('li');
+		dividerItem.innerHTML = '<hr class="dropdown-divider">';
+
+		var signOutItem = document.createElement('li');
+		var signOutBtn = document.createElement('button');
+		signOutBtn.className = 'dropdown-item';
+		signOutBtn.textContent = 'Sign out';
+		signOutBtn.onclick = signOutUser;
+		signOutItem.appendChild(signOutBtn);
+
+		menu.appendChild(emailItem);
+		menu.appendChild(docsItem);
+		menu.appendChild(dividerItem);
+		menu.appendChild(signOutItem);
+	} else {
+		signInBtn.classList.remove('d-none');
+		widget.classList.add('d-none');
+	}
+}
+
+function updateCloudButtons() {
+	var btn = document.getElementById('btn-cloud-save');
+	if (btn) btn.disabled = editor.textContent.trim() === '' || !currentUser;
+}
+
+function deriveDefaultTitle() {
+	var heading = editor.querySelector('h1, h2, h3');
+	var text = (heading ? heading.textContent : editor.textContent).trim().replace(/\s+/g, ' ');
+	return text.slice(0, 60) || 'Untitled document';
+}
+
+function openCloudSaveModal() {
+	if (!currentUser) { signInWithGoogle(); return; }
+	if (!editor.textContent.trim()) return;
+	document.getElementById('cloud-save-title').value = currentCloudTitle || deriveDefaultTitle();
+	document.getElementById('cloud-save-as-new').style.display = currentCloudDocId ? '' : 'none';
+	document.getElementById('cloud-save-error').style.display = 'none';
+	new bootstrap.Modal(document.getElementById('cloudSaveModal')).show();
+}
+
+async function saveToCloud(asNew) {
+	if (!currentUser) return;
+	var title = document.getElementById('cloud-save-title').value.trim() || 'Untitled document';
+	var errorEl = document.getElementById('cloud-save-error');
+	var btn = document.getElementById('btn-confirm-cloud-save');
+	errorEl.style.display = 'none';
+	btn.disabled = true;
+	try {
+		var db = getDb();
+		var payload = {
+			ownerId: currentUser.uid,
+			title: title,
+			content: editor.innerHTML,
+			updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+		};
+		if (currentCloudDocId && !asNew) {
+			await db.collection('documents').doc(currentCloudDocId).set(payload, { merge: true });
+		} else {
+			payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+			var ref = await db.collection('documents').add(payload);
+			currentCloudDocId = ref.id;
+		}
+		currentCloudTitle = title;
+		trackEvent('document_save_cloud', { method: asNew ? 'new_copy' : 'save' });
+		var modalEl = document.getElementById('cloudSaveModal');
+		var modal = bootstrap.Modal.getInstance(modalEl);
+		if (modal) modal.hide();
+	} catch (e) {
+		errorEl.textContent = e.message || 'Failed to save document.';
+		errorEl.style.display = '';
+	} finally {
+		btn.disabled = false;
+	}
+}
+
+function openDocumentsModal() {
+	if (!currentUser) return;
+	var listEl = document.getElementById('cloud-docs-list');
+	var emptyEl = document.getElementById('cloud-docs-empty');
+	var loadingEl = document.getElementById('cloud-docs-loading');
+	listEl.innerHTML = '';
+	emptyEl.style.display = 'none';
+	loadingEl.style.display = '';
+	new bootstrap.Modal(document.getElementById('documentsModal')).show();
+	getDb().collection('documents')
+		.where('ownerId', '==', currentUser.uid)
+		.orderBy('updatedAt', 'desc')
+		.get()
+		.then(function(snapshot) {
+			loadingEl.style.display = 'none';
+			if (snapshot.empty) {
+				emptyEl.style.display = '';
+				return;
+			}
+			snapshot.forEach(function(doc) {
+				renderCloudDocRow(doc.id, doc.data());
+			});
+		})
+		.catch(function(e) {
+			loadingEl.style.display = 'none';
+			emptyEl.textContent = 'Could not load documents: ' + e.message;
+			emptyEl.style.display = '';
+		});
+}
+
+function renderCloudDocRow(docId, data) {
+	var listEl = document.getElementById('cloud-docs-list');
+	var item = document.createElement('div');
+	item.className = 'list-group-item d-flex justify-content-between align-items-center gap-2';
+
+	var info = document.createElement('div');
+	info.className = 'flex-grow-1 overflow-hidden';
+	var titleEl = document.createElement('div');
+	titleEl.className = 'fw-semibold small text-truncate';
+	titleEl.textContent = data.title || 'Untitled document';
+	var timeEl = document.createElement('div');
+	timeEl.className = 'text-muted small';
+	timeEl.textContent = data.updatedAt ? relativeTime(data.updatedAt.toMillis()) : '';
+	info.appendChild(titleEl);
+	info.appendChild(timeEl);
+
+	var actions = document.createElement('div');
+	actions.className = 'd-flex gap-1 flex-shrink-0';
+	var openBtn = document.createElement('button');
+	openBtn.className = 'btn btn-sm btn-outline-primary';
+	openBtn.textContent = 'Open';
+	openBtn.onclick = function() { loadCloudDocument(docId, data.title); };
+	var delBtn = document.createElement('button');
+	delBtn.className = 'btn btn-sm btn-outline-danger';
+	delBtn.innerHTML = '<i class="fas fa-trash"></i>';
+	delBtn.onclick = function() { deleteCloudDocument(docId, item); };
+	actions.appendChild(openBtn);
+	actions.appendChild(delBtn);
+
+	item.appendChild(info);
+	item.appendChild(actions);
+	listEl.appendChild(item);
+}
+
+function loadCloudDocument(docId, title) {
+	getDb().collection('documents').doc(docId).get().then(function(doc) {
+		if (!doc.exists) return;
+		var data = doc.data();
+		editor.innerHTML = DOMPurify.sanitize(data.content || '');
+		currentCloudDocId = docId;
+		currentCloudTitle = data.title || title;
+		dismissSharedBanner();
+		history.replaceState(null, '', location.pathname);
+		try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) {}
+		updateCounter();
+		updateEditorActions();
+		trackEvent('document_load_cloud');
+		var modalEl = document.getElementById('documentsModal');
+		var modal = bootstrap.Modal.getInstance(modalEl);
+		if (modal) modal.hide();
+	});
+}
+
+function deleteCloudDocument(docId, rowEl) {
+	if (!confirm('Delete this document? This cannot be undone.')) return;
+	getDb().collection('documents').doc(docId).delete().then(function() {
+		if (rowEl && rowEl.parentNode) rowEl.parentNode.removeChild(rowEl);
+		if (currentCloudDocId === docId) currentCloudDocId = null;
+		trackEvent('document_delete_cloud');
+		var listEl = document.getElementById('cloud-docs-list');
+		if (listEl && !listEl.children.length) {
+			document.getElementById('cloud-docs-empty').style.display = '';
+		}
+	});
+}
+
 (function initContent() {
 	var params = new URLSearchParams(window.location.search);
 	var gistId = params.get('gist');
@@ -81,6 +332,7 @@ function dismissSharedBanner() {
 }
 
 function newDocument() {
+	trackEvent('new_document');
 	editor.innerHTML = '';
 	history.replaceState(null, '', location.pathname);
 	dismissSharedBanner();
@@ -151,6 +403,7 @@ function snapshotPreviewText(content) {
 }
 
 function openHistoryModal() {
+	trackEvent('open_history');
 	takeSnapshot(); // capture current state so it's not lost when restoring
 	renderHistoryList();
 	new bootstrap.Modal(document.getElementById('historyModal')).show();
@@ -194,6 +447,7 @@ function restoreSnapshot(timestamp) {
 	var list = getHistory();
 	var snap = list.find(function(s) { return s.time === timestamp; });
 	if (!snap) return;
+	trackEvent('restore_snapshot');
 	// Preserve current content as a snapshot before overwriting, so restoring is non-destructive.
 	takeSnapshot();
 	editor.innerHTML = DOMPurify.sanitize(snap.content);
@@ -210,6 +464,7 @@ function restoreSnapshot(timestamp) {
 
 function openShareModal() {
 	if (!editor.textContent.trim()) return;
+	trackEvent('open_share');
 	var compressed = LZString.compressToEncodedURIComponent(editor.innerHTML);
 	var shareUrl = location.origin + location.pathname + '#v1:' + compressed;
 	document.getElementById('share-url-input').value = shareUrl;
@@ -227,6 +482,7 @@ function copyShareUrl() {
 	var url = document.getElementById('share-url-input').value;
 	navigator.clipboard.writeText(url).then(function() {
 		document.getElementById('share-copy-feedback').textContent = 'Copied!';
+		trackEvent('copy_share_url');
 	});
 }
 
@@ -273,6 +529,7 @@ async function shareViaGist() {
 		document.getElementById('share-gist-section').style.display = 'none';
 		successEl.textContent = 'Gist created! URL updated above — copy and share it.';
 		successEl.style.display = '';
+		trackEvent('share_gist');
 	} catch (e) {
 		errorEl.textContent = e.message || 'Failed to create Gist.';
 		errorEl.style.display = '';
@@ -310,12 +567,16 @@ function restoreSelection() {
 
 function execCmd(command) {
 	restoreSelection();
+	trackEvent('format', { command: command });
 	document.execCommand(command, false, null);
 }
 
 function execCommandWithArg(command, arg) {
 	restoreSelection();
 	if (command === 'foreColor') currentForeColor = arg;
+	var params = { command: command };
+	if (command === 'formatBlock' || command === 'fontName' || command === 'fontSize') params.value = arg;
+	trackEvent('format', params);
 	document.execCommand(command, false, arg);
 }
 
@@ -342,6 +603,7 @@ function toggleSource() {
 		updateCounter();
 		updateEditorActions();
 	} else {
+		trackEvent('view_source');
 		editor.textContent = editor.innerHTML;
 		editor.contentEditable = 'false';
 		showingSourceCode = true;
@@ -402,6 +664,7 @@ function insertVideo(url) {
 		showUrlError('Unsupported URL — paste a YouTube or Vimeo link.');
 		return;
 	}
+	trackEvent('insert_video');
 	restoreSelection();
 	document.execCommand('insertHTML', false,
 		'<div class="video-embed" contenteditable="false">' +
@@ -434,6 +697,7 @@ function showUrlError(msg) {
 function insertImageFromUrl(url) {
 	var img = new Image();
 	img.onload = function() {
+		trackEvent('insert_image', { source: 'url' });
 		execCommandWithArg('insertImage', url);
 	};
 	img.onerror = function() {
@@ -448,6 +712,7 @@ function insertImageFromFile(input) {
 	if (!file) return;
 	var reader = new FileReader();
 	reader.onload = function(e) {
+		trackEvent('insert_image', { source: 'file' });
 		restoreSelection();
 		document.execCommand('insertImage', false, e.target.result);
 	};
@@ -480,6 +745,7 @@ function updateEditorActions() {
 		var btn = document.getElementById(id);
 		if (btn) btn.disabled = empty;
 	});
+	updateCloudButtons();
 }
 
 function cleanPastedHtml(html) {
@@ -515,6 +781,7 @@ editor.addEventListener('input', function() {
 });
 
 function clearAll() {
+	trackEvent('clear_all');
 	editor.focus();
 	document.execCommand('selectAll');
 	document.execCommand('delete');
@@ -525,7 +792,13 @@ function clearAll() {
 	updateEditorActions();
 }
 
+function printDocument() {
+	trackEvent('print');
+	window.print();
+}
+
 function exportPDF() {
+	trackEvent('export_pdf');
 	var win = window.open('', '_blank');
 	if (!win) return;
 	win.document.write(
@@ -544,6 +817,7 @@ function exportPDF() {
 }
 
 function exportHTML() {
+	trackEvent('export_html');
 	var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + editor.innerHTML + '</body></html>';
 	var blob = new Blob([html], { type: 'text/html' });
 	var a = document.createElement('a');
@@ -560,6 +834,7 @@ function toggleMarkdown() {
 	var btn = document.getElementById('btn-markdown');
 
 	isMarkdownMode = !isMarkdownMode;
+	trackEvent('toggle_markdown', { enabled: isMarkdownMode });
 
 	if (isMarkdownMode) {
 		editorEl.classList.add('d-none');
@@ -585,6 +860,7 @@ if (mdInput) {
 }
 
 function insertTable(rows, cols) {
+	trackEvent('insert_table', { rows: rows, cols: cols });
 	var html = '<table><tbody>';
 	for (var r = 0; r < rows; r++) {
 		html += '<tr>';
@@ -665,6 +941,7 @@ var isCharPickerOpen = false;
 function openCharPicker() {
 	var panel = document.getElementById('char-picker');
 	isCharPickerOpen = !isCharPickerOpen;
+	if (isCharPickerOpen) trackEvent('open_char_picker');
 	panel.style.display = isCharPickerOpen ? 'block' : 'none';
 }
 
@@ -684,6 +961,7 @@ var isDarkMode = false;
 
 function toggleDarkMode() {
 	isDarkMode = !isDarkMode;
+	trackEvent('toggle_dark_mode', { enabled: isDarkMode });
 	document.documentElement.setAttribute('data-bs-theme', isDarkMode ? 'dark' : 'light');
 	document.body.classList.toggle('dark-mode', isDarkMode);
 	var btn = document.getElementById('btn-dark-mode');
@@ -700,6 +978,7 @@ var findIndex = -1;
 var lastFindTerm = '';
 
 function openFindReplace() {
+	trackEvent('open_find_replace');
 	var bar = document.getElementById('find-replace-bar');
 	bar.style.display = 'block';
 	document.getElementById('find-input').focus();
@@ -816,6 +1095,7 @@ function replaceAll() {
 	var replacement = document.getElementById('replace-input').value;
 	if (term !== lastFindTerm) highlightMatches(term);
 	if (findMatches.length === 0) { updateFindStatus(); return; }
+	trackEvent('replace_all', { count: findMatches.length });
 	findMatches.forEach(function(match) {
 		match.parentNode.replaceChild(document.createTextNode(replacement), match);
 	});
@@ -830,6 +1110,7 @@ function toggleFullscreen() {
 	var container = document.querySelector('.container-lg');
 	var btn = document.getElementById('btn-fullscreen');
 	isFullscreen = !isFullscreen;
+	trackEvent('toggle_fullscreen', { enabled: isFullscreen });
 	container.classList.toggle('editor-fullscreen', isFullscreen);
 	if (btn) {
 		btn.innerHTML = isFullscreen ? '<i class="fas fa-compress"></i>' : '<i class="fas fa-expand"></i>';
@@ -842,12 +1123,14 @@ function toggleEdit() {
 	if (isInEditMode) {
 		editor.contentEditable = 'false';
 		isInEditMode = false;
+		trackEvent('toggle_edit', { enabled: false });
 		btn.textContent = 'Editing: OFF';
 		btn.classList.replace('btn-success', 'btn-outline-danger');
 		setToolbarDisabled(true, 'btn-toggle-edit');
 	} else {
 		editor.contentEditable = 'true';
 		isInEditMode = true;
+		trackEvent('toggle_edit', { enabled: true });
 		btn.textContent = 'Editing: ON';
 		btn.classList.replace('btn-outline-danger', 'btn-success');
 		setToolbarDisabled(false);
@@ -944,5 +1227,18 @@ if (typeof module !== 'undefined' && module.exports) {
 		openHistoryModal,
 		renderHistoryList,
 		restoreSnapshot,
+		trackEvent,
+		printDocument,
+		signInWithGoogle,
+		signOutUser,
+		updateAccountUI,
+		updateCloudButtons,
+		deriveDefaultTitle,
+		openCloudSaveModal,
+		saveToCloud,
+		openDocumentsModal,
+		renderCloudDocRow,
+		loadCloudDocument,
+		deleteCloudDocument,
 	};
 }
