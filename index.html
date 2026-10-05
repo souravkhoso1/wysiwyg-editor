@@ -91,9 +91,18 @@
 				<h1 class="h4 fw-bold mb-1">RichText.online</h1>
 				<p class="text-muted small mb-0">Free online rich text editor — format, export and print without sign-up or install.</p>
 			</div>
-			<a href="https://buymeacoffee.com/souravkhoso1" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-warning fw-semibold text-nowrap">
-				<i class="fas fa-mug-hot me-1"></i>Buy me a coffee
-			</a>
+			<div class="d-flex align-items-center gap-2">
+				<button id="btn-signin" class="btn btn-sm btn-primary fw-semibold text-nowrap" onmousedown="event.preventDefault()" onclick="signInWithGoogle();">
+					<i class="fa-brands fa-google me-1"></i>Sign in with Google
+				</button>
+				<div class="dropdown d-inline-block d-none" id="account-widget">
+					<button id="btn-account" title="Account" class="btn btn-sm btn-outline-secondary dropdown-toggle" onmousedown="event.preventDefault()" data-bs-toggle="dropdown"></button>
+					<ul class="dropdown-menu dropdown-menu-end" id="account-menu"></ul>
+				</div>
+				<a href="https://buymeacoffee.com/souravkhoso1" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-warning fw-semibold text-nowrap">
+					<i class="fas fa-mug-hot me-1"></i>Buy me a coffee
+				</a>
+			</div>
 		</header>
 		<div id="toolbar" class="d-flex flex-wrap align-items-center gap-1 p-2 bg-white border border-bottom-0 rounded-top">
 			<button id="btn-bold" title="Bold" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold"></i></button>
@@ -192,11 +201,12 @@
 			<button title="Clear All" class="btn btn-sm btn-outline-danger" onmousedown="event.preventDefault()" onclick="clearAll();">Clear All</button>
 			<div class="vr mx-1"></div>
 			<button id="btn-toggle-edit" title="Toggle Edit Mode" class="btn btn-sm btn-success" onmousedown="event.preventDefault()" onclick="toggleEdit();">Editing: ON</button>
-			<button id="btn-print" title="Print" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="window.print();" disabled><i class="fas fa-print"></i></button>
+			<button id="btn-print" title="Print" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="printDocument();" disabled><i class="fas fa-print"></i></button>
 			<button id="btn-export" title="Export as HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();" disabled><i class="fas fa-download"></i></button>
 			<button id="btn-export-pdf" title="Export as PDF" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportPDF();" disabled><i class="fas fa-file-pdf"></i></button>
 			<button id="btn-share" title="Share Document" class="btn btn-sm btn-outline-primary" onmousedown="event.preventDefault()" onclick="openShareModal();" disabled><i class="fas fa-share-nodes"></i></button>
 			<button id="btn-history" title="Version History" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openHistoryModal();"><i class="fas fa-clock-rotate-left"></i></button>
+			<button id="btn-cloud-save" title="Save to Cloud (sign in required)" class="btn btn-sm btn-outline-primary" onmousedown="event.preventDefault()" onclick="openCloudSaveModal();" disabled><i class="fas fa-cloud-arrow-up"></i></button>
 			<button id="btn-char-picker" title="Special Characters &amp; Emoji" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openCharPicker();"><i class="fas fa-smile"></i></button>
 			<button id="btn-find" title="Find &amp; Replace (Ctrl+H)" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openFindReplace();"><i class="fas fa-search"></i></button>
 			<button title="Keyboard Shortcuts" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#helpModal"><i class="fas fa-keyboard"></i></button>
@@ -500,23 +510,70 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="historyModalLabel"><i class="fas fa-clock-rotate-left me-2"></i>Version History</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<p class="small text-muted mb-3">Snapshots are saved automatically as you work and kept on this device only. Restoring a version saves your current text as a snapshot first, so nothing is lost.</p>
-						<div id="history-empty" class="text-muted small text-center py-4" style="display:none;">No earlier versions yet — keep editing and snapshots will appear here.</div>
-						<div id="history-list" class="list-group"></div>
+	</div>
+	<div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="historyModalLabel"><i class="fas fa-clock-rotate-left me-2"></i>Version History</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">Snapshots are saved automatically as you work and kept on this device only. Restoring a version saves your current text as a snapshot first, so nothing is lost.</p>
+					<div id="history-empty" class="text-muted small text-center py-4" style="display:none;">No earlier versions yet — keep editing and snapshots will appear here.</div>
+					<div id="history-list" class="list-group"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="cloudSaveModal" tabindex="-1" aria-labelledby="cloudSaveModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="cloudSaveModalLabel"><i class="fas fa-cloud-arrow-up me-2"></i>Save to Cloud</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">Saved to your account — accessible from any device when signed in.</p>
+					<label class="form-label fw-semibold small">Document title</label>
+					<input type="text" id="cloud-save-title" class="form-control form-control-sm mb-3" placeholder="Untitled document">
+					<div id="cloud-save-error" class="text-danger small mb-2" style="display:none;"></div>
+					<div class="d-flex gap-2">
+						<button id="btn-confirm-cloud-save" class="btn btn-primary btn-sm" onclick="saveToCloud(false);">Save</button>
+						<button id="cloud-save-as-new" class="btn btn-outline-secondary btn-sm" style="display:none;" onclick="saveToCloud(true);">Save as New Copy</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="documentsModal" tabindex="-1" aria-labelledby="documentsModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="documentsModalLabel"><i class="fas fa-folder-open me-2"></i>My Documents</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div id="cloud-docs-loading" class="text-muted small text-center py-4">Loading…</div>
+					<div id="cloud-docs-empty" class="text-muted small text-center py-4" style="display:none;">No saved documents yet — use the cloud icon in the toolbar to save one here.</div>
+					<div id="cloud-docs-list" class="list-group"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+	<script>
+		firebase.initializeApp({
+			apiKey: "AIzaSyBsEkDEf1qqDVlQUpsUc5qG_SbPuNPiTQI",
+			authDomain: "richtext-online.firebaseapp.com",
+			projectId: "richtext-online",
+			storageBucket: "richtext-online.firebasestorage.app",
+			messagingSenderId: "483792477186",
+			appId: "1:483792477186:web:40083f00456bc496e75b1b"
+		});
+	</script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
