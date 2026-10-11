@@ -146,6 +146,7 @@ async function saveToCloud(asNew) {
 		var db = getDb();
 		var payload = {
 			ownerId: currentUser.uid,
+			ownerEmail: currentUser.email || null,
 			title: title,
 			content: editor.innerHTML,
 			updatedAt: firebase.firestore.FieldValue.serverTimestamp()
