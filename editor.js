@@ -11,6 +11,7 @@ var HISTORY_MAX = 8;
 var HISTORY_INTERVAL_MS = 2 * 60 * 1000;
 var historyTimer = null;
 var lastSnapshotContent = null;
+var EMBED = window.rtEmbed || { embedded: false, host: '', parentOrigin: '' };
 
 // URL length above which we warn and suggest GitHub Gist
 var URL_SHARE_THRESHOLD = 2000;
@@ -267,7 +268,50 @@ function deleteCloudDocument(docId, rowEl) {
 	});
 }
 
+// ── Embed mode ───────────────────────────────────────────────────────────────
+// Content comes only from the host page (embed.js). Never read or write the visitor's own
+// richtext.online localStorage here, or a host site could see their saved drafts.
+
+var embedChangeTimer = null;
+
+function postToParent(msg) {
+	if (!EMBED.parentOrigin || window.parent === window) return;
+	msg.rt = 1;
+	window.parent.postMessage(msg, EMBED.parentOrigin);
+}
+
+function notifyParentOfChange() {
+	clearTimeout(embedChangeTimer);
+	embedChangeTimer = setTimeout(function() {
+		postToParent({ type: 'change', html: editor.innerHTML });
+	}, 300);
+}
+
+function initEmbedMode() {
+	editor.innerHTML = '';
+	editor.style.visibility = 'visible';
+	window.addEventListener('message', function(e) {
+		if (e.source !== window.parent || e.origin !== EMBED.parentOrigin) return;
+		var d = e.data;
+		if (!d || d.rt !== 1) return;
+		if (d.type === 'setHTML') {
+			editor.innerHTML = DOMPurify.sanitize(String(d.html || ''));
+			updateCounter();
+			updateEditorActions();
+		} else if (d.type === 'getHTML') {
+			postToParent({ type: 'html', id: d.id, html: editor.innerHTML });
+		}
+	});
+	postToParent({ type: 'ready' });
+}
+
 (function initContent() {
+	if (EMBED.embedded) {
+		initEmbedMode();
+		updateCounter();
+		updateEditorActions();
+		return;
+	}
 	var params = new URLSearchParams(window.location.search);
 	var gistId = params.get('gist');
 	var hash = window.location.hash;
@@ -774,6 +818,10 @@ editor.addEventListener('paste', function(e) {
 editor.addEventListener('input', function() {
 	updateCounter();
 	updateEditorActions();
+	if (EMBED.embedded) {
+		notifyParentOfChange();
+		return;
+	}
 	clearTimeout(saveTimer);
 	saveTimer = setTimeout(function() {
 		try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) {}
@@ -787,8 +835,10 @@ function clearAll() {
 	document.execCommand('selectAll');
 	document.execCommand('delete');
 	currentForeColor = null;
-	try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-	clearHistory();
+	if (!EMBED.embedded) {
+		try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+		clearHistory();
+	}
 	updateCounter();
 	updateEditorActions();
 }

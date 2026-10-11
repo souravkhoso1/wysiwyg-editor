@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="robots" content="noindex">
+	<title>Embed RichText.online</title>
+	<style>
+		body { font-family: system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+		pre { background: #f4f4f4; padding: 1rem; overflow-x: auto; border-radius: 4px; }
+		button { margin: 0.5rem 0.5rem 0.5rem 0; }
+		#output { white-space: pre-wrap; background: #fafafa; border: 1px solid #ddd; padding: 0.75rem; min-height: 3rem; }
+	</style>
+</head>
+<body>
+	<h1>Embed RichText.online</h1>
+	<p>Add a container and the script — the editor loads inside an isolated iframe.</p>
+<pre>&lt;div id="editor"&gt;&lt;/div&gt;
+&lt;script src="https://richtext.online/embed.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  var ed = RichTextEditor.create('#editor', {
+    height: 400,                        // number (px) or any CSS size
+    content: '&lt;p&gt;Initial HTML&lt;/p&gt;',    // optional
+    onChange: function (html) { /* fires as the user types */ }
+  });
+  ed.getHTML().then(function (html) { /* current content */ });
+  ed.setHTML('&lt;p&gt;Replace content&lt;/p&gt;');
+&lt;/script&gt;</pre>
+	<p>Or declaratively: <code>&lt;div data-richtext-editor data-height="400"&gt;&lt;/div&gt;</code></p>
+	<p>The HTML you get back is user-authored — sanitise it (e.g. DOMPurify) before rendering it on your own pages.</p>
+
+	<h2>Live demo</h2>
+	<div id="editor"></div>
+	<button id="get">Get HTML</button>
+	<button id="set">Set sample HTML</button>
+	<div id="output"></div>
+
+	<script src="embed.js"></script>
+	<script>
+		var ed = RichTextEditor.create('#editor', {
+			height: 400,
+			content: '<h2>Hello from the host page</h2><p>Edit me.</p>',
+			onChange: function (html) { document.getElementById('output').textContent = 'change: ' + html; }
+		});
+		document.getElementById('get').onclick = function () {
+			ed.getHTML().then(function (html) { document.getElementById('output').textContent = 'getHTML: ' + html; });
+		};
+		document.getElementById('set').onclick = function () {
+			ed.setHTML('<p><strong>Set from the host page</strong></p>');
+		};
+	</script>
+</body>
+</html>

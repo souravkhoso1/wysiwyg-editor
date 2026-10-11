@@ -114,3 +114,29 @@ mark.find-match-current {
 	border-color: #86b7fe !important;
 	box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
 }
+
+/* Embed mode (?embed=1): editor only, no site chrome or account/local-storage features */
+.embed-mode body {
+	padding: 0 !important;
+	background: transparent !important;
+}
+
+.embed-mode .container-lg {
+	max-width: 100% !important;
+	padding: 0 !important;
+}
+
+.embed-mode header,
+.embed-mode footer,
+.embed-mode #shared-banner,
+.embed-mode #btn-signin,
+.embed-mode #account-widget,
+.embed-mode #btn-cloud-save,
+.embed-mode #btn-history {
+	display: none !important;
+}
+
+.embed-mode #editor {
+	min-height: 240px;
+	visibility: hidden;
+}
