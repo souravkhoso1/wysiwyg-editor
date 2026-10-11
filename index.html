@@ -56,6 +56,7 @@
 			"Fullscreen mode",
 			"Special characters and emoji picker",
 			"Auto-save to browser local storage",
+			"Embeddable in any website with a single script tag",
 			"Word and character counter"
 		]
 	}
@@ -102,7 +103,7 @@
 		<header class="mb-3 d-flex justify-content-between align-items-start flex-wrap gap-2">
 			<div>
 				<h1 class="h4 fw-bold mb-1">RichText.online</h1>
-				<p class="text-muted small mb-0">Free online rich text editor — format, export and print without sign-up or install.</p>
+				<p class="text-muted small mb-0">Free online rich text editor — format, export and print without sign-up or install. &middot; <a href="embed-example.html" class="text-decoration-none">Embed it on your website &rarr;</a></p>
 			</div>
 			<div class="d-flex align-items-center gap-2">
 				<button id="btn-signin" class="btn btn-sm btn-primary fw-semibold text-nowrap" onmousedown="event.preventDefault()" onclick="signInWithGoogle();">
@@ -424,6 +425,18 @@
 						<p>Prefer to write in Markdown? Toggle Markdown mode for a live split-screen: raw Markdown on the left, rendered HTML on the right. Copy the rendered output or switch to rich-text mode to continue editing with the toolbar.</p>
 					</div>
 				</div>
+			</section>
+
+			<section class="mb-5" id="embed">
+				<h2 class="h4 fw-bold mb-3">Embed the editor in your own website</h2>
+				<p class="small">Want this editor on your own site? Add a container and one script tag. The editor loads in an isolated frame, and your page can read or set its content with a few lines of JavaScript.</p>
+<pre class="small bg-white border rounded p-3"><code>&lt;div id="editor"&gt;&lt;/div&gt;
+&lt;script src="https://richtext.online/embed.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  var ed = RichTextEditor.create('#editor', { height: 400 });
+  ed.onChange(function (html) { /* save html */ });
+&lt;/script&gt;</code></pre>
+				<p class="small"><a href="embed-example.html">See the full embedding guide and live demo</a>. Embedded editors don't include sign-in, cloud save or version history, and never touch your visitors' saved RichText.online documents. The HTML the editor returns is user-authored, so sanitise it before displaying it elsewhere. RichText.online records anonymous usage analytics for embedded editors, including the domain of the site that embeds it.</p>
 			</section>
 
 			<section class="mb-5">
