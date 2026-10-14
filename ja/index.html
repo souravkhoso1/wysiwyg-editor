@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta verification-text="31c968e3b5ba53ce67ce6a94ea71d2ac6506e71e">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>無料オンラインリッチテキストエディタ | RichText.online</title>
+	<meta name="description" content="ブラウザ上でテキストの書式設定やエクスポートができます。登録もインストールも不要。太字、斜体、色、見出し、リスト、リンク、画像、Markdownモードなどに対応しています。">
+	<meta name="keywords" content="オンラインリッチテキストエディタ, WYSIWYGエディタ, 無料テキストエディタ, オンラインワープロ, テキスト整形, リッチテキスト, HTMLエディタ">
+	<link rel="canonical" href="https://richtext.online/ja/">
+	<link rel="alternate" hreflang="en" href="https://richtext.online/">
+	<link rel="alternate" hreflang="ja" href="https://richtext.online/ja/">
+	<link rel="alternate" hreflang="fr" href="https://richtext.online/fr/">
+	<link rel="alternate" hreflang="es" href="https://richtext.online/es/">
+	<link rel="alternate" hreflang="ar" href="https://richtext.online/ar/">
+	<link rel="alternate" hreflang="pt" href="https://richtext.online/pt/">
+	<link rel="alternate" hreflang="ru" href="https://richtext.online/ru/">
+	<link rel="alternate" hreflang="x-default" href="https://richtext.online/">
+	<meta name="google-adsense-account" content="ca-pub-2084790723060606">
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="website">
+	<meta property="og:locale" content="ja_JP">
+	<meta property="og:url" content="https://richtext.online/ja/">
+	<meta property="og:title" content="無料オンラインリッチテキストエディタ | RichText.online">
+	<meta property="og:description" content="ブラウザ上でテキストの書式設定やエクスポートができます。登録もインストールも不要。太字、斜体、色、見出し、リスト、リンク、画像などに対応しています。">
+	<meta property="og:image" content="https://richtext.online/social-preview.png">
+
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="https://richtext.online/ja/">
+	<meta name="twitter:title" content="無料オンラインリッチテキストエディタ | RichText.online">
+	<meta name="twitter:description" content="ブラウザ上でテキストの書式設定やエクスポートができます。登録もインストールも不要です。">
+	<meta name="twitter:image" content="https://richtext.online/social-preview.png">
+
+	<!-- Structured data -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "RichText.online",
+		"url": "https://richtext.online/ja/",
+		"inLanguage": "ja",
+		"description": "無料のオンラインリッチテキストエディタ。太字、斜体、色、見出し、リスト、リンク、画像などの書式をブラウザ上で直接設定できます。アカウント登録は不要です。",
+		"applicationCategory": "UtilitiesApplication",
+		"operatingSystem": "All",
+		"browserRequirements": "Any modern browser",
+		"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+		"featureList": [
+			"Bold, italic, underline, strikethrough, subscript, superscript",
+			"Font family and size",
+			"Text and background colour",
+			"Headings H1–H6",
+			"Bullet and numbered lists with indent and outdent",
+			"Insert links, images from URL or file upload",
+			"Embed YouTube and Vimeo videos",
+			"Insert and edit tables",
+			"Blockquote and code block formatting",
+			"Find and replace with step-through highlighting",
+			"Markdown mode with live split-pane preview",
+			"Source HTML view and edit",
+			"Share document via URL (no account required)",
+			"Export as HTML",
+			"Print and PDF export",
+			"Dark mode",
+			"Fullscreen mode",
+			"Special characters and emoji picker",
+			"Auto-save to browser local storage",
+			"Embeddable in any website with a single script tag",
+			"Word and character counter"
+		]
+	}
+	</script>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<link rel="stylesheet" href="/styles.css?v=3">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X3P1QLTV49"></script>
+<script>
+  // Embed mode: set by embed.js (?embed=1&embed_host=...&parent_origin=...). Must run before first paint and before gtag config.
+  window.rtEmbed = (function() {
+    var p = new URLSearchParams(location.search);
+    var embedded = p.get('embed') === '1';
+    var info = { embedded: embedded, host: '', parentOrigin: '' };
+    if (!embedded) return info;
+    document.documentElement.classList.add('embed-mode');
+    var hostRe = /^[a-z0-9]([a-z0-9.-]{0,98}[a-z0-9])?$/i;
+    var host = p.get('embed_host') || '';
+    if (!hostRe.test(host)) {
+      host = '';
+      try { host = new URL(document.referrer).hostname; } catch (e) {}
+    }
+    info.host = hostRe.test(host) ? host.toLowerCase() : 'unknown';
+    try {
+      var po = new URL(p.get('parent_origin') || '');
+      if (/^https?:$/.test(po.protocol)) info.parentOrigin = po.origin;
+    } catch (e) {}
+    return info;
+  })();
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  var gaParams = { traffic_context: window.rtEmbed.embedded ? 'embed' : 'direct' };
+  if (window.rtEmbed.embedded) gaParams.embed_host = window.rtEmbed.host;
+  gtag('config', 'G-X3P1QLTV49', gaParams);
+</script>
+<body class="bg-light py-4">
+	<div class="container-lg">
+		<header class="mb-3 d-flex justify-content-between align-items-start flex-wrap gap-2">
+			<div style="flex:1 1 320px">
+				<h1 class="h4 fw-bold mb-1" translate="no">RichText.online</h1>
+				<p class="text-muted small mb-0">無料のオンラインリッチテキストエディタ — 登録やインストールなしで、書式設定、エクスポート、印刷ができます。 &middot; <a href="/embed-example.html" class="text-decoration-none">自分のウェブサイトに埋め込む&nbsp;&rarr;</a></p>
+			</div>
+			<div class="d-flex align-items-center flex-wrap gap-2">
+				<div class="dropdown" id="lang-switcher">
+					<button class="btn btn-sm btn-outline-secondary dropdown-toggle text-nowrap" type="button" data-bs-toggle="dropdown" title="言語" aria-label="言語"><i class="fas fa-globe me-1"></i><span data-lang-current translate="no">日本語</span></button>
+					<ul class="dropdown-menu dropdown-menu-end">
+						<li><a class="dropdown-item" href="/" hreflang="en" lang="en" translate="no">English</a></li>
+						<li><a class="dropdown-item active" href="/ja/" hreflang="ja" lang="ja" translate="no">日本語</a></li>
+						<li><a class="dropdown-item" href="/fr/" hreflang="fr" lang="fr" translate="no">Français</a></li>
+						<li><a class="dropdown-item" href="/es/" hreflang="es" lang="es" translate="no">Español</a></li>
+						<li><a class="dropdown-item" href="/ar/" hreflang="ar" lang="ar" translate="no">العربية</a></li>
+						<li><a class="dropdown-item" href="/pt/" hreflang="pt" lang="pt" translate="no">Português</a></li>
+						<li><a class="dropdown-item" href="/ru/" hreflang="ru" lang="ru" translate="no">Русский</a></li>
+					</ul>
+				</div>
+				<button id="btn-signin" class="btn btn-sm btn-primary fw-semibold text-nowrap" onmousedown="event.preventDefault()" onclick="signInWithGoogle();">
+					<i class="fa-brands fa-google me-1"></i>Googleでログイン
+				</button>
+				<div class="dropdown d-inline-block d-none" id="account-widget">
+					<button id="btn-account" title="アカウント" class="btn btn-sm btn-outline-secondary dropdown-toggle" onmousedown="event.preventDefault()" data-bs-toggle="dropdown"></button>
+					<ul class="dropdown-menu dropdown-menu-end" id="account-menu"></ul>
+				</div>
+				<a href="https://buymeacoffee.com/souravkhoso1" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-warning fw-semibold text-nowrap">
+					<i class="fas fa-mug-hot me-1"></i>コーヒーをおごる
+				</a>
+			</div>
+		</header>
+		<div id="toolbar" class="d-flex flex-wrap align-items-center gap-1 p-2 bg-white border border-bottom-0 rounded-top">
+			<button id="btn-bold" title="太字" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold"></i></button>
+			<button id="btn-italic" title="斜体" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic"></i></button>
+			<button id="btn-underline" title="下線" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fas fa-underline"></i></button>
+			<button id="btn-strikeThrough" title="取り消し線" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="左揃え" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fas fa-align-left"></i></button>
+			<button title="中央揃え" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyCenter');"><i class="fas fa-align-center"></i></button>
+			<button title="右揃え" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fas fa-align-right"></i></button>
+			<button title="両端揃え" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fas fa-align-justify"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="切り取り" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="cutText();"><i class="fas fa-scissors"></i></button>
+			<button title="コピー" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="copyText();"><i class="fas fa-copy"></i></button>
+			<button title="貼り付け" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="pasteText();"><i class="fas fa-paste"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="インデントを増やす" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fas fa-indent"></i></button>
+			<button title="インデントを減らす" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fas fa-outdent"></i></button>
+			<button title="下付き文字" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fas fa-subscript"></i></button>
+			<button title="上付き文字" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('superscript');"><i class="fas fa-superscript"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="元に戻す" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('undo');"><i class="fas fa-rotate-left"></i></button>
+			<button title="やり直し" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('redo');"><i class="fas fa-rotate-right"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="箇条書きリスト" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul"></i></button>
+			<button title="番号付きリスト" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol"></i></button>
+			<select title="見出し" class="form-select form-select-sm w-auto" onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
+				<option value="">見出し</option>
+				<option value="H1">H1</option>
+				<option value="H2">H2</option>
+				<option value="H3">H3</option>
+				<option value="H4">H4</option>
+				<option value="H5">H5</option>
+				<option value="H6">H6</option>
+			</select>
+			<button title="水平線" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertHorizontalRule');">HR</button>
+			<div class="dropdown d-inline-block">
+				<button title="表を挿入" class="btn btn-sm btn-outline-secondary dropdown-toggle" onmousedown="event.preventDefault()" data-bs-toggle="dropdown"><i class="fas fa-table"></i></button>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(2,2);return false;">2 × 2</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(2,3);return false;">2 × 3</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(3,3);return false;">3 × 3</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(3,4);return false;">3 × 4</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(4,4);return false;">4 × 4</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableAddRowAfter();return false;">下に行を追加</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableDeleteRow();return false;">行を削除</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableAddColAfter();return false;">右に列を追加</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableDeleteCol();return false;">列を削除</a></li>
+				</ul>
+			</div>
+			<button title="引用" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCommandWithArg('formatBlock', 'BLOCKQUOTE');"><i class="fas fa-quote-right"></i></button>
+			<button title="コードブロック" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCommandWithArg('formatBlock', 'PRE');"><i class="fas fa-terminal"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="リンクを挿入" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('link');"><i class="fas fa-link"></i></button>
+			<button title="リンクを削除" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash"></i></button>
+			<button title="URLから画像を挿入" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('image');"><i class="fas fa-image"></i></button>
+			<label title="ファイルから画像をアップロード" class="btn btn-sm btn-outline-secondary mb-0" onmousedown="event.preventDefault()"><i class="fas fa-file-image"></i><input type="file" accept="image/*" style="display:none" onchange="insertImageFromFile(this)"></label>
+			<button title="YouTube / Vimeo動画を埋め込む" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('video');"><i class="fas fa-video"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="書式をクリア" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('removeFormat');"><i class="fas fa-eraser"></i></button>
+			<button id="btn-source" title="HTMLソースの表示切り替え" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code"></i></button>
+			<button id="btn-markdown" title="Markdownモード" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleMarkdown();">MD</button>
+			<div class="w-100"></div>
+			<select title="フォントの種類" class="form-select form-select-sm w-auto" onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
+				<option value="">フォント</option>
+				<option value="Arial">Arial</option>
+				<option value="Comic Sans MS">Comic Sans MS</option>
+				<option value="Courier">Courier</option>
+				<option value="Georgia">Georgia</option>
+				<option value="Tahoma">Tahoma</option>
+				<option value="Times New Roman">Times New Roman</option>
+				<option value="Verdana">Verdana</option>
+			</select>
+			<select title="文字サイズ" class="form-select form-select-sm w-auto" onchange="if(this.value) execCommandWithArg('fontSize', this.value); this.selectedIndex = 0;">
+				<option value="">サイズ</option>
+				<option value="1">極小</option>
+				<option value="2">小</option>
+				<option value="3">標準</option>
+				<option value="4">中</option>
+				<option value="5">大</option>
+				<option value="6">特大</option>
+				<option value="7">最大</option>
+			</select>
+			<div class="vr mx-1"></div>
+			<label class="d-flex align-items-center gap-1 small text-muted mb-0">
+				文字色
+				<input type="color" class="form-control form-control-color form-control-sm p-0 border" oninput="execCommandWithArg('foreColor', this.value);" title="文字色" />
+			</label>
+			<label class="d-flex align-items-center gap-1 small text-muted mb-0">
+				背景色
+				<input type="color" class="form-control form-control-color form-control-sm p-0 border" oninput="execCommandWithArg('hiliteColor', this.value);" title="背景色" />
+			</label>
+			<div class="vr mx-1"></div>
+			<button title="すべて選択" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">すべて選択</button>
+			<button title="すべてクリア" class="btn btn-sm btn-outline-danger" onmousedown="event.preventDefault()" onclick="clearAll();">すべてクリア</button>
+			<div class="vr mx-1"></div>
+			<button id="btn-toggle-edit" title="編集モードの切り替え" class="btn btn-sm btn-success" onmousedown="event.preventDefault()" onclick="toggleEdit();">編集: オン</button>
+			<button id="btn-print" title="印刷" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="printDocument();" disabled><i class="fas fa-print"></i></button>
+			<button id="btn-export" title="HTMLとしてエクスポート" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();" disabled><i class="fas fa-download"></i></button>
+			<button id="btn-export-pdf" title="PDFとしてエクスポート" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportPDF();" disabled><i class="fas fa-file-pdf"></i></button>
+			<button id="btn-share" title="ドキュメントを共有" class="btn btn-sm btn-outline-primary" onmousedown="event.preventDefault()" onclick="openShareModal();" disabled><i class="fas fa-share-nodes"></i></button>
+			<button id="btn-history" title="バージョン履歴" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openHistoryModal();"><i class="fas fa-clock-rotate-left"></i></button>
+			<button id="btn-cloud-save" title="クラウドに保存（ログインが必要）" class="btn btn-sm btn-outline-primary" onmousedown="event.preventDefault()" onclick="openCloudSaveModal();" disabled><i class="fas fa-cloud-arrow-up"></i></button>
+			<button id="btn-char-picker" title="特殊文字と絵文字" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openCharPicker();"><i class="fas fa-smile"></i></button>
+			<button id="btn-find" title="検索と置換 (Ctrl+H)" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openFindReplace();"><i class="fas fa-search"></i></button>
+			<button title="キーボードショートカット" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#helpModal"><i class="fas fa-keyboard"></i></button>
+			<button id="btn-dark-mode" title="ダークモード" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleDarkMode();"><i class="fas fa-moon"></i></button>
+			<button id="btn-fullscreen" title="全画面表示" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleFullscreen();"><i class="fas fa-expand"></i></button>
+		</div>
+		<div id="url-bar" style="display:none;">
+			<div class="input-group input-group-sm p-2 bg-light border border-top-0 border-bottom-0">
+				<input type="text" id="url-input" class="form-control" placeholder="https://" />
+				<button class="btn btn-primary" onclick="confirmUrl();">挿入</button>
+				<button class="btn btn-outline-secondary" onclick="closeUrlBar();">キャンセル</button>
+			</div>
+			<div id="url-error" class="text-danger small px-3 pb-1 bg-light border border-top-0 border-bottom-0" style="display:none;"></div>
+		</div>
+		<div id="find-replace-bar" style="display:none;">
+			<div class="d-flex flex-wrap align-items-center gap-2 p-2 bg-light border border-top-0 border-bottom-0">
+				<input type="text" id="find-input" class="form-control form-control-sm" style="max-width:180px" placeholder="検索..." />
+				<button class="btn btn-sm btn-outline-secondary" onclick="findPrev();" title="前の一致">&#8593;</button>
+				<button class="btn btn-sm btn-outline-secondary" onclick="findNext();" title="次の一致">&#8595;</button>
+				<div class="vr"></div>
+				<input type="text" id="replace-input" class="form-control form-control-sm" style="max-width:180px" placeholder="置換..." />
+				<button class="btn btn-sm btn-primary" onclick="replaceOne();">置換</button>
+				<button class="btn btn-sm btn-outline-secondary" onclick="replaceAll();">すべて置換</button>
+				<span id="find-status" class="small text-muted"></span>
+				<button class="btn btn-sm btn-outline-secondary ms-auto" onclick="closeFindReplace();" title="閉じる">&times;</button>
+			</div>
+		</div>
+		<div id="char-picker" style="display:none;">
+			<div class="p-2 bg-light border border-top-0 border-bottom-0">
+				<div class="d-flex flex-wrap gap-1 mb-1">
+					<span class="small text-muted me-1 align-self-center">記号:</span>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('©')">©</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('®')">®</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('™')">™</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('€')">€</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('£')">£</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¥')">¥</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('°')">°</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('±')">±</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('×')">×</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('÷')">÷</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('→')">→</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('←')">←</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('↑')">↑</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('↓')">↓</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('…')">…</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('—')">—</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('–')">–</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('"')">"</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('"')">"</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('½')">½</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¼')">¼</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¾')">¾</button>
+				</div>
+				<div class="d-flex flex-wrap gap-1">
+					<span class="small text-muted me-1 align-self-center">絵文字:</span>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('😀')">😀</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('😂')">😂</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('❤️')">❤️</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('👍')">👍</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🎉')">🎉</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🔥')">🔥</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('✅')">✅</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('⭐')">⭐</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🚀')">🚀</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('💡')">💡</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('📌')">📌</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('📝')">📝</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🎯')">🎯</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('⚠️')">⚠️</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('ℹ️')">ℹ️</button>
+				</div>
+			</div>
+		</div>
+		<div id="shared-banner" class="alert alert-info alert-dismissible d-none d-flex align-items-center gap-2 py-2 px-3 border border-top-0 border-info rounded-0 mb-0" role="alert">
+			<i class="fas fa-circle-info flex-shrink-0"></i>
+			<span class="small">共有されたドキュメントを表示しています。</span>
+			<button class="btn btn-sm btn-outline-info ms-2" onmousedown="event.preventDefault()" onclick="newDocument();">新しいドキュメント</button>
+			<button type="button" class="btn-close ms-auto" onclick="dismissSharedBanner();"></button>
+		</div>
+		<div id="editor" class="bg-white border border-bottom-0 p-3" contenteditable="true"><h2>RichText.online へようこそ</h2><p><strong>ここに入力を始めてください</strong> — この案内文は、何か入力すると消えます。作業内容はブラウザに自動保存されるので、いつでも続きから再開できます。</p><h3>このエディタでできること</h3><ul><li><strong>テキストの書式設定</strong> — ツールバーから太字、斜体、下線、取り消し線、下付き文字、上付き文字を設定できます。</li><li><strong>文書の構造化</strong> — 見出し1〜見出し6を使って、わかりやすい章立てと階層を作れます。</li><li><strong>リストの追加</strong> — 箇条書き、番号付きリストをワンクリックで作成できます。</li><li><strong>フォントと色の設定</strong> — 7種類のフォント、7段階のサイズから選び、文字色や背景色も自由に指定できます。</li><li><strong>リンクと画像の挿入</strong> — URLを貼り付けてリンクを作成したり、Web上の画像を埋め込んだり、端末から画像をアップロードしたりできます。</li><li><strong>動画の埋め込み</strong> — YouTubeまたはVimeoのリンクを貼り付けて、再生できる動画を挿入できます。</li><li><strong>表の作成</strong> — 最大4×4の表を挿入し、行や列をいつでも追加・削除できます。</li><li><strong>検索と置換</strong> — ハイライト表示で文書内を検索し、1件ずつまたは一括で置換できます。</li><li><strong>Markdownへの切り替え</strong> — ライブプレビュー付きの2画面でMarkdownを書き、いつでもリッチテキストに戻せます。</li><li><strong>リンクで共有</strong> — 共有ボタンをクリックすると、開いた人に同じ文書を再現するURLが生成されます。</li><li><strong>エクスポート</strong> — 文書を単独のHTMLファイルとしてダウンロードしたり、印刷用のPDF表示を開いたりできます。</li></ul><p>アカウントもインストールもファイル管理も不要です。すべてブラウザ上で直接動作します。</p></div>
+		<div id="markdown-pane" class="d-none">
+			<div class="d-flex bg-white border border-top-0 rounded-bottom overflow-hidden" style="min-height: 400px;">
+				<textarea id="markdown-input" class="border-0 p-3 font-monospace" style="flex:1; resize:none; outline:none; min-height:400px;" placeholder="Write Markdown here..."></textarea>
+				<div class="border-start"></div>
+				<div id="markdown-preview" class="p-3 overflow-auto" style="flex:1;"></div>
+			</div>
+		</div>
+		<div id="editor-counter" class="bg-white border border-top-0 rounded-bottom px-3 py-1 text-end small text-muted">単語数: 0 | 文字数: 0</div>
+		<footer class="mt-5 pt-4 border-top">
+
+			<p class="text-muted small mb-5"><strong>RichText.online</strong> は、ブラウザで使える無料のWYSIWYGリッチテキストエディタです。太字、斜体、下線、取り消し線、見出し (H1〜H6)、箇条書きと番号付きリスト、文字色、背景色、フォント、文字サイズ、リンク、画像、水平線を使って文書を作成・整形できます。Markdownモードでライブプレビュー付きの2画面表示に切り替えたり、HTMLソースを表示したり、文書を単独のHTMLファイルとしてエクスポートしたりできます。アカウント作成は不要です。</p>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">機能一覧</h2>
+				<div class="row g-4">
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">テキストの書式設定</h3>
+						<p class="small">選択範囲に<strong>太字</strong>、<em>斜体</em>、<u>下線</u>、<s>取り消し線</s>を適用できます。上付き文字・下付き文字で、科学表記、脚注、化学式も表現できます。「書式をクリア」ボタンで、インライン書式をまとめて解除できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">見出しと段落構造</h3>
+						<p class="small">見出しのドロップダウンでH1〜H6の見出しレベルを設定できます。構造化された見出しは、長い文書を読みやすくし、スクリーンリーダー利用者のアクセシビリティも向上させます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">リスト</h3>
+						<p class="small">項目の一覧には箇条書き、手順には番号付きリストを使えます。インデントを増やす・減らすボタンで、複数階層の入れ子リストも作成できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">フォントと色</h3>
+						<p class="small">Arial、Comic Sans MS、Courier、Georgia、Tahoma、Times New Roman、Verdanaの7種類のフォントと、極小から最大までの7段階のサイズから選べます。文字色と背景のハイライト色は、標準のカラーピッカーで自由に指定できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">リンクと画像</h3>
+						<p class="small">テキストを選択してリンクアイコンをクリックするとハイパーリンクを設定でき、ワンクリックで解除もできます。Web上のURLから画像を挿入したり、端末のファイルを直接アップロードしたり、URLを貼り付けてYouTubeやVimeoの動画を埋め込んだりできます。すべてエディタを離れずに操作できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">表</h3>
+						<p class="small">ツールバーのメニューから最大4×4セルの表を挿入できます。挿入後は、任意のセルにカーソルを置き、表メニューから下への行の追加、行の削除、右への列の追加、列の削除ができます。1行目は自動的に見出し行として書式設定されます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">引用とコードブロック</h3>
+						<p class="small">段落を引用にして、出典の引用や重要な箇所を目立たせられます。段落をコード/整形済みブロックに切り替えると、コマンドライン、コードスニペット、その他の等幅コンテンツを表示できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">検索と置換</h3>
+						<p class="small">検索と置換バー (Ctrl+H / ⌘+H) を開くと、一致箇所がハイライト表示されます。矢印ボタンで1件ずつ移動したり、個別に置換したり、すべてを一括で置換したりできます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Markdownモード</h3>
+						<p class="small">Markdownモードに切り替えると、プレーンなMarkdown記法で書きながら、横に表示されるプレビューで結果を確認できます。プレビューは入力に合わせて更新されます。ツールバーで書式を設定したいときは、いつでもリッチテキストモードに戻せます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">HTMLソース表示</h3>
+						<p class="small">ソースボタンをクリックすると、文書の元になっているHTMLを表示・編集できます。他のシステムからの貼り付け、書式のトラブルシューティング、ツールバーにはないHTML要素の手作業での追加に便利です。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">エクスポートと印刷</h3>
+						<p class="small">文書をどのブラウザでも開ける単独のHTMLファイルとしてダウンロードでき、保管やオフラインでの共有に便利です。印刷用のPDF表示を開いて、そのまま印刷したり、ブラウザの印刷ダイアログでPDFとして保存したりできます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">URLで共有</h3>
+						<p class="small">共有ボタンをクリックすると、文書の内容が圧縮され、共有用URLにエンコードされます。リンクを開いた人は同じ文書を閲覧・編集できます。アカウント、サーバー、ファイル添付は不要です。非常に長い文書には、より短いリンクを生成するGitHub Gistのオプションも利用できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">自動保存</h3>
+						<p class="small">入力内容は、書き込みを減らすための短い遅延を置いて、ブラウザのローカルストレージに自動保存されます。タブを閉じて開き直しても、手動で保存しなくても、そのまま続きから再開できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">ダークモードと全画面表示</h3>
+						<p class="small">ダークモードに切り替えると、暗い環境でも快適に編集できます。全画面表示ではエディタがブラウザ全体に広がり、他の要素が隠れるので、集中して執筆できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">特殊文字と絵文字</h3>
+						<p class="small">文字パレットを開くと、著作権記号©、登録商標®、商標™、通貨記号、矢印、分数、約物などのよく使う記号や、厳選した絵文字をワンクリックで挿入できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">キーボードショートカット</h3>
+						<p class="small">エディタ全体で標準的なショートカットが使えます。Ctrl+Bで太字、Ctrl+Iで斜体、Ctrl+Uで下線、Ctrl+Zで元に戻す、Ctrl+Y (MacではCmd+Shift+Z) でやり直し、Ctrl+Hで検索と置換を開きます。URLバーではEnterで確定、Escapeで閉じます。</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">RichText.online の使い方</h2>
+				<ol class="small">
+					<li class="mb-2"><strong>エディタを開く。</strong> ページを読み込むとすぐに使えます。ログイン、拡張機能、インストールは不要です。以前に使ったことがある場合は、前回の内容が自動的に復元されます。</li>
+					<li class="mb-2"><strong>内容を書く。</strong> 編集エリアをクリックして入力を始めます。ワープロと同じように、Enterで新しい段落、リスト内ではTabでインデントができます。</li>
+					<li class="mb-2"><strong>書式を設定する。</strong> マウスまたはキーボードでテキストを選択し、ツールバーのボタンをクリックして、太字、斜体、下線、見出しレベル、色などを設定します。書式は選択範囲にすぐ反映されます。</li>
+					<li class="mb-2"><strong>リンクとメディアを挿入する。</strong> リンクアイコンをクリックして、選択したテキストにURLを設定します。画像アイコンでWebアドレスから画像を埋め込み、ファイルアップロードアイコンでパソコンから画像を選べます。YouTubeまたはVimeoのURLを動画埋め込みバーに貼り付けると、再生できる動画を追加できます。</li>
+					<li class="mb-2"><strong>表で整理する。</strong> 表アイコンをクリックして表を挿入します。セルをクリックしてカーソルを置き、表メニューでデータの増減に合わせて行や列を追加・削除します。</li>
+					<li class="mb-2"><strong>文書を共有する。</strong> ツールバーの青い共有ボタンをクリックして共有ダイアログを開きます。生成されたURLをコピーして送れば、相手はアカウントなしで同じ文書をブラウザで開けます。</li>
+					<li class="mb-2"><strong>完成したらエクスポートする。</strong> ダウンロードアイコンでHTMLファイルとして保存するか、PDFアイコンで印刷表示を開きます。ブラウザの印刷ダイアログからPDFとして保存したり、プリンターに送ったりできます。</li>
+				</ol>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">主な使い方</h2>
+				<div class="row g-3 small">
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">ブログ記事の下書き</h3>
+						<p>見出し、小見出し、太字の強調、ハイパーリンクを使って下書きを作成します。完成したらHTMLとしてエクスポートしてCMSに貼り付けたり、共有URLを編集者に送ってレビューを依頼したりできます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">書式付きメール</h3>
+						<p>箇条書き、色付きテキスト、埋め込み画像を使ったメールを作成します。エディタから書式付きの内容をコピーしてメールソフトに貼り付ければ、リッチな書式が保たれます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">クイックメモと議事録</h3>
+						<p>ブラウザのタブでエディタを開き、番号付きのアクション項目とともに会議のメモを取れます。自動保存で内容が守られ、共有リンクで議事録をチーム全員にすぐ配布できます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">レポートとドキュメント</h3>
+						<p>見出しの階層、データ表、出典付きの引用、セクションを区切る水平線を使って、構造化されたレポートを作成します。HTMLとしてエクスポートすれば、社内ツールやWikiに埋め込めます。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">コンテンツの共同作業</h3>
+						<p>文書を書いて共有をクリックし、URLを同僚に送ります。相手はブラウザで開いて編集し、また共有し返せます。共有ドライブもバージョン管理ファイルも、どちらのログインも不要です。</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Markdownでの執筆</h3>
+						<p>Markdownで書きたい方は、Markdownモードに切り替えてライブ分割画面を使えます。左に生のMarkdown、右にレンダリング済みのHTMLが表示されます。レンダリング結果をコピーするか、リッチテキストモードに切り替えてツールバーで編集を続けられます。</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-5" id="embed">
+				<h2 class="h4 fw-bold mb-3">エディタを自分のウェブサイトに埋め込む</h2>
+				<p class="small">このエディタを自分のサイトで使いたいですか？ コンテナと1つのスクリプトタグを追加するだけです。エディタは分離されたフレーム内で読み込まれ、ページ側から数行のJavaScriptで内容を読み取ったり設定したりできます。</p>
+<pre class="small bg-white border rounded p-3" dir="ltr"><code>&lt;div id="editor"&gt;&lt;/div&gt;
+&lt;script src="https://richtext.online/embed.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  var ed = RichTextEditor.create('#editor', { height: 400 });
+  ed.onChange(function (html) { /* save html */ });
+&lt;/script&gt;</code></pre>
+				<p class="small"><a href="/embed-example.html">埋め込みガイド全文とライブデモを見る</a>（英語）。埋め込み版エディタには、ログイン、クラウド保存、バージョン履歴は含まれず、訪問者がRichText.onlineに保存した文書には一切触れません。エディタが返すHTMLはユーザーが作成したものなので、他の場所で表示する前にサニタイズしてください。RichText.onlineは、埋め込み版エディタの匿名の利用状況を、埋め込み先サイトのドメインを含めて記録します。</p>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">よくある質問</h2>
+				<div class="small">
+					<h3 class="h6 fw-semibold">RichText.online は無料で使えますか？</h3>
+					<p>はい、完全無料です。利用制限も有料プランもなく、アカウントも不要です。ページを開けばすぐに書き始められます。</p>
+
+					<h3 class="h6 fw-semibold">内容はどこに保存されますか？</h3>
+					<p>内容は、お使いの端末のブラウザのローカルストレージに自動保存されます。サーバーには何も送信されません。ブラウザのデータを消去すると保存内容も消えるため、永続的なコピーが必要な場合はエクスポートまたは共有を使ってください。</p>
+
+					<h3 class="h6 fw-semibold">共有はどのように動作しますか？</h3>
+					<p>共有をクリックすると、文書のHTMLが圧縮され、URLに直接エンコードされます。受け取った人のブラウザがそれを展開して文書を表示します。サーバーは関与せず、データはどこにも保存されません。URLが現実的でないほど長くなる大きな文書では、オプションのGitHub Gistを使うと、内容をGitHubに保存して短いリンクを生成できます。</p>
+
+					<h3 class="h6 fw-semibold">WordやGoogleドキュメントから貼り付けできますか？</h3>
+					<p>はい。貼り付け時に、Microsoft Word独自のマークアップを自動的に除去します。レイアウトを崩す原因となる非表示のXMLタグ、インラインスタイル、条件付きコメントが取り除かれ、太字、斜体、見出し、リスト、リンクなどの基本的な書式は保持されます。</p>
+
+					<h3 class="h6 fw-semibold">オフラインでも使えますか？</h3>
+					<p>ページを読み込んだ後は、インターネット接続なしで文章の入力と書式設定ができます。ツールバー、自動保存、エクスポート、印刷はオフラインでも動作します。共有機能 (URLハッシュ方式) もリンクの生成はオフラインで可能ですが、GitHub Gist方式はGitHub APIを呼び出すためネットワーク接続が必要です。</p>
+
+					<h3 class="h6 fw-semibold">モバイルでも使えますか？</h3>
+					<p>はい。ツールバーはレスポンシブで、小さい画面では折り返して表示されます。編集エリアはモバイルのキーボードでも使えます。モバイルでは、最新バージョンのChrome、Safari、Firefoxをおすすめします。</p>
+
+					<h3 class="h6 fw-semibold">画像はどのように挿入しますか？</h3>
+					<p>2つの方法があります。画像のURLアイコン (額縁) をクリックして、外部にホストされている画像のWebアドレスを貼り付けます。ファイルアップロードアイコン (プラス付きの写真) をクリックして、端末から画像ファイルを選びます。画像はBase64のデータURIとして文書に直接埋め込まれるため、外部ホスティングは不要です。</p>
+
+					<h3 class="h6 fw-semibold">Markdownモードとは何ですか？</h3>
+					<p>Markdownモードでは、エディタが分割表示に切り替わります。左側のプレーンテキスト領域にMarkdown記法で書くと、右側のライブHTMLプレビューが入力に合わせて更新されます。Markdownで書きたいけれど結果をすぐ確認したい方に便利です。MDボタンで、Markdownモードとリッチテキストモードを切り替えられます。</p>
+				</div>
+			</section>
+
+			<section class="mb-5" id="languages">
+				<h2 class="h4 fw-bold mb-3">対応言語</h2>
+				<p class="small mb-2">RichText.online は7つの言語で利用できます。デフォルトは英語です。</p>
+				<ul class="list-inline small mb-0">
+					<li class="list-inline-item"><a href="/" hreflang="en" lang="en" translate="no">English</a></li>
+					<li class="list-inline-item"><a href="/ja/" hreflang="ja" lang="ja" translate="no">日本語</a></li>
+					<li class="list-inline-item"><a href="/fr/" hreflang="fr" lang="fr" translate="no">Français</a></li>
+					<li class="list-inline-item"><a href="/es/" hreflang="es" lang="es" translate="no">Español</a></li>
+					<li class="list-inline-item"><a href="/ar/" hreflang="ar" lang="ar" translate="no">العربية</a></li>
+					<li class="list-inline-item"><a href="/pt/" hreflang="pt" lang="pt" translate="no">Português</a></li>
+					<li class="list-inline-item"><a href="/ru/" hreflang="ru" lang="ru" translate="no">Русский</a></li>
+				</ul>
+			</section>
+
+		</footer>
+	</div>
+	<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="helpModalLabel">キーボードショートカット</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+				</div>
+				<div class="modal-body p-0">
+					<table class="table table-sm table-bordered mb-0">
+						<thead class="table-light">
+							<tr><th>ショートカット</th><th>操作</th></tr>
+						</thead>
+						<tbody>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + B</kbd></td><td>太字</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + I</kbd></td><td>斜体</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + U</kbd></td><td>下線</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + Z</kbd></td><td>元に戻す</td></tr>
+							<tr><td id="shortcut-redo"><kbd><span class="key-mod">Ctrl</span> + Y</kbd></td><td>やり直し</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + A</kbd></td><td>すべて選択</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + C</kbd></td><td>コピー</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + X</kbd></td><td>切り取り</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + V</kbd></td><td>貼り付け</td></tr>
+							<tr><td>URLバーで<kbd>Enter</kbd></td><td>リンク／画像の挿入を確定</td></tr>
+							<tr><td>URLバーで<kbd>Escape</kbd></td><td>URLバーを閉じる</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="shareModalLabel"><i class="fas fa-share-nodes me-2"></i>ドキュメントを共有</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">このリンクを知っている人は誰でも、あなたの文書のコピーを閲覧・編集できます。アカウントは不要です。</p>
+					<label class="form-label fw-semibold small">共有用URL</label>
+					<div class="input-group mb-1">
+						<input type="text" id="share-url-input" class="form-control form-control-sm font-monospace" readonly>
+						<button class="btn btn-outline-secondary btn-sm" onclick="copyShareUrl();" title="URLをコピー"><i class="fas fa-copy"></i></button>
+					</div>
+					<div class="d-flex align-items-center justify-content-between mb-2">
+						<span id="share-copy-feedback" class="small text-success"></span>
+						<button class="btn btn-link btn-sm text-muted p-0 small" onclick="showGistSection();">代わりにGitHub Gistを使う &rsaquo;</button>
+					</div>
+					<div id="share-url-warning" class="alert alert-warning small py-2 px-3 mb-2" style="display:none;">
+						<i class="fas fa-triangle-exclamation me-1"></i>
+						このURLは2&thinsp;000文字を超えており、一部のアプリやメールクライアントで途中で切れる可能性があります。より短いリンクには、下のGitHub Gistをご利用ください。
+					</div>
+					<div id="share-gist-section" style="display:none;">
+						<hr class="my-3">
+						<label class="form-label fw-semibold small">GitHub Gist <span class="fw-normal text-muted">(より短いURL)</span></label>
+						<p class="small text-muted mb-2"><code>gist</code>スコープ付きの<a href="https://github.com/settings/tokens/new?scopes=gist&description=RichText.online" target="_blank" rel="noopener noreferrer">GitHubトークン</a>を作成し、下に貼り付けてください。トークンは保存されません。</p>
+						<div class="input-group mb-2">
+							<input type="password" id="gist-token-input" class="form-control form-control-sm" placeholder="ghp_…" autocomplete="off">
+							<button id="btn-share-gist" class="btn btn-primary btn-sm" onclick="shareViaGist();">Gistを作成</button>
+						</div>
+						<div id="gist-error" class="text-danger small" style="display:none;"></div>
+						<div id="gist-success" class="text-success small" style="display:none;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="historyModalLabel"><i class="fas fa-clock-rotate-left me-2"></i>バージョン履歴</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">スナップショットは作業中に自動で保存され、この端末にのみ保持されます。バージョンを復元する際は、現在のテキストが先にスナップショットとして保存されるので、内容が失われることはありません。</p>
+					<div id="history-empty" class="text-muted small text-center py-4" style="display:none;">以前のバージョンはまだありません。編集を続けると、ここにスナップショットが表示されます。</div>
+					<div id="history-list" class="list-group"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="cloudSaveModal" tabindex="-1" aria-labelledby="cloudSaveModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="cloudSaveModalLabel"><i class="fas fa-cloud-arrow-up me-2"></i>クラウドに保存</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">アカウントに保存されます。ログインすればどの端末からでもアクセスできます。</p>
+					<label class="form-label fw-semibold small">ドキュメントのタイトル</label>
+					<input type="text" id="cloud-save-title" class="form-control form-control-sm mb-3" placeholder="無題のドキュメント">
+					<div id="cloud-save-error" class="text-danger small mb-2" style="display:none;"></div>
+					<div class="d-flex gap-2">
+						<button id="btn-confirm-cloud-save" class="btn btn-primary btn-sm" onclick="saveToCloud(false);">保存</button>
+						<button id="cloud-save-as-new" class="btn btn-outline-secondary btn-sm" style="display:none;" onclick="saveToCloud(true);">新しいコピーとして保存</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="documentsModal" tabindex="-1" aria-labelledby="documentsModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="documentsModalLabel"><i class="fas fa-folder-open me-2"></i>マイドキュメント</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+				</div>
+				<div class="modal-body">
+					<div id="cloud-docs-loading" class="text-muted small text-center py-4">読み込み中…</div>
+					<div id="cloud-docs-empty" class="text-muted small text-center py-4" style="display:none;">保存されたドキュメントはまだありません。ツールバーのクラウドアイコンから保存できます。</div>
+					<div id="cloud-docs-list" class="list-group"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+	<script>
+		firebase.initializeApp({
+			apiKey: "AIzaSyBsEkDEf1qqDVlQUpsUc5qG_SbPuNPiTQI",
+			authDomain: "richtext-online.firebaseapp.com",
+			projectId: "richtext-online",
+			storageBucket: "richtext-online.firebasestorage.app",
+			messagingSenderId: "483792477186",
+			appId: "1:483792477186:web:40083f00456bc496e75b1b"
+		});
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+	<script>window.RT_I18N = {"account": "アカウント", "myDocuments": "マイドキュメント", "signOut": "ログアウト", "signInFailed": "ログインに失敗しました: {msg}", "untitledDocument": "無題のドキュメント", "saveFailed": "ドキュメントを保存できませんでした。", "loadDocsFailed": "ドキュメントを読み込めませんでした: {msg}", "open": "開く", "deleteConfirm": "このドキュメントを削除しますか？ この操作は元に戻せません。", "loadingShared": "共有ドキュメントを読み込み中…", "sharedLoadFailed": "共有ドキュメントを読み込めませんでした。", "justNow": "たった今", "emptyDocument": "(空のドキュメント)", "restore": "復元", "copied": "コピーしました！", "gistTokenRequired": "GitHubのパーソナルアクセストークンを入力してください。", "creating": "作成中…", "createGist": "Gistを作成", "gistCreated": "Gistを作成しました！ 上のURLが更新されています。コピーして共有してください。", "gistApiError": "GitHub APIエラー ({status})", "gistFailed": "Gistを作成できませんでした。", "unsupportedVideo": "未対応のURLです。YouTubeまたはVimeoのリンクを貼り付けてください。", "imageLoadFailed": "画像を読み込めませんでした。URLを確認してください。", "counter": "単語数: {words} | 文字数: {chars}", "darkMode": "ダークモード", "lightMode": "ライトモード", "fullscreen": "全画面表示", "exitFullscreen": "全画面表示を終了", "noMatches": "一致なし", "matchOf": "{current} / {total}", "allReplaced": "すべて置換しました", "editingOn": "編集: オン", "editingOff": "編集: オフ"};</script>
+	<script src="/editor.js?v=4"></script>
+</body>
+</html>

@@ -13,6 +13,52 @@ var historyTimer = null;
 var lastSnapshotContent = null;
 var EMBED = window.rtEmbed || { embedded: false, host: '', parentOrigin: '' };
 
+// UI strings used from JavaScript. Keep this block strict JSON: tools/build_i18n.py reads it, and each
+// translated page overrides these via window.RT_I18N (generated from i18n/<lang>.json).
+/* i18n:defaults:start */
+var RT_DEFAULTS = {
+	"account": "Account",
+	"myDocuments": "My Documents",
+	"signOut": "Sign out",
+	"signInFailed": "Sign-in failed: {msg}",
+	"untitledDocument": "Untitled document",
+	"saveFailed": "Failed to save document.",
+	"loadDocsFailed": "Could not load documents: {msg}",
+	"open": "Open",
+	"deleteConfirm": "Delete this document? This cannot be undone.",
+	"loadingShared": "Loading shared document…",
+	"sharedLoadFailed": "Could not load the shared document.",
+	"justNow": "Just now",
+	"emptyDocument": "(empty document)",
+	"restore": "Restore",
+	"copied": "Copied!",
+	"gistTokenRequired": "Please enter a GitHub personal access token.",
+	"creating": "Creating…",
+	"createGist": "Create Gist",
+	"gistCreated": "Gist created! URL updated above — copy and share it.",
+	"gistApiError": "GitHub API error ({status})",
+	"gistFailed": "Failed to create Gist.",
+	"unsupportedVideo": "Unsupported URL — paste a YouTube or Vimeo link.",
+	"imageLoadFailed": "Could not load image — please check the URL.",
+	"counter": "Words: {words} | Characters: {chars}",
+	"darkMode": "Dark Mode",
+	"lightMode": "Light Mode",
+	"fullscreen": "Fullscreen",
+	"exitFullscreen": "Exit Fullscreen",
+	"noMatches": "No matches",
+	"matchOf": "{current} of {total}",
+	"allReplaced": "All replaced",
+	"editingOn": "Editing: ON",
+	"editingOff": "Editing: OFF"
+};
+/* i18n:defaults:end */
+
+function rtT(key, vars) {
+	var overrides = window.RT_I18N || {};
+	var str = overrides[key] !== undefined ? overrides[key] : RT_DEFAULTS[key];
+	return str.replace(/\{(\w+)\}/g, function(m, name) { return vars && vars[name] !== undefined ? vars[name] : m; });
+}
+
 // URL length above which we warn and suggest GitHub Gist
 var URL_SHARE_THRESHOLD = 2000;
 
@@ -48,7 +94,7 @@ function signInWithGoogle() {
 		.then(function() { trackEvent('login', { method: 'Google' }); })
 		.catch(function(e) {
 			if (e.code !== 'auth/cancelled-popup-request' && e.code !== 'auth/popup-closed-by-user') {
-				alert('Sign-in failed: ' + e.message);
+				alert(rtT('signInFailed', { msg: e.message }));
 			}
 		});
 }
@@ -81,7 +127,7 @@ function updateAccountUI(user) {
 		} else {
 			btn.innerHTML = '<i class="fas fa-circle-user"></i>';
 		}
-		btn.title = user.displayName || user.email || 'Account';
+		btn.title = user.displayName || user.email || rtT('account');
 
 		var emailItem = document.createElement('li');
 		var emailText = document.createElement('span');
@@ -92,7 +138,7 @@ function updateAccountUI(user) {
 		var docsItem = document.createElement('li');
 		var docsBtn = document.createElement('button');
 		docsBtn.className = 'dropdown-item';
-		docsBtn.textContent = 'My Documents';
+		docsBtn.textContent = rtT('myDocuments');
 		docsBtn.onclick = openDocumentsModal;
 		docsItem.appendChild(docsBtn);
 
@@ -102,7 +148,7 @@ function updateAccountUI(user) {
 		var signOutItem = document.createElement('li');
 		var signOutBtn = document.createElement('button');
 		signOutBtn.className = 'dropdown-item';
-		signOutBtn.textContent = 'Sign out';
+		signOutBtn.textContent = rtT('signOut');
 		signOutBtn.onclick = signOutUser;
 		signOutItem.appendChild(signOutBtn);
 
@@ -124,7 +170,7 @@ function updateCloudButtons() {
 function deriveDefaultTitle() {
 	var heading = editor.querySelector('h1, h2, h3');
 	var text = (heading ? heading.textContent : editor.textContent).trim().replace(/\s+/g, ' ');
-	return text.slice(0, 60) || 'Untitled document';
+	return text.slice(0, 60) || rtT('untitledDocument');
 }
 
 function openCloudSaveModal() {
@@ -138,7 +184,7 @@ function openCloudSaveModal() {
 
 async function saveToCloud(asNew) {
 	if (!currentUser) return;
-	var title = document.getElementById('cloud-save-title').value.trim() || 'Untitled document';
+	var title = document.getElementById('cloud-save-title').value.trim() || rtT('untitledDocument');
 	var errorEl = document.getElementById('cloud-save-error');
 	var btn = document.getElementById('btn-confirm-cloud-save');
 	errorEl.style.display = 'none';
@@ -165,7 +211,7 @@ async function saveToCloud(asNew) {
 		var modal = bootstrap.Modal.getInstance(modalEl);
 		if (modal) modal.hide();
 	} catch (e) {
-		errorEl.textContent = e.message || 'Failed to save document.';
+		errorEl.textContent = e.message || rtT('saveFailed');
 		errorEl.style.display = '';
 	} finally {
 		btn.disabled = false;
@@ -197,7 +243,7 @@ function openDocumentsModal() {
 		})
 		.catch(function(e) {
 			loadingEl.style.display = 'none';
-			emptyEl.textContent = 'Could not load documents: ' + e.message;
+			emptyEl.textContent = rtT('loadDocsFailed', { msg: e.message });
 			emptyEl.style.display = '';
 		});
 }
@@ -211,7 +257,7 @@ function renderCloudDocRow(docId, data) {
 	info.className = 'flex-grow-1 overflow-hidden';
 	var titleEl = document.createElement('div');
 	titleEl.className = 'fw-semibold small text-truncate';
-	titleEl.textContent = data.title || 'Untitled document';
+	titleEl.textContent = data.title || rtT('untitledDocument');
 	var timeEl = document.createElement('div');
 	timeEl.className = 'text-muted small';
 	timeEl.textContent = data.updatedAt ? relativeTime(data.updatedAt.toMillis()) : '';
@@ -222,7 +268,7 @@ function renderCloudDocRow(docId, data) {
 	actions.className = 'd-flex gap-1 flex-shrink-0';
 	var openBtn = document.createElement('button');
 	openBtn.className = 'btn btn-sm btn-outline-primary';
-	openBtn.textContent = 'Open';
+	openBtn.textContent = rtT('open');
 	openBtn.onclick = function() { loadCloudDocument(docId, data.title); };
 	var delBtn = document.createElement('button');
 	delBtn.className = 'btn btn-sm btn-outline-danger';
@@ -256,7 +302,7 @@ function loadCloudDocument(docId, title) {
 }
 
 function deleteCloudDocument(docId, rowEl) {
-	if (!confirm('Delete this document? This cannot be undone.')) return;
+	if (!confirm(rtT('deleteConfirm'))) return;
 	getDb().collection('documents').doc(docId).delete().then(function() {
 		if (rowEl && rowEl.parentNode) rowEl.parentNode.removeChild(rowEl);
 		if (currentCloudDocId === docId) currentCloudDocId = null;
@@ -345,8 +391,14 @@ function restoreFromHash(compressed) {
 	restoreFromStorage();
 }
 
+function showSharedLoadError() {
+	editor.innerHTML = '<p class="text-danger"></p>';
+	editor.querySelector('p').textContent = rtT('sharedLoadFailed');
+}
+
 function restoreFromGist(gistId) {
-	editor.innerHTML = '<p class="text-muted"><em>Loading shared document…</em></p>';
+	editor.innerHTML = '<p class="text-muted"><em></em></p>';
+	editor.querySelector('em').textContent = rtT('loadingShared');
 	fetch('https://api.github.com/gists/' + gistId)
 		.then(function(r) { return r.json(); })
 		.then(function(data) {
@@ -358,11 +410,11 @@ function restoreFromGist(gistId) {
 				updateEditorActions();
 				showSharedBanner();
 			} else {
-				editor.innerHTML = '<p class="text-danger">Could not load the shared document.</p>';
+				showSharedLoadError();
 			}
 		})
 		.catch(function() {
-			editor.innerHTML = '<p class="text-danger">Could not load the shared document.</p>';
+			showSharedLoadError();
 		});
 }
 
@@ -429,22 +481,19 @@ function scheduleHistorySnapshot() {
 function relativeTime(timestamp) {
 	var diff = Math.max(0, Date.now() - timestamp);
 	var mins = Math.round(diff / 60000);
-	if (mins < 1) return 'Just now';
-	if (mins === 1) return '1 minute ago';
-	if (mins < 60) return mins + ' minutes ago';
+	if (mins < 1) return rtT('justNow');
+	var rtf = new Intl.RelativeTimeFormat(document.documentElement.lang || 'en', { numeric: 'auto' });
+	if (mins < 60) return rtf.format(-mins, 'minute');
 	var hours = Math.round(mins / 60);
-	if (hours === 1) return '1 hour ago';
-	if (hours < 24) return hours + ' hours ago';
-	var days = Math.round(hours / 24);
-	if (days === 1) return 'Yesterday';
-	return days + ' days ago';
+	if (hours < 24) return rtf.format(-hours, 'hour');
+	return rtf.format(-Math.round(hours / 24), 'day');
 }
 
 function snapshotPreviewText(content) {
 	var div = document.createElement('div');
 	div.innerHTML = content;
 	var text = (div.textContent || '').trim().replace(/\s+/g, ' ');
-	return text.length > 120 ? text.slice(0, 120) + '…' : (text || '(empty document)');
+	return text.length > 120 ? text.slice(0, 120) + '…' : (text || rtT('emptyDocument'));
 }
 
 function openHistoryModal() {
@@ -480,7 +529,7 @@ function renderHistoryList() {
 		info.appendChild(previewEl);
 		var btn = document.createElement('button');
 		btn.className = 'btn btn-sm btn-outline-primary flex-shrink-0';
-		btn.textContent = 'Restore';
+		btn.textContent = rtT('restore');
 		btn.onclick = function() { restoreSnapshot(snap.time); };
 		item.appendChild(info);
 		item.appendChild(btn);
@@ -526,7 +575,7 @@ function openShareModal() {
 function copyShareUrl() {
 	var url = document.getElementById('share-url-input').value;
 	navigator.clipboard.writeText(url).then(function() {
-		document.getElementById('share-copy-feedback').textContent = 'Copied!';
+		document.getElementById('share-copy-feedback').textContent = rtT('copied');
 		trackEvent('copy_share_url');
 	});
 }
@@ -543,12 +592,12 @@ async function shareViaGist() {
 	errorEl.style.display = 'none';
 	successEl.style.display = 'none';
 	if (!token) {
-		errorEl.textContent = 'Please enter a GitHub personal access token.';
+		errorEl.textContent = rtT('gistTokenRequired');
 		errorEl.style.display = '';
 		return;
 	}
 	btn.disabled = true;
-	btn.textContent = 'Creating…';
+	btn.textContent = rtT('creating');
 	try {
 		var resp = await fetch('https://api.github.com/gists', {
 			method: 'POST',
@@ -565,22 +614,22 @@ async function shareViaGist() {
 		});
 		if (!resp.ok) {
 			var err = await resp.json().catch(function() { return {}; });
-			throw new Error(err.message || 'GitHub API error (' + resp.status + ')');
+			throw new Error(err.message || rtT('gistApiError', { status: resp.status }));
 		}
 		var data = await resp.json();
 		var shareUrl = location.origin + location.pathname + '?gist=' + data.id;
 		document.getElementById('share-url-input').value = shareUrl;
 		document.getElementById('share-url-warning').style.display = 'none';
 		document.getElementById('share-gist-section').style.display = 'none';
-		successEl.textContent = 'Gist created! URL updated above — copy and share it.';
+		successEl.textContent = rtT('gistCreated');
 		successEl.style.display = '';
 		trackEvent('share_gist');
 	} catch (e) {
-		errorEl.textContent = e.message || 'Failed to create Gist.';
+		errorEl.textContent = e.message || rtT('gistFailed');
 		errorEl.style.display = '';
 	} finally {
 		btn.disabled = false;
-		btn.textContent = 'Create Gist';
+		btn.textContent = rtT('createGist');
 	}
 }
 
@@ -706,7 +755,7 @@ function insertVideo(url) {
 	var embedUrl = getVideoEmbedUrl(url);
 	if (!embedUrl) {
 		openUrlBar('video');
-		showUrlError('Unsupported URL — paste a YouTube or Vimeo link.');
+		showUrlError(rtT('unsupportedVideo'));
 		return;
 	}
 	trackEvent('insert_video');
@@ -747,7 +796,7 @@ function insertImageFromUrl(url) {
 	};
 	img.onerror = function() {
 		openUrlBar('image');
-		showUrlError('Could not load image — please check the URL.');
+		showUrlError(rtT('imageLoadFailed'));
 	};
 	img.src = url;
 }
@@ -781,7 +830,7 @@ function updateCounter() {
 	if (!el) return;
 	var text = editor.textContent || '';
 	var words = text.trim() ? text.trim().split(/\s+/).length : 0;
-	el.textContent = 'Words: ' + words + ' | Characters: ' + text.length;
+	el.textContent = rtT('counter', { words: words, chars: text.length });
 }
 
 function updateEditorActions() {
@@ -1018,7 +1067,7 @@ function toggleDarkMode() {
 	var btn = document.getElementById('btn-dark-mode');
 	if (btn) {
 		btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-		btn.title = isDarkMode ? 'Light Mode' : 'Dark Mode';
+		btn.title = isDarkMode ? rtT('lightMode') : rtT('darkMode');
 	}
 }
 
@@ -1093,9 +1142,9 @@ function updateFindStatus() {
 	var el = document.getElementById('find-status');
 	if (!el) return;
 	if (findMatches.length === 0) {
-		el.textContent = lastFindTerm ? 'No matches' : '';
+		el.textContent = lastFindTerm ? rtT('noMatches') : '';
 	} else {
-		el.textContent = (findIndex + 1) + ' of ' + findMatches.length;
+		el.textContent = rtT('matchOf', { current: findIndex + 1, total: findMatches.length });
 	}
 }
 
@@ -1154,7 +1203,7 @@ function replaceAll() {
 	findIndex = -1;
 	lastFindTerm = '';
 	var el = document.getElementById('find-status');
-	if (el) el.textContent = 'All replaced';
+	if (el) el.textContent = rtT('allReplaced');
 }
 
 function toggleFullscreen() {
@@ -1165,7 +1214,7 @@ function toggleFullscreen() {
 	container.classList.toggle('editor-fullscreen', isFullscreen);
 	if (btn) {
 		btn.innerHTML = isFullscreen ? '<i class="fas fa-compress"></i>' : '<i class="fas fa-expand"></i>';
-		btn.title = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen';
+		btn.title = isFullscreen ? rtT('exitFullscreen') : rtT('fullscreen');
 	}
 }
 
@@ -1175,14 +1224,14 @@ function toggleEdit() {
 		editor.contentEditable = 'false';
 		isInEditMode = false;
 		trackEvent('toggle_edit', { enabled: false });
-		btn.textContent = 'Editing: OFF';
+		btn.textContent = rtT('editingOff');
 		btn.classList.replace('btn-success', 'btn-outline-danger');
 		setToolbarDisabled(true, 'btn-toggle-edit');
 	} else {
 		editor.contentEditable = 'true';
 		isInEditMode = true;
 		trackEvent('toggle_edit', { enabled: true });
-		btn.textContent = 'Editing: ON';
+		btn.textContent = rtT('editingOn');
 		btn.classList.replace('btn-outline-danger', 'btn-success');
 		setToolbarDisabled(false);
 		updateEditorActions();

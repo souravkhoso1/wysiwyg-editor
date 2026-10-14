@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta verification-text="31c968e3b5ba53ce67ce6a94ea71d2ac6506e71e">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Бесплатный онлайн-редактор форматированного текста | RichText.online</title>
+	<meta name="description" content="Форматируйте, оформляйте и экспортируйте текст прямо в браузере — без регистрации и установки. Жирный шрифт, курсив, цвета, заголовки, списки, ссылки, изображения, режим Markdown и многое другое.">
+	<meta name="keywords" content="онлайн-редактор форматированного текста, WYSIWYG-редактор, бесплатный текстовый редактор онлайн, онлайн-текстовый процессор, форматирование текста, форматированный текст, HTML-редактор">
+	<link rel="canonical" href="https://richtext.online/ru/">
+	<link rel="alternate" hreflang="en" href="https://richtext.online/">
+	<link rel="alternate" hreflang="ja" href="https://richtext.online/ja/">
+	<link rel="alternate" hreflang="fr" href="https://richtext.online/fr/">
+	<link rel="alternate" hreflang="es" href="https://richtext.online/es/">
+	<link rel="alternate" hreflang="ar" href="https://richtext.online/ar/">
+	<link rel="alternate" hreflang="pt" href="https://richtext.online/pt/">
+	<link rel="alternate" hreflang="ru" href="https://richtext.online/ru/">
+	<link rel="alternate" hreflang="x-default" href="https://richtext.online/">
+	<meta name="google-adsense-account" content="ca-pub-2084790723060606">
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="website">
+	<meta property="og:locale" content="ru_RU">
+	<meta property="og:url" content="https://richtext.online/ru/">
+	<meta property="og:title" content="Бесплатный онлайн-редактор форматированного текста | RichText.online">
+	<meta property="og:description" content="Форматируйте, оформляйте и экспортируйте текст прямо в браузере — без регистрации и установки. Жирный шрифт, курсив, цвета, заголовки, списки, ссылки, изображения и многое другое.">
+	<meta property="og:image" content="https://richtext.online/social-preview.png">
+
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="https://richtext.online/ru/">
+	<meta name="twitter:title" content="Бесплатный онлайн-редактор форматированного текста | RichText.online">
+	<meta name="twitter:description" content="Форматируйте, оформляйте и экспортируйте текст прямо в браузере — без регистрации и установки.">
+	<meta name="twitter:image" content="https://richtext.online/social-preview.png">
+
+	<!-- Structured data -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "RichText.online",
+		"url": "https://richtext.online/ru/",
+		"inLanguage": "ru",
+		"description": "Бесплатный онлайн-редактор форматированного текста. Применяйте жирный шрифт, курсив, цвета, заголовки, списки, ссылки и изображения прямо в браузере — аккаунт не нужен.",
+		"applicationCategory": "UtilitiesApplication",
+		"operatingSystem": "All",
+		"browserRequirements": "Any modern browser",
+		"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+		"featureList": [
+			"Bold, italic, underline, strikethrough, subscript, superscript",
+			"Font family and size",
+			"Text and background colour",
+			"Headings H1–H6",
+			"Bullet and numbered lists with indent and outdent",
+			"Insert links, images from URL or file upload",
+			"Embed YouTube and Vimeo videos",
+			"Insert and edit tables",
+			"Blockquote and code block formatting",
+			"Find and replace with step-through highlighting",
+			"Markdown mode with live split-pane preview",
+			"Source HTML view and edit",
+			"Share document via URL (no account required)",
+			"Export as HTML",
+			"Print and PDF export",
+			"Dark mode",
+			"Fullscreen mode",
+			"Special characters and emoji picker",
+			"Auto-save to browser local storage",
+			"Embeddable in any website with a single script tag",
+			"Word and character counter"
+		]
+	}
+	</script>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<link rel="stylesheet" href="/styles.css?v=3">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X3P1QLTV49"></script>
+<script>
+  // Embed mode: set by embed.js (?embed=1&embed_host=...&parent_origin=...). Must run before first paint and before gtag config.
+  window.rtEmbed = (function() {
+    var p = new URLSearchParams(location.search);
+    var embedded = p.get('embed') === '1';
+    var info = { embedded: embedded, host: '', parentOrigin: '' };
+    if (!embedded) return info;
+    document.documentElement.classList.add('embed-mode');
+    var hostRe = /^[a-z0-9]([a-z0-9.-]{0,98}[a-z0-9])?$/i;
+    var host = p.get('embed_host') || '';
+    if (!hostRe.test(host)) {
+      host = '';
+      try { host = new URL(document.referrer).hostname; } catch (e) {}
+    }
+    info.host = hostRe.test(host) ? host.toLowerCase() : 'unknown';
+    try {
+      var po = new URL(p.get('parent_origin') || '');
+      if (/^https?:$/.test(po.protocol)) info.parentOrigin = po.origin;
+    } catch (e) {}
+    return info;
+  })();
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  var gaParams = { traffic_context: window.rtEmbed.embedded ? 'embed' : 'direct' };
+  if (window.rtEmbed.embedded) gaParams.embed_host = window.rtEmbed.host;
+  gtag('config', 'G-X3P1QLTV49', gaParams);
+</script>
+<body class="bg-light py-4">
+	<div class="container-lg">
+		<header class="mb-3 d-flex justify-content-between align-items-start flex-wrap gap-2">
+			<div style="flex:1 1 320px">
+				<h1 class="h4 fw-bold mb-1" translate="no">RichText.online</h1>
+				<p class="text-muted small mb-0">Бесплатный онлайн-редактор форматированного текста — форматируйте, экспортируйте и печатайте без регистрации и установки. &middot; <a href="/embed-example.html" class="text-decoration-none">Встроить на свой сайт&nbsp;&rarr;</a></p>
+			</div>
+			<div class="d-flex align-items-center flex-wrap gap-2">
+				<div class="dropdown" id="lang-switcher">
+					<button class="btn btn-sm btn-outline-secondary dropdown-toggle text-nowrap" type="button" data-bs-toggle="dropdown" title="Язык" aria-label="Язык"><i class="fas fa-globe me-1"></i><span data-lang-current translate="no">Русский</span></button>
+					<ul class="dropdown-menu dropdown-menu-end">
+						<li><a class="dropdown-item" href="/" hreflang="en" lang="en" translate="no">English</a></li>
+						<li><a class="dropdown-item" href="/ja/" hreflang="ja" lang="ja" translate="no">日本語</a></li>
+						<li><a class="dropdown-item" href="/fr/" hreflang="fr" lang="fr" translate="no">Français</a></li>
+						<li><a class="dropdown-item" href="/es/" hreflang="es" lang="es" translate="no">Español</a></li>
+						<li><a class="dropdown-item" href="/ar/" hreflang="ar" lang="ar" translate="no">العربية</a></li>
+						<li><a class="dropdown-item" href="/pt/" hreflang="pt" lang="pt" translate="no">Português</a></li>
+						<li><a class="dropdown-item active" href="/ru/" hreflang="ru" lang="ru" translate="no">Русский</a></li>
+					</ul>
+				</div>
+				<button id="btn-signin" class="btn btn-sm btn-primary fw-semibold text-nowrap" onmousedown="event.preventDefault()" onclick="signInWithGoogle();">
+					<i class="fa-brands fa-google me-1"></i>Войти через Google
+				</button>
+				<div class="dropdown d-inline-block d-none" id="account-widget">
+					<button id="btn-account" title="Аккаунт" class="btn btn-sm btn-outline-secondary dropdown-toggle" onmousedown="event.preventDefault()" data-bs-toggle="dropdown"></button>
+					<ul class="dropdown-menu dropdown-menu-end" id="account-menu"></ul>
+				</div>
+				<a href="https://buymeacoffee.com/souravkhoso1" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-warning fw-semibold text-nowrap">
+					<i class="fas fa-mug-hot me-1"></i>Угостить кофе
+				</a>
+			</div>
+		</header>
+		<div id="toolbar" class="d-flex flex-wrap align-items-center gap-1 p-2 bg-white border border-bottom-0 rounded-top">
+			<button id="btn-bold" title="Жирный" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold"></i></button>
+			<button id="btn-italic" title="Курсив" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic"></i></button>
+			<button id="btn-underline" title="Подчёркнутый" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fas fa-underline"></i></button>
+			<button id="btn-strikeThrough" title="Зачёркнутый" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="По левому краю" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fas fa-align-left"></i></button>
+			<button title="По центру" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyCenter');"><i class="fas fa-align-center"></i></button>
+			<button title="По правому краю" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fas fa-align-right"></i></button>
+			<button title="По ширине" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fas fa-align-justify"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Вырезать" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="cutText();"><i class="fas fa-scissors"></i></button>
+			<button title="Копировать" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="copyText();"><i class="fas fa-copy"></i></button>
+			<button title="Вставить" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="pasteText();"><i class="fas fa-paste"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Увеличить отступ" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fas fa-indent"></i></button>
+			<button title="Уменьшить отступ" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fas fa-outdent"></i></button>
+			<button title="Подстрочный индекс" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fas fa-subscript"></i></button>
+			<button title="Надстрочный индекс" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('superscript');"><i class="fas fa-superscript"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Отменить" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('undo');"><i class="fas fa-rotate-left"></i></button>
+			<button title="Повторить" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('redo');"><i class="fas fa-rotate-right"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Маркированный список" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul"></i></button>
+			<button title="Нумерованный список" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol"></i></button>
+			<select title="Заголовок" class="form-select form-select-sm w-auto" onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
+				<option value="">Заголовок</option>
+				<option value="H1">H1</option>
+				<option value="H2">H2</option>
+				<option value="H3">H3</option>
+				<option value="H4">H4</option>
+				<option value="H5">H5</option>
+				<option value="H6">H6</option>
+			</select>
+			<button title="Горизонтальная линия" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertHorizontalRule');">HR</button>
+			<div class="dropdown d-inline-block">
+				<button title="Вставить таблицу" class="btn btn-sm btn-outline-secondary dropdown-toggle" onmousedown="event.preventDefault()" data-bs-toggle="dropdown"><i class="fas fa-table"></i></button>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(2,2);return false;">2 × 2</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(2,3);return false;">2 × 3</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(3,3);return false;">3 × 3</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(3,4);return false;">3 × 4</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(4,4);return false;">4 × 4</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableAddRowAfter();return false;">Добавить строку ниже</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableDeleteRow();return false;">Удалить строку</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableAddColAfter();return false;">Добавить столбец справа</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableDeleteCol();return false;">Удалить столбец</a></li>
+				</ul>
+			</div>
+			<button title="Цитата" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCommandWithArg('formatBlock', 'BLOCKQUOTE');"><i class="fas fa-quote-right"></i></button>
+			<button title="Блок кода" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCommandWithArg('formatBlock', 'PRE');"><i class="fas fa-terminal"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Вставить ссылку" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('link');"><i class="fas fa-link"></i></button>
+			<button title="Удалить ссылку" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash"></i></button>
+			<button title="Вставить изображение по URL" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('image');"><i class="fas fa-image"></i></button>
+			<label title="Загрузить изображение из файла" class="btn btn-sm btn-outline-secondary mb-0" onmousedown="event.preventDefault()"><i class="fas fa-file-image"></i><input type="file" accept="image/*" style="display:none" onchange="insertImageFromFile(this)"></label>
+			<button title="Встроить видео YouTube / Vimeo" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('video');"><i class="fas fa-video"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Очистить форматирование" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('removeFormat');"><i class="fas fa-eraser"></i></button>
+			<button id="btn-source" title="Показать/скрыть HTML-код" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code"></i></button>
+			<button id="btn-markdown" title="Режим Markdown" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleMarkdown();">MD</button>
+			<div class="w-100"></div>
+			<select title="Шрифт" class="form-select form-select-sm w-auto" onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
+				<option value="">Шрифт</option>
+				<option value="Arial">Arial</option>
+				<option value="Comic Sans MS">Comic Sans MS</option>
+				<option value="Courier">Courier</option>
+				<option value="Georgia">Georgia</option>
+				<option value="Tahoma">Tahoma</option>
+				<option value="Times New Roman">Times New Roman</option>
+				<option value="Verdana">Verdana</option>
+			</select>
+			<select title="Размер шрифта" class="form-select form-select-sm w-auto" onchange="if(this.value) execCommandWithArg('fontSize', this.value); this.selectedIndex = 0;">
+				<option value="">Размер</option>
+				<option value="1">Крошечный</option>
+				<option value="2">Маленький</option>
+				<option value="3">Обычный</option>
+				<option value="4">Средний</option>
+				<option value="5">Большой</option>
+				<option value="6">Очень большой</option>
+				<option value="7">Огромный</option>
+			</select>
+			<div class="vr mx-1"></div>
+			<label class="d-flex align-items-center gap-1 small text-muted mb-0">
+				Цвет текста
+				<input type="color" class="form-control form-control-color form-control-sm p-0 border" oninput="execCommandWithArg('foreColor', this.value);" title="Цвет текста" />
+			</label>
+			<label class="d-flex align-items-center gap-1 small text-muted mb-0">
+				Цвет фона
+				<input type="color" class="form-control form-control-color form-control-sm p-0 border" oninput="execCommandWithArg('hiliteColor', this.value);" title="Цвет фона" />
+			</label>
+			<div class="vr mx-1"></div>
+			<button title="Выделить всё" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">Выделить всё</button>
+			<button title="Очистить всё" class="btn btn-sm btn-outline-danger" onmousedown="event.preventDefault()" onclick="clearAll();">Очистить всё</button>
+			<div class="vr mx-1"></div>
+			<button id="btn-toggle-edit" title="Включить/выключить редактирование" class="btn btn-sm btn-success" onmousedown="event.preventDefault()" onclick="toggleEdit();">Редактирование: вкл.</button>
+			<button id="btn-print" title="Печать" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="printDocument();" disabled><i class="fas fa-print"></i></button>
+			<button id="btn-export" title="Экспорт в HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();" disabled><i class="fas fa-download"></i></button>
+			<button id="btn-export-pdf" title="Экспорт в PDF" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportPDF();" disabled><i class="fas fa-file-pdf"></i></button>
+			<button id="btn-share" title="Поделиться документом" class="btn btn-sm btn-outline-primary" onmousedown="event.preventDefault()" onclick="openShareModal();" disabled><i class="fas fa-share-nodes"></i></button>
+			<button id="btn-history" title="История версий" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openHistoryModal();"><i class="fas fa-clock-rotate-left"></i></button>
+			<button id="btn-cloud-save" title="Сохранить в облаке (нужен вход)" class="btn btn-sm btn-outline-primary" onmousedown="event.preventDefault()" onclick="openCloudSaveModal();" disabled><i class="fas fa-cloud-arrow-up"></i></button>
+			<button id="btn-char-picker" title="Специальные символы и эмодзи" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openCharPicker();"><i class="fas fa-smile"></i></button>
+			<button id="btn-find" title="Найти и заменить (Ctrl+H)" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openFindReplace();"><i class="fas fa-search"></i></button>
+			<button title="Горячие клавиши" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#helpModal"><i class="fas fa-keyboard"></i></button>
+			<button id="btn-dark-mode" title="Тёмная тема" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleDarkMode();"><i class="fas fa-moon"></i></button>
+			<button id="btn-fullscreen" title="Полноэкранный режим" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleFullscreen();"><i class="fas fa-expand"></i></button>
+		</div>
+		<div id="url-bar" style="display:none;">
+			<div class="input-group input-group-sm p-2 bg-light border border-top-0 border-bottom-0">
+				<input type="text" id="url-input" class="form-control" placeholder="https://" />
+				<button class="btn btn-primary" onclick="confirmUrl();">Вставить</button>
+				<button class="btn btn-outline-secondary" onclick="closeUrlBar();">Отмена</button>
+			</div>
+			<div id="url-error" class="text-danger small px-3 pb-1 bg-light border border-top-0 border-bottom-0" style="display:none;"></div>
+		</div>
+		<div id="find-replace-bar" style="display:none;">
+			<div class="d-flex flex-wrap align-items-center gap-2 p-2 bg-light border border-top-0 border-bottom-0">
+				<input type="text" id="find-input" class="form-control form-control-sm" style="max-width:180px" placeholder="Найти..." />
+				<button class="btn btn-sm btn-outline-secondary" onclick="findPrev();" title="Предыдущее совпадение">&#8593;</button>
+				<button class="btn btn-sm btn-outline-secondary" onclick="findNext();" title="Следующее совпадение">&#8595;</button>
+				<div class="vr"></div>
+				<input type="text" id="replace-input" class="form-control form-control-sm" style="max-width:180px" placeholder="Заменить на..." />
+				<button class="btn btn-sm btn-primary" onclick="replaceOne();">Заменить</button>
+				<button class="btn btn-sm btn-outline-secondary" onclick="replaceAll();">Заменить все</button>
+				<span id="find-status" class="small text-muted"></span>
+				<button class="btn btn-sm btn-outline-secondary ms-auto" onclick="closeFindReplace();" title="Закрыть">&times;</button>
+			</div>
+		</div>
+		<div id="char-picker" style="display:none;">
+			<div class="p-2 bg-light border border-top-0 border-bottom-0">
+				<div class="d-flex flex-wrap gap-1 mb-1">
+					<span class="small text-muted me-1 align-self-center">Символы:</span>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('©')">©</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('®')">®</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('™')">™</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('€')">€</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('£')">£</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¥')">¥</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('°')">°</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('±')">±</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('×')">×</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('÷')">÷</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('→')">→</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('←')">←</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('↑')">↑</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('↓')">↓</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('…')">…</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('—')">—</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('–')">–</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('"')">"</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('"')">"</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('½')">½</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¼')">¼</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¾')">¾</button>
+				</div>
+				<div class="d-flex flex-wrap gap-1">
+					<span class="small text-muted me-1 align-self-center">Эмодзи:</span>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('😀')">😀</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('😂')">😂</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('❤️')">❤️</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('👍')">👍</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🎉')">🎉</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🔥')">🔥</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('✅')">✅</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('⭐')">⭐</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🚀')">🚀</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('💡')">💡</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('📌')">📌</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('📝')">📝</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🎯')">🎯</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('⚠️')">⚠️</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('ℹ️')">ℹ️</button>
+				</div>
+			</div>
+		</div>
+		<div id="shared-banner" class="alert alert-info alert-dismissible d-none d-flex align-items-center gap-2 py-2 px-3 border border-top-0 border-info rounded-0 mb-0" role="alert">
+			<i class="fas fa-circle-info flex-shrink-0"></i>
+			<span class="small">Вы просматриваете общий документ.</span>
+			<button class="btn btn-sm btn-outline-info ms-2" onmousedown="event.preventDefault()" onclick="newDocument();">Новый документ</button>
+			<button type="button" class="btn-close ms-auto" onclick="dismissSharedBanner();"></button>
+		</div>
+		<div id="editor" class="bg-white border border-bottom-0 p-3" contenteditable="true"><h2>Добро пожаловать в RichText.online</h2><p><strong>Начните печатать здесь</strong> — этот пример текста исчезнет, как только вы что-нибудь напишете. Ваша работа автоматически сохраняется в браузере, поэтому вы можете вернуться в любой момент, ничего не потеряв.</p><h3>Что можно делать в этом редакторе</h3><ul><li><strong>Форматировать текст</strong> — жирный шрифт, курсив, подчёркивание, зачёркивание, подстрочные и надстрочные индексы на панели инструментов.</li><li><strong>Структурировать документ</strong> — применяйте заголовки от 1 до 6 уровня для понятных разделов и иерархии.</li><li><strong>Добавлять списки</strong> — маркированные и нумерованные списки в один клик.</li><li><strong>Настраивать шрифты и цвета</strong> — выбирайте из семи шрифтов и семи готовых размеров, задавайте любой цвет текста и фона.</li><li><strong>Вставлять ссылки и изображения</strong> — вставьте URL, чтобы создать гиперссылку, добавьте изображение из интернета или загрузите своё с устройства.</li><li><strong>Встраивать видео</strong> — вставьте ссылку на YouTube или Vimeo, чтобы добавить воспроизводимое видео прямо в текст.</li><li><strong>Создавать таблицы</strong> — вставляйте таблицы размером до 4 × 4 и в любой момент добавляйте или удаляйте строки и столбцы.</li><li><strong>Искать и заменять</strong> — ищите по документу с пошаговой подсветкой и заменяйте совпадения по одному или все сразу.</li><li><strong>Переключаться на Markdown</strong> — пишите в Markdown с предпросмотром в реальном времени в двух панелях и в любой момент возвращайтесь к форматированному тексту.</li><li><strong>Делиться по ссылке</strong> — нажмите кнопку «Поделиться», чтобы получить URL, который восстановит ваш документ в точности для любого, кто его откроет.</li><li><strong>Экспортировать</strong> — скачайте документ как отдельный HTML-файл или откройте PDF-версию, готовую к печати.</li></ul><p>Без аккаунта, без установки и без управления файлами. Всё работает прямо в вашем браузере.</p></div>
+		<div id="markdown-pane" class="d-none">
+			<div class="d-flex bg-white border border-top-0 rounded-bottom overflow-hidden" style="min-height: 400px;">
+				<textarea id="markdown-input" class="border-0 p-3 font-monospace" style="flex:1; resize:none; outline:none; min-height:400px;" placeholder="Write Markdown here..."></textarea>
+				<div class="border-start"></div>
+				<div id="markdown-preview" class="p-3 overflow-auto" style="flex:1;"></div>
+			</div>
+		</div>
+		<div id="editor-counter" class="bg-white border border-top-0 rounded-bottom px-3 py-1 text-end small text-muted">Слов: 0 | Символов: 0</div>
+		<footer class="mt-5 pt-4 border-top">
+
+			<p class="text-muted small mb-5"><strong>RichText.online</strong> — бесплатный WYSIWYG-редактор форматированного текста, работающий в браузере. Создавайте и оформляйте документы: жирный шрифт, курсив, подчёркивание, зачёркивание, заголовки (H1–H6), маркированные и нумерованные списки, цвет текста и фона, шрифты, размеры, ссылки, изображения и горизонтальные линии. Переключайтесь в режим Markdown с предпросмотром в реальном времени, показывайте исходный HTML-код или экспортируйте документ как отдельный HTML-файл — и всё это без создания аккаунта.</p>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Полный список возможностей</h2>
+				<div class="row g-4">
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Форматирование текста</h3>
+						<p class="small">Применяйте <strong>жирный шрифт</strong>, <em>курсив</em>, <u>подчёркивание</u> и <s>зачёркивание</s> к любому выделенному фрагменту. Поднимайте и опускайте символы с помощью надстрочных и подстрочных индексов для научных обозначений, сносок и химических формул. Одной кнопкой «Очистить форматирование» убирайте всё встроенное форматирование.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Заголовки и структура абзацев</h3>
+						<p class="small">В раскрывающемся списке «Заголовок» выберите уровень от H1 до H6. Хорошо структурированные заголовки облегчают навигацию по длинным документам и улучшают доступность для пользователей программ экранного доступа.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Списки</h3>
+						<p class="small">Создавайте маркированные списки для наборов элементов и нумерованные списки для пошаговых инструкций. С помощью кнопок «Увеличить отступ» и «Уменьшить отступ» делайте вложенные списки с несколькими уровнями иерархии.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Шрифты и цвета</h3>
+						<p class="small">Выбирайте из семи шрифтов — Arial, Comic Sans MS, Courier, Georgia, Tahoma, Times New Roman и Verdana — и семи готовых размеров, от «Крошечного» до «Огромного». Любой цвет текста и фона задаётся через стандартный выбор цвета.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Ссылки и изображения</h3>
+						<p class="small">Выделите текст и нажмите значок ссылки, чтобы сделать его гиперссылкой, или уберите ссылку одним кликом. Вставляйте изображения по URL, загружайте файл прямо с устройства или встраивайте видео YouTube и Vimeo, вставив его URL, — не выходя из редактора.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Таблицы</h3>
+						<p class="small">Вставьте таблицу размером до 4 × 4 ячеек из меню на панели инструментов. После вставки поставьте курсор в любую ячейку и используйте меню «Таблица», чтобы добавить строку ниже, удалить строку, добавить столбец справа или удалить столбец. Первая строка автоматически оформляется как заголовок.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Цитаты и блоки кода</h3>
+						<p class="small">Оформите абзац как цитату, чтобы выделить ссылку на источник или важный фрагмент. Преобразуйте любой абзац в блок кода, чтобы показывать команды, фрагменты кода и другой текст моноширинным шрифтом.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Поиск и замена</h3>
+						<p class="small">Откройте панель «Найти и заменить» (или нажмите Ctrl+H / ⌘+H), чтобы искать по документу с подсветкой совпадений. Переходите между результатами кнопками-стрелками, заменяйте совпадения по одному или все сразу.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Режим Markdown</h3>
+						<p class="small">Включите режим Markdown, чтобы писать обычным синтаксисом Markdown, а рядом видеть панель с готовым предпросмотром. Предпросмотр обновляется по мере набора. В любой момент вернитесь в режим форматированного текста и продолжайте работать с панелью инструментов.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Просмотр HTML-кода</h3>
+						<p class="small">Нажмите кнопку «Код», чтобы посмотреть и изменить исходный HTML вашего документа. Это удобно, когда нужно вставить содержимое из других систем, разобраться с форматированием или вручную создать HTML-элементы, которых нет на панели инструментов.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Экспорт и печать</h3>
+						<p class="small">Скачайте документ как автономный HTML-файл, который открывается в любом браузере, — удобно для архива или обмена офлайн. Откройте PDF-версию, готовую к печати, чтобы сразу распечатать её или сохранить в PDF через диалог печати браузера.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Обмен по URL</h3>
+						<p class="small">Нажмите кнопку «Поделиться», чтобы сжать содержимое документа и закодировать его в ссылке. Каждый, кто откроет ссылку, увидит тот же документ и сможет читать или править его — без аккаунта, без сервера и без вложений. Для очень длинных документов есть дополнительный вариант через GitHub Gist, который создаёт более короткую ссылку.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Автосохранение</h3>
+						<p class="small">Ваш текст автоматически сохраняется в локальном хранилище браузера по мере набора — с небольшой задержкой, чтобы не записывать слишком часто. Если закрыть и снова открыть вкладку, вы вернётесь ровно туда, где остановились, без ручного сохранения.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Тёмная тема и полноэкранный режим</h3>
+						<p class="small">Включите тёмную тему для комфортной работы при слабом освещении. Переключитесь в полноэкранный режим, чтобы развернуть редактор на всё окно браузера и скрыть всё лишнее — ничто не будет отвлекать от письма.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Специальные символы и эмодзи</h3>
+						<p class="small">Откройте таблицу символов, чтобы одним кликом вставить часто используемые знаки — авторское право ©, зарегистрированный товарный знак ®, товарный знак ™, символы валют, стрелки, дроби, типографскую пунктуацию — а также подборку эмодзи.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Горячие клавиши</h3>
+						<p class="small">В редакторе работают стандартные горячие клавиши: Ctrl+B — жирный шрифт, Ctrl+I — курсив, Ctrl+U — подчёркивание, Ctrl+Z — отмена, Ctrl+Y (или ⌘+Shift+Z на Mac) — повтор, Ctrl+H — «Найти и заменить». В строке URL нажмите Enter для подтверждения и Escape, чтобы закрыть её.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Как пользоваться RichText.online</h2>
+				<ol class="small">
+					<li class="mb-2"><strong>Откройте редактор.</strong> Редактор готов к работе сразу после загрузки страницы — без входа, без расширений и без установки. Если вы уже заходили, ваш предыдущий текст восстановится автоматически.</li>
+					<li class="mb-2"><strong>Напишите текст.</strong> Щёлкните в области редактирования и начните печатать. Редактор работает как текстовый процессор: Enter — новый абзац, Tab — отступ внутри списков.</li>
+					<li class="mb-2"><strong>Примените форматирование.</strong> Выделите текст мышью или с клавиатуры, затем нажмите кнопку на панели инструментов, чтобы применить жирный шрифт, курсив, подчёркивание, уровень заголовка, цвет или другой формат. Форматирование применяется к выделенному сразу.</li>
+					<li class="mb-2"><strong>Вставьте ссылки и медиа.</strong> Нажмите значок ссылки, чтобы привязать URL к выделенному тексту. Нажмите значок изображения, чтобы вставить картинку по веб-адресу, или значок загрузки файла, чтобы выбрать изображение на компьютере. Вставьте URL YouTube или Vimeo в строку встраивания видео, чтобы добавить воспроизводимое видео.</li>
+					<li class="mb-2"><strong>Организуйте данные в таблицах.</strong> Нажмите значок таблицы, чтобы вставить сетку. Щёлкните в ячейке, чтобы поставить курсор, и используйте меню «Таблица», чтобы добавлять или удалять строки и столбцы по мере роста данных.</li>
+					<li class="mb-2"><strong>Поделитесь документом.</strong> Нажмите синюю кнопку «Поделиться» на панели инструментов, чтобы открыть диалог обмена. Скопируйте созданный URL и отправьте кому угодно — получатель откроет тот же документ в своём браузере без аккаунта.</li>
+					<li class="mb-2"><strong>Экспортируйте, когда закончите.</strong> Нажмите значок загрузки, чтобы сохранить документ как HTML-файл, или значок PDF, чтобы открыть версию для печати. В диалоге печати браузера сохраните её в PDF или отправьте на принтер.</li>
+				</ol>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Типичные сценарии</h2>
+				<div class="row g-3 small">
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Черновики статей для блога</h3>
+						<p>Напишите и оформите черновик с заголовками, подзаголовками, выделением жирным и гиперссылками. Когда закончите, экспортируйте в HTML и вставьте прямо в CMS или отправьте редактору ссылку на документ для проверки.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Письма с форматированием</h3>
+						<p>Составьте письмо с маркированными списками, цветным текстом и встроенным изображением. Скопируйте оформленный текст из редактора и вставьте в почтовый клиент — форматирование сохранится.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Быстрые заметки и протоколы встреч</h3>
+						<p>Откройте редактор во вкладке браузера и ведите заметки встречи с нумерованными задачами. Автосохранение защитит ваш текст, а ссылка для обмена позволит мгновенно разослать протокол всей команде.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Отчёты и документация</h3>
+						<p>Создавайте структурированные отчёты с иерархией заголовков, таблицами данных, цитатами для источников и горизонтальными линиями между разделами. Экспортируйте в HTML для встраивания во внутренние инструменты или вики.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Совместная работа над текстом</h3>
+						<p>Напишите документ, нажмите «Поделиться» и отправьте URL коллеге. Он откроет его в браузере, внесёт правки и отправит обратно — без общих дисков, без файлов версий и без входа в аккаунт с обеих сторон.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Письмо в Markdown</h3>
+						<p>Предпочитаете писать в Markdown? Включите режим Markdown и работайте в разделённом окне: исходный Markdown слева, готовый HTML справа. Скопируйте результат или вернитесь в режим форматированного текста и продолжайте с панелью инструментов.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-5" id="embed">
+				<h2 class="h4 fw-bold mb-3">Встройте редактор на свой сайт</h2>
+				<p class="small">Хотите такой редактор на своём сайте? Добавьте контейнер и один тег script. Редактор загружается в изолированном фрейме, а ваша страница может читать и задавать его содержимое несколькими строками JavaScript.</p>
+<pre class="small bg-white border rounded p-3" dir="ltr"><code>&lt;div id="editor"&gt;&lt;/div&gt;
+&lt;script src="https://richtext.online/embed.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  var ed = RichTextEditor.create('#editor', { height: 400 });
+  ed.onChange(function (html) { /* save html */ });
+&lt;/script&gt;</code></pre>
+				<p class="small"><a href="/embed-example.html">Полное руководство по встраиванию и живая демонстрация</a> (на английском). Встроенные редакторы не включают вход, сохранение в облаке и историю версий и никогда не обращаются к документам, которые ваши посетители сохранили в RichText.online. HTML, который возвращает редактор, создаётся пользователем, поэтому очищайте его перед показом в другом месте. RichText.online собирает анонимную статистику использования встроенных редакторов, включая домен сайта, на котором они встроены.</p>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Часто задаваемые вопросы</h2>
+				<div class="small">
+					<h3 class="h6 fw-semibold">RichText.online бесплатный?</h3>
+					<p>Да, полностью бесплатный: без ограничений на использование, без платных тарифов и без аккаунта. Откройте страницу и сразу начинайте писать.</p>
+
+					<h3 class="h6 fw-semibold">Где хранится мой текст?</h3>
+					<p>Ваш текст автоматически сохраняется в локальном хранилище браузера на вашем устройстве. На сервер ничего не отправляется. Если очистить данные браузера, сохранённый текст исчезнет, поэтому используйте экспорт или «Поделиться», чтобы создать постоянную копию.</p>
+
+					<h3 class="h6 fw-semibold">Как работает обмен документами?</h3>
+					<p>При нажатии «Поделиться» HTML документа сжимается и кодируется прямо в URL. Браузер получателя распаковывает его и показывает документ — сервер не задействован, и никакие данные нигде не хранятся. Для очень больших документов, где URL получился бы слишком длинным, можно воспользоваться GitHub Gist: содержимое сохраняется на GitHub, а вы получаете короткую ссылку.</p>
+
+					<h3 class="h6 fw-semibold">Можно ли вставлять текст из Word или Google Docs?</h3>
+					<p>Да. При вставке редактор автоматически очищает собственную разметку Microsoft Word: скрытые XML-теги, встроенные стили и условные комментарии, которые иначе испортили бы вёрстку. Базовое форматирование — жирный шрифт, курсив, заголовки, списки и ссылки — сохраняется.</p>
+
+					<h3 class="h6 fw-semibold">Работает ли редактор офлайн?</h3>
+					<p>После загрузки страницы вы можете писать и форматировать текст без подключения к интернету. Панель инструментов, автосохранение, экспорт и печать работают офлайн. Функция «Поделиться» (метод с хэшем в URL) также создаёт ссылку офлайн, но способу через GitHub Gist нужно сетевое подключение для обращения к API GitHub.</p>
+
+					<h3 class="h6 fw-semibold">Можно ли пользоваться на телефоне?</h3>
+					<p>Да. Панель инструментов адаптивна и переносится на малых экранах. Область редактирования работает с мобильными клавиатурами. Для лучшего результата на телефоне используйте актуальную версию Chrome, Safari или Firefox.</p>
+
+					<h3 class="h6 fw-semibold">Как вставить изображение?</h3>
+					<p>Есть два способа. Нажмите значок «Изображение по URL» (рамка), чтобы вставить веб-адрес картинки, размещённой на другом сайте. Нажмите значок загрузки файла (фото с плюсом), чтобы выбрать файл изображения на устройстве — оно встраивается прямо в документ как data URI в формате base64, поэтому внешний хостинг не нужен.</p>
+
+					<h3 class="h6 fw-semibold">Что такое режим Markdown?</h3>
+					<p>В режиме Markdown редактор заменяется разделённым видом: слева — поле для простого текста, где вы пишете на синтаксисе Markdown, справа — предпросмотр HTML в реальном времени, который обновляется по мере набора. Это удобно, если вы любите писать в Markdown, но хотите сразу видеть результат. Кнопка MD переключает режимы Markdown и форматированного текста.</p>
+				</div>
+			</section>
+
+			<section class="mb-5" id="languages">
+				<h2 class="h4 fw-bold mb-3">Доступные языки</h2>
+				<p class="small mb-2">RichText.online доступен на семи языках. По умолчанию используется английский.</p>
+				<ul class="list-inline small mb-0">
+					<li class="list-inline-item"><a href="/" hreflang="en" lang="en" translate="no">English</a></li>
+					<li class="list-inline-item"><a href="/ja/" hreflang="ja" lang="ja" translate="no">日本語</a></li>
+					<li class="list-inline-item"><a href="/fr/" hreflang="fr" lang="fr" translate="no">Français</a></li>
+					<li class="list-inline-item"><a href="/es/" hreflang="es" lang="es" translate="no">Español</a></li>
+					<li class="list-inline-item"><a href="/ar/" hreflang="ar" lang="ar" translate="no">العربية</a></li>
+					<li class="list-inline-item"><a href="/pt/" hreflang="pt" lang="pt" translate="no">Português</a></li>
+					<li class="list-inline-item"><a href="/ru/" hreflang="ru" lang="ru" translate="no">Русский</a></li>
+				</ul>
+			</section>
+
+		</footer>
+	</div>
+	<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="helpModalLabel">Горячие клавиши</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body p-0">
+					<table class="table table-sm table-bordered mb-0">
+						<thead class="table-light">
+							<tr><th>Сочетание клавиш</th><th>Действие</th></tr>
+						</thead>
+						<tbody>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + B</kbd></td><td>Жирный</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + I</kbd></td><td>Курсив</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + U</kbd></td><td>Подчёркнутый</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + Z</kbd></td><td>Отменить</td></tr>
+							<tr><td id="shortcut-redo"><kbd><span class="key-mod">Ctrl</span> + Y</kbd></td><td>Повторить</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + A</kbd></td><td>Выделить всё</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + C</kbd></td><td>Копировать</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + X</kbd></td><td>Вырезать</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + V</kbd></td><td>Вставить</td></tr>
+							<tr><td><kbd>Enter</kbd> в строке URL</td><td>Подтвердить вставку ссылки / изображения</td></tr>
+							<tr><td><kbd>Escape</kbd> в строке URL</td><td>Закрыть строку URL</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="shareModalLabel"><i class="fas fa-share-nodes me-2"></i>Поделиться документом</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">Любой, у кого есть эта ссылка, может просмотреть и отредактировать копию вашего документа — аккаунт не нужен.</p>
+					<label class="form-label fw-semibold small">Ссылка для обмена</label>
+					<div class="input-group mb-1">
+						<input type="text" id="share-url-input" class="form-control form-control-sm font-monospace" readonly>
+						<button class="btn btn-outline-secondary btn-sm" onclick="copyShareUrl();" title="Копировать URL"><i class="fas fa-copy"></i></button>
+					</div>
+					<div class="d-flex align-items-center justify-content-between mb-2">
+						<span id="share-copy-feedback" class="small text-success"></span>
+						<button class="btn btn-link btn-sm text-muted p-0 small" onclick="showGistSection();">Использовать GitHub Gist &rsaquo;</button>
+					</div>
+					<div id="share-url-warning" class="alert alert-warning small py-2 px-3 mb-2" style="display:none;">
+						<i class="fas fa-triangle-exclamation me-1"></i>
+						Этот URL длиннее 2&thinsp;000 символов, и некоторые приложения или почтовые клиенты могут его обрезать. Для более короткой ссылки воспользуйтесь GitHub Gist ниже.
+					</div>
+					<div id="share-gist-section" style="display:none;">
+						<hr class="my-3">
+						<label class="form-label fw-semibold small">GitHub Gist <span class="fw-normal text-muted">(более короткий URL)</span></label>
+						<p class="small text-muted mb-2">Создайте <a href="https://github.com/settings/tokens/new?scopes=gist&description=RichText.online" target="_blank" rel="noopener noreferrer">токен GitHub</a> с правом <code>gist</code> и вставьте его ниже. Токен нигде не сохраняется.</p>
+						<div class="input-group mb-2">
+							<input type="password" id="gist-token-input" class="form-control form-control-sm" placeholder="ghp_…" autocomplete="off">
+							<button id="btn-share-gist" class="btn btn-primary btn-sm" onclick="shareViaGist();">Создать Gist</button>
+						</div>
+						<div id="gist-error" class="text-danger small" style="display:none;"></div>
+						<div id="gist-success" class="text-success small" style="display:none;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="historyModalLabel"><i class="fas fa-clock-rotate-left me-2"></i>История версий</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">Снимки сохраняются автоматически по ходу работы и хранятся только на этом устройстве. Перед восстановлением версии текущий текст сохраняется как снимок, поэтому ничего не потеряется.</p>
+					<div id="history-empty" class="text-muted small text-center py-4" style="display:none;">Прежних версий пока нет — продолжайте редактировать, и снимки появятся здесь.</div>
+					<div id="history-list" class="list-group"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="cloudSaveModal" tabindex="-1" aria-labelledby="cloudSaveModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="cloudSaveModalLabel"><i class="fas fa-cloud-arrow-up me-2"></i>Сохранить в облаке</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">Сохраняется в вашем аккаунте — доступно с любого устройства после входа.</p>
+					<label class="form-label fw-semibold small">Название документа</label>
+					<input type="text" id="cloud-save-title" class="form-control form-control-sm mb-3" placeholder="Документ без названия">
+					<div id="cloud-save-error" class="text-danger small mb-2" style="display:none;"></div>
+					<div class="d-flex gap-2">
+						<button id="btn-confirm-cloud-save" class="btn btn-primary btn-sm" onclick="saveToCloud(false);">Сохранить</button>
+						<button id="cloud-save-as-new" class="btn btn-outline-secondary btn-sm" style="display:none;" onclick="saveToCloud(true);">Сохранить как новую копию</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="documentsModal" tabindex="-1" aria-labelledby="documentsModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="documentsModalLabel"><i class="fas fa-folder-open me-2"></i>Мои документы</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body">
+					<div id="cloud-docs-loading" class="text-muted small text-center py-4">Загрузка…</div>
+					<div id="cloud-docs-empty" class="text-muted small text-center py-4" style="display:none;">Сохранённых документов пока нет — нажмите значок облака на панели инструментов, чтобы сохранить документ здесь.</div>
+					<div id="cloud-docs-list" class="list-group"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+	<script>
+		firebase.initializeApp({
+			apiKey: "AIzaSyBsEkDEf1qqDVlQUpsUc5qG_SbPuNPiTQI",
+			authDomain: "richtext-online.firebaseapp.com",
+			projectId: "richtext-online",
+			storageBucket: "richtext-online.firebasestorage.app",
+			messagingSenderId: "483792477186",
+			appId: "1:483792477186:web:40083f00456bc496e75b1b"
+		});
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+	<script>window.RT_I18N = {"account": "Аккаунт", "myDocuments": "Мои документы", "signOut": "Выйти", "signInFailed": "Не удалось войти: {msg}", "untitledDocument": "Документ без названия", "saveFailed": "Не удалось сохранить документ.", "loadDocsFailed": "Не удалось загрузить документы: {msg}", "open": "Открыть", "deleteConfirm": "Удалить этот документ? Это действие нельзя отменить.", "loadingShared": "Загрузка общего документа…", "sharedLoadFailed": "Не удалось загрузить общий документ.", "justNow": "Только что", "emptyDocument": "(пустой документ)", "restore": "Восстановить", "copied": "Скопировано!", "gistTokenRequired": "Введите персональный токен доступа GitHub.", "creating": "Создание…", "createGist": "Создать Gist", "gistCreated": "Gist создан! URL выше обновлён — скопируйте его и поделитесь.", "gistApiError": "Ошибка API GitHub ({status})", "gistFailed": "Не удалось создать Gist.", "unsupportedVideo": "Неподдерживаемый URL — вставьте ссылку на YouTube или Vimeo.", "imageLoadFailed": "Не удалось загрузить изображение — проверьте URL.", "counter": "Слов: {words} | Символов: {chars}", "darkMode": "Тёмная тема", "lightMode": "Светлая тема", "fullscreen": "Полноэкранный режим", "exitFullscreen": "Выйти из полноэкранного режима", "noMatches": "Совпадений нет", "matchOf": "{current} из {total}", "allReplaced": "Всё заменено", "editingOn": "Редактирование: вкл.", "editingOff": "Редактирование: выкл."};</script>
+	<script src="/editor.js?v=4"></script>
+</body>
+</html>

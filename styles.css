@@ -140,3 +140,9 @@ mark.find-match-current {
 	min-height: 240px;
 	visibility: hidden;
 }
+
+/* Right-to-left languages (Arabic) */
+[dir="rtl"] #editor blockquote {
+	border-left: 0;
+	border-right: 4px solid #dee2e6;
+}

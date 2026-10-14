@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://richtext.online/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://richtext.online/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://richtext.online/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://richtext.online/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://richtext.online/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://richtext.online/ar/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://richtext.online/pt/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://richtext.online/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://richtext.online/"/>
+  </url>
+  <url>
+    <loc>https://richtext.online/ja/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://richtext.online/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://richtext.online/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://richtext.online/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://richtext.online/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://richtext.online/ar/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://richtext.online/pt/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://richtext.online/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://richtext.online/"/>
+  </url>
+  <url>
+    <loc>https://richtext.online/fr/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://richtext.online/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://richtext.online/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://richtext.online/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://richtext.online/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://richtext.online/ar/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://richtext.online/pt/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://richtext.online/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://richtext.online/"/>
+  </url>
+  <url>
+    <loc>https://richtext.online/es/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://richtext.online/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://richtext.online/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://richtext.online/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://richtext.online/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://richtext.online/ar/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://richtext.online/pt/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://richtext.online/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://richtext.online/"/>
+  </url>
+  <url>
+    <loc>https://richtext.online/ar/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://richtext.online/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://richtext.online/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://richtext.online/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://richtext.online/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://richtext.online/ar/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://richtext.online/pt/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://richtext.online/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://richtext.online/"/>
+  </url>
+  <url>
+    <loc>https://richtext.online/pt/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://richtext.online/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://richtext.online/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://richtext.online/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://richtext.online/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://richtext.online/ar/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://richtext.online/pt/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://richtext.online/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://richtext.online/"/>
+  </url>
+  <url>
+    <loc>https://richtext.online/ru/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://richtext.online/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://richtext.online/ja/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://richtext.online/fr/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://richtext.online/es/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://richtext.online/ar/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://richtext.online/pt/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://richtext.online/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://richtext.online/"/>
+  </url>
+</urlset>
