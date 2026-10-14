@@ -128,6 +128,7 @@ mark.find-match-current {
 
 .embed-mode header,
 .embed-mode footer,
+.embed-mode .lang-note,
 .embed-mode #shared-banner,
 .embed-mode #btn-signin,
 .embed-mode #account-widget,
@@ -139,4 +140,10 @@ mark.find-match-current {
 .embed-mode #editor {
 	min-height: 240px;
 	visibility: hidden;
+}
+
+/* Right-to-left languages (Arabic) */
+[dir="rtl"] #editor blockquote {
+	border-left: 0;
+	border-right: 4px solid #dee2e6;
 }

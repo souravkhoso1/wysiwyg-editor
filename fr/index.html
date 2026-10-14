@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta verification-text="31c968e3b5ba53ce67ce6a94ea71d2ac6506e71e">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Éditeur de texte enrichi gratuit en ligne | RichText.online</title>
+	<meta name="description" content="Mettez en forme, stylisez et exportez du texte directement dans votre navigateur, sans inscription ni installation. Gras, italique, couleurs, titres, listes, liens, images, mode Markdown et bien plus.">
+	<meta name="keywords" content="éditeur de texte enrichi en ligne, éditeur WYSIWYG, éditeur de texte gratuit en ligne, traitement de texte en ligne, mise en forme de texte, texte enrichi, éditeur HTML">
+	<link rel="canonical" href="https://richtext.online/fr/">
+	<link rel="alternate" hreflang="en" href="https://richtext.online/">
+	<link rel="alternate" hreflang="ja" href="https://richtext.online/ja/">
+	<link rel="alternate" hreflang="fr" href="https://richtext.online/fr/">
+	<link rel="alternate" hreflang="es" href="https://richtext.online/es/">
+	<link rel="alternate" hreflang="ar" href="https://richtext.online/ar/">
+	<link rel="alternate" hreflang="pt" href="https://richtext.online/pt/">
+	<link rel="alternate" hreflang="ru" href="https://richtext.online/ru/">
+	<link rel="alternate" hreflang="x-default" href="https://richtext.online/">
+	<meta name="google-adsense-account" content="ca-pub-2084790723060606">
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="website">
+	<meta property="og:locale" content="fr_FR">
+	<meta property="og:url" content="https://richtext.online/fr/">
+	<meta property="og:title" content="Éditeur de texte enrichi gratuit en ligne | RichText.online">
+	<meta property="og:description" content="Mettez en forme, stylisez et exportez du texte directement dans votre navigateur, sans inscription ni installation. Gras, italique, couleurs, titres, listes, liens, images et plus encore.">
+	<meta property="og:image" content="https://richtext.online/social-preview.png">
+
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="https://richtext.online/fr/">
+	<meta name="twitter:title" content="Éditeur de texte enrichi gratuit en ligne | RichText.online">
+	<meta name="twitter:description" content="Mettez en forme, stylisez et exportez du texte directement dans votre navigateur, sans inscription ni installation.">
+	<meta name="twitter:image" content="https://richtext.online/social-preview.png">
+
+	<!-- Structured data -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "RichText.online",
+		"url": "https://richtext.online/fr/",
+		"inLanguage": "fr",
+		"description": "Éditeur de texte enrichi gratuit en ligne. Appliquez du gras, de l'italique, des couleurs, des titres, des listes, des liens et des images directement dans votre navigateur, sans créer de compte.",
+		"applicationCategory": "UtilitiesApplication",
+		"operatingSystem": "All",
+		"browserRequirements": "Any modern browser",
+		"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+		"featureList": [
+			"Bold, italic, underline, strikethrough, subscript, superscript",
+			"Font family and size",
+			"Text and background colour",
+			"Headings H1–H6",
+			"Bullet and numbered lists with indent and outdent",
+			"Insert links, images from URL or file upload",
+			"Embed YouTube and Vimeo videos",
+			"Insert and edit tables",
+			"Blockquote and code block formatting",
+			"Find and replace with step-through highlighting",
+			"Markdown mode with live split-pane preview",
+			"Source HTML view and edit",
+			"Share document via URL (no account required)",
+			"Export as HTML",
+			"Print and PDF export",
+			"Dark mode",
+			"Fullscreen mode",
+			"Special characters and emoji picker",
+			"Auto-save to browser local storage",
+			"Embeddable in any website with a single script tag",
+			"Word and character counter"
+		]
+	}
+	</script>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<link rel="stylesheet" href="/styles.css?v=4">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X3P1QLTV49"></script>
+<script>
+  // Embed mode: set by embed.js (?embed=1&embed_host=...&parent_origin=...). Must run before first paint and before gtag config.
+  window.rtEmbed = (function() {
+    var p = new URLSearchParams(location.search);
+    var embedded = p.get('embed') === '1';
+    var info = { embedded: embedded, host: '', parentOrigin: '' };
+    if (!embedded) return info;
+    document.documentElement.classList.add('embed-mode');
+    var hostRe = /^[a-z0-9]([a-z0-9.-]{0,98}[a-z0-9])?$/i;
+    var host = p.get('embed_host') || '';
+    if (!hostRe.test(host)) {
+      host = '';
+      try { host = new URL(document.referrer).hostname; } catch (e) {}
+    }
+    info.host = hostRe.test(host) ? host.toLowerCase() : 'unknown';
+    try {
+      var po = new URL(p.get('parent_origin') || '');
+      if (/^https?:$/.test(po.protocol)) info.parentOrigin = po.origin;
+    } catch (e) {}
+    return info;
+  })();
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  var gaParams = { traffic_context: window.rtEmbed.embedded ? 'embed' : 'direct' };
+  if (window.rtEmbed.embedded) gaParams.embed_host = window.rtEmbed.host;
+  gtag('config', 'G-X3P1QLTV49', gaParams);
+</script>
+<body class="bg-light py-4">
+	<div class="container-lg">
+		<header class="mb-3 d-flex justify-content-between align-items-start flex-wrap gap-2">
+			<div style="flex:1 1 320px">
+				<h1 class="h4 fw-bold mb-1" translate="no">RichText.online</h1>
+				<p class="text-muted small mb-0">Éditeur de texte enrichi gratuit en ligne — mettez en forme, exportez et imprimez sans inscription ni installation. &middot; <a href="/embed-example.html" class="text-decoration-none">Intégrez-le à votre site&nbsp;&rarr;</a></p>
+			</div>
+			<div class="d-flex align-items-center flex-wrap gap-2">
+				<div class="dropdown" id="lang-switcher">
+					<button class="btn btn-sm btn-outline-secondary dropdown-toggle text-nowrap" type="button" data-bs-toggle="dropdown" title="Langue" aria-label="Langue"><i class="fas fa-globe me-1"></i><span data-lang-current translate="no">Français</span></button>
+					<ul class="dropdown-menu dropdown-menu-end">
+						<li><a class="dropdown-item" href="/" hreflang="en" lang="en" translate="no">English</a></li>
+						<li><a class="dropdown-item" href="/ja/" hreflang="ja" lang="ja" translate="no">日本語</a></li>
+						<li><a class="dropdown-item active" href="/fr/" hreflang="fr" lang="fr" translate="no">Français</a></li>
+						<li><a class="dropdown-item" href="/es/" hreflang="es" lang="es" translate="no">Español</a></li>
+						<li><a class="dropdown-item" href="/ar/" hreflang="ar" lang="ar" translate="no">العربية</a></li>
+						<li><a class="dropdown-item" href="/pt/" hreflang="pt" lang="pt" translate="no">Português</a></li>
+						<li><a class="dropdown-item" href="/ru/" hreflang="ru" lang="ru" translate="no">Русский</a></li>
+					</ul>
+				</div>
+				<button id="btn-signin" class="btn btn-sm btn-primary fw-semibold text-nowrap" onmousedown="event.preventDefault()" onclick="signInWithGoogle();">
+					<i class="fa-brands fa-google me-1"></i>Se connecter avec Google
+				</button>
+				<div class="dropdown d-inline-block d-none" id="account-widget">
+					<button id="btn-account" title="Compte" class="btn btn-sm btn-outline-secondary dropdown-toggle" onmousedown="event.preventDefault()" data-bs-toggle="dropdown"></button>
+					<ul class="dropdown-menu dropdown-menu-end" id="account-menu"></ul>
+				</div>
+				<a href="https://buymeacoffee.com/souravkhoso1" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-warning fw-semibold text-nowrap">
+					<i class="fas fa-mug-hot me-1"></i>Offrez-moi un café
+				</a>
+			</div>
+		</header>
+		<div class="alert alert-info small py-2 px-3 mb-3 lang-note" role="note">Cette page a été traduite automatiquement (traduction automatique) et peut contenir des erreurs. Si la traduction ne vous semble pas assez bonne dans votre langue maternelle, merci de contribuer au dépôt Git : <a href="https://github.com/souravkhoso1/wysiwyg-editor" target="_blank" rel="noopener noreferrer">github.com/souravkhoso1/wysiwyg-editor</a></div>
+		<div id="toolbar" class="d-flex flex-wrap align-items-center gap-1 p-2 bg-white border border-bottom-0 rounded-top">
+			<button id="btn-bold" title="Gras" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('bold');"><i class="fas fa-bold"></i></button>
+			<button id="btn-italic" title="Italique" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('italic');"><i class="fas fa-italic"></i></button>
+			<button id="btn-underline" title="Souligné" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('underline');"><i class="fas fa-underline"></i></button>
+			<button id="btn-strikeThrough" title="Barré" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('strikeThrough');"><i class="fas fa-strikethrough"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Aligner à gauche" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyLeft');"><i class="fas fa-align-left"></i></button>
+			<button title="Centrer" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyCenter');"><i class="fas fa-align-center"></i></button>
+			<button title="Aligner à droite" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyRight');"><i class="fas fa-align-right"></i></button>
+			<button title="Justifier" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('justifyFull');"><i class="fas fa-align-justify"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Couper" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="cutText();"><i class="fas fa-scissors"></i></button>
+			<button title="Copier" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="copyText();"><i class="fas fa-copy"></i></button>
+			<button title="Coller" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="pasteText();"><i class="fas fa-paste"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Augmenter le retrait" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('indent');"><i class="fas fa-indent"></i></button>
+			<button title="Diminuer le retrait" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('outdent');"><i class="fas fa-outdent"></i></button>
+			<button title="Indice" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('subscript');"><i class="fas fa-subscript"></i></button>
+			<button title="Exposant" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('superscript');"><i class="fas fa-superscript"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Annuler" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('undo');"><i class="fas fa-rotate-left"></i></button>
+			<button title="Rétablir" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('redo');"><i class="fas fa-rotate-right"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Liste à puces" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertUnorderedList');"><i class="fas fa-list-ul"></i></button>
+			<button title="Liste numérotée" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertOrderedList');"><i class="fas fa-list-ol"></i></button>
+			<select title="Titre" class="form-select form-select-sm w-auto" onchange="if(this.value) execCommandWithArg('formatBlock', this.value); this.selectedIndex = 0;">
+				<option value="">Titre</option>
+				<option value="H1">H1</option>
+				<option value="H2">H2</option>
+				<option value="H3">H3</option>
+				<option value="H4">H4</option>
+				<option value="H5">H5</option>
+				<option value="H6">H6</option>
+			</select>
+			<button title="Ligne horizontale" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('insertHorizontalRule');">HR</button>
+			<div class="dropdown d-inline-block">
+				<button title="Insérer un tableau" class="btn btn-sm btn-outline-secondary dropdown-toggle" onmousedown="event.preventDefault()" data-bs-toggle="dropdown"><i class="fas fa-table"></i></button>
+				<ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(2,2);return false;">2 × 2</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(2,3);return false;">2 × 3</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(3,3);return false;">3 × 3</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(3,4);return false;">3 × 4</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="insertTable(4,4);return false;">4 × 4</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableAddRowAfter();return false;">Ajouter une ligne en dessous</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableDeleteRow();return false;">Supprimer la ligne</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableAddColAfter();return false;">Ajouter une colonne à droite</a></li>
+					<li><a class="dropdown-item" href="#" onmousedown="event.preventDefault()" onclick="tableDeleteCol();return false;">Supprimer la colonne</a></li>
+				</ul>
+			</div>
+			<button title="Citation" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCommandWithArg('formatBlock', 'BLOCKQUOTE');"><i class="fas fa-quote-right"></i></button>
+			<button title="Bloc de code" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCommandWithArg('formatBlock', 'PRE');"><i class="fas fa-terminal"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Insérer un lien" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('link');"><i class="fas fa-link"></i></button>
+			<button title="Supprimer le lien" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('unlink');"><i class="fas fa-link-slash"></i></button>
+			<button title="Insérer une image depuis une URL" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('image');"><i class="fas fa-image"></i></button>
+			<label title="Téléverser une image depuis un fichier" class="btn btn-sm btn-outline-secondary mb-0" onmousedown="event.preventDefault()"><i class="fas fa-file-image"></i><input type="file" accept="image/*" style="display:none" onchange="insertImageFromFile(this)"></label>
+			<button title="Intégrer une vidéo YouTube / Vimeo" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openUrlBar('video');"><i class="fas fa-video"></i></button>
+			<div class="vr mx-1"></div>
+			<button title="Effacer la mise en forme" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('removeFormat');"><i class="fas fa-eraser"></i></button>
+			<button id="btn-source" title="Afficher/masquer le code source HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleSource();"><i class="fas fa-code"></i></button>
+			<button id="btn-markdown" title="Mode Markdown" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleMarkdown();">MD</button>
+			<div class="w-100"></div>
+			<select title="Police de caractères" class="form-select form-select-sm w-auto" onchange="if(this.value) execCommandWithArg('fontName', this.value); this.selectedIndex = 0;">
+				<option value="">Police</option>
+				<option value="Arial">Arial</option>
+				<option value="Comic Sans MS">Comic Sans MS</option>
+				<option value="Courier">Courier</option>
+				<option value="Georgia">Georgia</option>
+				<option value="Tahoma">Tahoma</option>
+				<option value="Times New Roman">Times New Roman</option>
+				<option value="Verdana">Verdana</option>
+			</select>
+			<select title="Taille de police" class="form-select form-select-sm w-auto" onchange="if(this.value) execCommandWithArg('fontSize', this.value); this.selectedIndex = 0;">
+				<option value="">Taille</option>
+				<option value="1">Minuscule</option>
+				<option value="2">Petite</option>
+				<option value="3">Normale</option>
+				<option value="4">Moyenne</option>
+				<option value="5">Grande</option>
+				<option value="6">Très grande</option>
+				<option value="7">Énorme</option>
+			</select>
+			<div class="vr mx-1"></div>
+			<label class="d-flex align-items-center gap-1 small text-muted mb-0">
+				Couleur du texte
+				<input type="color" class="form-control form-control-color form-control-sm p-0 border" oninput="execCommandWithArg('foreColor', this.value);" title="Couleur du texte" />
+			</label>
+			<label class="d-flex align-items-center gap-1 small text-muted mb-0">
+				Couleur de fond
+				<input type="color" class="form-control form-control-color form-control-sm p-0 border" oninput="execCommandWithArg('hiliteColor', this.value);" title="Couleur de fond" />
+			</label>
+			<div class="vr mx-1"></div>
+			<button title="Tout sélectionner" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">Tout sélectionner</button>
+			<button title="Tout effacer" class="btn btn-sm btn-outline-danger" onmousedown="event.preventDefault()" onclick="clearAll();">Tout effacer</button>
+			<div class="vr mx-1"></div>
+			<button id="btn-toggle-edit" title="Activer/désactiver l'édition" class="btn btn-sm btn-success" onmousedown="event.preventDefault()" onclick="toggleEdit();">Édition : activée</button>
+			<button id="btn-print" title="Imprimer" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="printDocument();" disabled><i class="fas fa-print"></i></button>
+			<button id="btn-export" title="Exporter en HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();" disabled><i class="fas fa-download"></i></button>
+			<button id="btn-export-pdf" title="Exporter en PDF" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportPDF();" disabled><i class="fas fa-file-pdf"></i></button>
+			<button id="btn-share" title="Partager le document" class="btn btn-sm btn-outline-primary" onmousedown="event.preventDefault()" onclick="openShareModal();" disabled><i class="fas fa-share-nodes"></i></button>
+			<button id="btn-history" title="Historique des versions" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openHistoryModal();"><i class="fas fa-clock-rotate-left"></i></button>
+			<button id="btn-cloud-save" title="Enregistrer dans le cloud (connexion requise)" class="btn btn-sm btn-outline-primary" onmousedown="event.preventDefault()" onclick="openCloudSaveModal();" disabled><i class="fas fa-cloud-arrow-up"></i></button>
+			<button id="btn-char-picker" title="Caractères spéciaux et émojis" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openCharPicker();"><i class="fas fa-smile"></i></button>
+			<button id="btn-find" title="Rechercher et remplacer (Ctrl+H)" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="openFindReplace();"><i class="fas fa-search"></i></button>
+			<button title="Raccourcis clavier" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault();" data-bs-toggle="modal" data-bs-target="#helpModal"><i class="fas fa-keyboard"></i></button>
+			<button id="btn-dark-mode" title="Mode sombre" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleDarkMode();"><i class="fas fa-moon"></i></button>
+			<button id="btn-fullscreen" title="Plein écran" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="toggleFullscreen();"><i class="fas fa-expand"></i></button>
+		</div>
+		<div id="url-bar" style="display:none;">
+			<div class="input-group input-group-sm p-2 bg-light border border-top-0 border-bottom-0">
+				<input type="text" id="url-input" class="form-control" placeholder="https://" />
+				<button class="btn btn-primary" onclick="confirmUrl();">Insérer</button>
+				<button class="btn btn-outline-secondary" onclick="closeUrlBar();">Annuler</button>
+			</div>
+			<div id="url-error" class="text-danger small px-3 pb-1 bg-light border border-top-0 border-bottom-0" style="display:none;"></div>
+		</div>
+		<div id="find-replace-bar" style="display:none;">
+			<div class="d-flex flex-wrap align-items-center gap-2 p-2 bg-light border border-top-0 border-bottom-0">
+				<input type="text" id="find-input" class="form-control form-control-sm" style="max-width:180px" placeholder="Rechercher..." />
+				<button class="btn btn-sm btn-outline-secondary" onclick="findPrev();" title="Résultat précédent">&#8593;</button>
+				<button class="btn btn-sm btn-outline-secondary" onclick="findNext();" title="Résultat suivant">&#8595;</button>
+				<div class="vr"></div>
+				<input type="text" id="replace-input" class="form-control form-control-sm" style="max-width:180px" placeholder="Remplacer par..." />
+				<button class="btn btn-sm btn-primary" onclick="replaceOne();">Remplacer</button>
+				<button class="btn btn-sm btn-outline-secondary" onclick="replaceAll();">Tout remplacer</button>
+				<span id="find-status" class="small text-muted"></span>
+				<button class="btn btn-sm btn-outline-secondary ms-auto" onclick="closeFindReplace();" title="Fermer">&times;</button>
+			</div>
+		</div>
+		<div id="char-picker" style="display:none;">
+			<div class="p-2 bg-light border border-top-0 border-bottom-0">
+				<div class="d-flex flex-wrap gap-1 mb-1">
+					<span class="small text-muted me-1 align-self-center">Symboles :</span>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('©')">©</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('®')">®</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('™')">™</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('€')">€</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('£')">£</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¥')">¥</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('°')">°</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('±')">±</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('×')">×</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('÷')">÷</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('→')">→</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('←')">←</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('↑')">↑</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('↓')">↓</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('…')">…</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('—')">—</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('–')">–</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('"')">"</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('"')">"</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('½')">½</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¼')">¼</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('¾')">¾</button>
+				</div>
+				<div class="d-flex flex-wrap gap-1">
+					<span class="small text-muted me-1 align-self-center">Émojis :</span>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('😀')">😀</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('😂')">😂</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('❤️')">❤️</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('👍')">👍</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🎉')">🎉</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🔥')">🔥</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('✅')">✅</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('⭐')">⭐</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🚀')">🚀</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('💡')">💡</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('📌')">📌</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('📝')">📝</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('🎯')">🎯</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('⚠️')">⚠️</button>
+					<button class="btn btn-sm btn-outline-secondary px-1 py-0" onmousedown="event.preventDefault()" onclick="insertChar('ℹ️')">ℹ️</button>
+				</div>
+			</div>
+		</div>
+		<div id="shared-banner" class="alert alert-info alert-dismissible d-none d-flex align-items-center gap-2 py-2 px-3 border border-top-0 border-info rounded-0 mb-0" role="alert">
+			<i class="fas fa-circle-info flex-shrink-0"></i>
+			<span class="small">Vous consultez un document partagé.</span>
+			<button class="btn btn-sm btn-outline-info ms-2" onmousedown="event.preventDefault()" onclick="newDocument();">Nouveau document</button>
+			<button type="button" class="btn-close ms-auto" onclick="dismissSharedBanner();"></button>
+		</div>
+		<div id="editor" class="bg-white border border-bottom-0 p-3" contenteditable="true"><h2>Bienvenue sur RichText.online</h2><p><strong>Commencez à écrire ici</strong> — ce texte d'exemple disparaît dès que vous saisissez quelque chose. Votre travail est enregistré automatiquement dans votre navigateur : vous pouvez revenir à tout moment sans rien perdre.</p><h3>Ce que vous pouvez faire avec cet éditeur</h3><ul><li><strong>Mettre en forme le texte</strong> — gras, italique, souligné, barré, indice et exposant depuis la barre d'outils.</li><li><strong>Structurer votre document</strong> — appliquez les niveaux de titre 1 à 6 pour des sections claires et une hiérarchie lisible.</li><li><strong>Ajouter des listes</strong> — listes à puces ou numérotées en un clic.</li><li><strong>Gérer polices et couleurs</strong> — choisissez parmi sept polices et sept tailles prédéfinies, et sélectionnez n'importe quelle couleur de texte ou de fond.</li><li><strong>Insérer des liens et des images</strong> — collez une URL pour créer un lien hypertexte, intégrez une image du web ou importez-en une depuis votre appareil.</li><li><strong>Intégrer des vidéos</strong> — collez un lien YouTube ou Vimeo pour intégrer une vidéo lisible directement dans le texte.</li><li><strong>Créer des tableaux</strong> — insérez des grilles jusqu'à 4 × 4, puis ajoutez ou supprimez des lignes et des colonnes à tout moment.</li><li><strong>Rechercher et remplacer</strong> — parcourez votre document avec une mise en évidence pas à pas, et remplacez les occurrences une par une ou toutes d'un coup.</li><li><strong>Passer à Markdown</strong> — écrivez en Markdown avec un aperçu en direct côte à côte, puis revenez au texte enrichi quand vous le souhaitez.</li><li><strong>Partager par lien</strong> — cliquez sur le bouton Partager pour générer une URL qui restitue exactement votre document à toute personne qui l'ouvre.</li><li><strong>Exporter</strong> — téléchargez votre document sous forme de fichier HTML autonome ou ouvrez un aperçu PDF prêt à imprimer.</li></ul><p>Aucun compte, aucune installation et aucune gestion de fichiers. Tout fonctionne directement dans votre navigateur.</p></div>
+		<div id="markdown-pane" class="d-none">
+			<div class="d-flex bg-white border border-top-0 rounded-bottom overflow-hidden" style="min-height: 400px;">
+				<textarea id="markdown-input" class="border-0 p-3 font-monospace" style="flex:1; resize:none; outline:none; min-height:400px;" placeholder="Write Markdown here..."></textarea>
+				<div class="border-start"></div>
+				<div id="markdown-preview" class="p-3 overflow-auto" style="flex:1;"></div>
+			</div>
+		</div>
+		<div id="editor-counter" class="bg-white border border-top-0 rounded-bottom px-3 py-1 text-end small text-muted">Mots : 0 | Caractères : 0</div>
+		<footer class="mt-5 pt-4 border-top">
+
+			<p class="text-muted small mb-5"><strong>RichText.online</strong> est un éditeur de texte enrichi WYSIWYG gratuit qui fonctionne dans le navigateur. Rédigez et mettez en forme vos documents avec du gras, de l'italique, du souligné, du barré, des titres (H1–H6), des listes à puces et numérotées, des couleurs de texte et de fond, des polices, des tailles, des liens, des images et des lignes horizontales. Passez en mode Markdown pour un aperçu en direct en écran partagé, affichez le code source HTML ou exportez votre document sous forme de fichier HTML autonome — le tout sans créer de compte.</p>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Liste complète des fonctionnalités</h2>
+				<div class="row g-4">
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Mise en forme du texte</h3>
+						<p class="small">Appliquez du <strong>gras</strong>, de l'<em>italique</em>, du <u>souligné</u> et du <s>barré</s> à n'importe quelle sélection. Placez des caractères en exposant ou en indice pour la notation scientifique, les notes de bas de page et les formules chimiques. Supprimez toute la mise en forme d'un coup avec le bouton Effacer la mise en forme.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Titres et structure des paragraphes</h3>
+						<p class="small">Utilisez la liste déroulante Titre pour appliquer les niveaux H1 à H6. Des titres bien structurés facilitent la navigation dans les longs documents et améliorent l'accessibilité pour les utilisateurs de lecteurs d'écran.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Listes</h3>
+						<p class="small">Créez des listes à puces pour regrouper des éléments et des listes numérotées pour des instructions étape par étape. Utilisez Augmenter et Diminuer le retrait pour créer des sous-listes imbriquées sur plusieurs niveaux.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Polices et couleurs</h3>
+						<p class="small">Choisissez parmi sept polices — Arial, Comic Sans MS, Courier, Georgia, Tahoma, Times New Roman et Verdana — et sept tailles prédéfinies, de Minuscule à Énorme. Choisissez n'importe quelle couleur de texte et de surlignage avec le sélecteur de couleur natif.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Liens et images</h3>
+						<p class="small">Sélectionnez du texte et cliquez sur l'icône de lien pour en faire un lien hypertexte, ou supprimez un lien en un clic. Insérez des images depuis une URL, importez un fichier depuis votre appareil ou intégrez une vidéo YouTube ou Vimeo en collant son URL — sans quitter l'éditeur.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Tableaux</h3>
+						<p class="small">Insérez un tableau jusqu'à 4 × 4 cellules depuis le menu de la barre d'outils. Une fois inséré, placez le curseur dans une cellule et utilisez le menu Tableau pour ajouter une ligne en dessous, supprimer une ligne, ajouter une colonne à droite ou supprimer une colonne. La première ligne est automatiquement formatée en ligne d'en-tête.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Citations et blocs de code</h3>
+						<p class="small">Mettez un paragraphe en forme de citation pour faire ressortir une référence ou un passage important. Transformez n'importe quel paragraphe en bloc de code pour afficher des commandes, des extraits de code ou tout autre contenu à chasse fixe.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Rechercher et remplacer</h3>
+						<p class="small">Ouvrez la barre Rechercher et remplacer (ou appuyez sur Ctrl+H / ⌘+H) pour chercher dans votre document avec mise en évidence des résultats. Parcourez les résultats un par un avec les boutons fléchés, remplacez les occurrences individuellement ou toutes en une seule fois.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Mode Markdown</h3>
+						<p class="small">Activez le mode Markdown pour écrire en syntaxe Markdown simple avec un volet d'aperçu rendu en direct à côté. L'aperçu se met à jour au fil de la saisie. Revenez au mode texte enrichi à tout moment pour continuer la mise en forme avec la barre d'outils.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Affichage du code source HTML</h3>
+						<p class="small">Cliquez sur le bouton Source pour afficher et modifier le code HTML brut de votre document. C'est utile pour coller du contenu depuis d'autres systèmes, résoudre des problèmes de mise en forme ou créer à la main des éléments HTML que la barre d'outils ne propose pas.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Exportation et impression</h3>
+						<p class="small">Téléchargez votre document sous forme de fichier HTML autonome que vous pouvez ouvrir dans n'importe quel navigateur — pratique pour l'archivage ou le partage hors ligne. Ouvrez un aperçu PDF prêt à imprimer pour imprimer directement ou enregistrer en PDF via la boîte de dialogue d'impression de votre navigateur.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Partage par URL</h3>
+						<p class="small">Cliquez sur le bouton Partager pour compresser le contenu de votre document et l'encoder dans une URL partageable. Toute personne qui ouvre le lien voit le même document, prêt à être lu ou modifié — sans compte, sans serveur, sans pièce jointe. Pour les documents très longs, une option GitHub Gist génère un lien plus court.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Enregistrement automatique</h3>
+						<p class="small">Votre contenu est enregistré automatiquement dans le stockage local de votre navigateur pendant que vous écrivez, avec un court délai pour éviter les écritures excessives. En fermant puis en rouvrant l'onglet, vous retrouvez exactement où vous en étiez, sans aucune étape d'enregistrement manuel.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Mode sombre et plein écran</h3>
+						<p class="small">Activez le mode sombre pour éditer confortablement dans un environnement peu éclairé. Passez en plein écran pour étendre l'éditeur à toute la fenêtre du navigateur et masquer tout le reste, pour une écriture sans distraction.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Caractères spéciaux et émojis</h3>
+						<p class="small">Ouvrez le sélecteur de caractères pour insérer en un clic des symboles courants — copyright ©, marque déposée ®, marque ™, symboles monétaires, flèches, fractions, ponctuation typographique — ainsi qu'une sélection d'émojis.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Raccourcis clavier</h3>
+						<p class="small">Les raccourcis clavier habituels fonctionnent dans tout l'éditeur : Ctrl+B pour le gras, Ctrl+I pour l'italique, Ctrl+U pour le souligné, Ctrl+Z pour annuler, Ctrl+Y (ou ⌘+Maj+Z sur Mac) pour rétablir, Ctrl+H pour ouvrir Rechercher et remplacer. Appuyez sur Entrée dans la barre d'URL pour confirmer et sur Échap pour la fermer.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Comment utiliser RichText.online</h2>
+				<ol class="small">
+					<li class="mb-2"><strong>Ouvrez l'éditeur.</strong> L'éditeur est prêt à l'emploi dès le chargement de la page — sans connexion, sans extension, sans installation. Si vous êtes déjà venu, votre contenu précédent est restauré automatiquement.</li>
+					<li class="mb-2"><strong>Rédigez votre contenu.</strong> Cliquez dans la zone d'édition et commencez à écrire. L'éditeur fonctionne comme un traitement de texte : Entrée pour un nouveau paragraphe, Tab pour le retrait dans les listes.</li>
+					<li class="mb-2"><strong>Appliquez la mise en forme.</strong> Sélectionnez du texte à la souris ou au clavier, puis cliquez sur un bouton de la barre d'outils pour appliquer le gras, l'italique, le souligné, un niveau de titre, une couleur ou tout autre format. La mise en forme s'applique immédiatement à la sélection.</li>
+					<li class="mb-2"><strong>Insérez des liens et des médias.</strong> Cliquez sur l'icône de lien pour associer une URL au texte sélectionné. Cliquez sur l'icône d'image pour intégrer une image depuis une adresse web, ou utilisez l'icône d'import de fichier pour choisir une image sur votre ordinateur. Collez une URL YouTube ou Vimeo dans la barre d'intégration vidéo pour ajouter une vidéo lisible.</li>
+					<li class="mb-2"><strong>Organisez avec des tableaux.</strong> Cliquez sur l'icône de tableau pour insérer une grille. Cliquez dans une cellule pour y placer le curseur, puis utilisez le menu Tableau pour ajouter ou supprimer des lignes et des colonnes à mesure que vos données grandissent.</li>
+					<li class="mb-2"><strong>Partagez votre document.</strong> Cliquez sur le bouton Partager bleu de la barre d'outils pour ouvrir la boîte de dialogue de partage. Copiez l'URL générée et envoyez-la à qui vous voulez — le destinataire ouvrira le même document dans son navigateur sans avoir besoin de compte.</li>
+					<li class="mb-2"><strong>Exportez une fois terminé.</strong> Cliquez sur l'icône de téléchargement pour enregistrer votre document au format HTML, ou sur l'icône PDF pour ouvrir un aperçu d'impression. Utilisez la boîte de dialogue d'impression de votre navigateur pour enregistrer en PDF ou envoyer à une imprimante.</li>
+				</ol>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Cas d'usage courants</h2>
+				<div class="row g-3 small">
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Brouillons d'articles de blog</h3>
+						<p>Rédigez et mettez en forme un brouillon avec des titres, des sous-titres, des mots en gras et des liens hypertexte. Une fois terminé, exportez en HTML pour le coller directement dans votre CMS, ou envoyez l'URL de partage à un relecteur.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">E-mails mis en forme</h3>
+						<p>Rédigez un e-mail avec des listes à puces, du texte en couleur et une image intégrée. Copiez le contenu mis en forme depuis l'éditeur et collez-le dans votre messagerie pour conserver la mise en forme riche.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Notes rapides et comptes rendus de réunion</h3>
+						<p>Ouvrez l'éditeur dans un onglet du navigateur et prenez des notes de réunion avec des actions numérotées. L'enregistrement automatique protège votre contenu et le lien de partage permet de diffuser le compte rendu à toute l'équipe instantanément.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Rapports et documentation</h3>
+						<p>Construisez des rapports structurés avec une hiérarchie de titres, des tableaux de données, des citations pour les sources et des lignes horizontales pour séparer les sections. Exportez en HTML pour l'intégrer à des outils internes ou à des wikis.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Collaboration sur le contenu</h3>
+						<p>Rédigez un document, cliquez sur Partager et envoyez l'URL à un collègue. Il l'ouvre dans son navigateur, apporte ses modifications et vous le renvoie — sans lecteur partagé, sans fichiers de versions, sans connexion de part et d'autre.</p>
+					</div>
+					<div class="col-md-6">
+						<h3 class="h6 fw-semibold">Rédaction en Markdown</h3>
+						<p>Vous préférez écrire en Markdown ? Activez le mode Markdown pour un écran partagé en direct : le Markdown brut à gauche, le HTML rendu à droite. Copiez le rendu ou repassez en mode texte enrichi pour continuer avec la barre d'outils.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-5" id="embed">
+				<h2 class="h4 fw-bold mb-3">Intégrer l'éditeur à votre propre site web</h2>
+				<p class="small">Vous voulez cet éditeur sur votre site ? Ajoutez un conteneur et une balise script. L'éditeur se charge dans un cadre isolé, et votre page peut lire ou définir son contenu avec quelques lignes de JavaScript.</p>
+<pre class="small bg-white border rounded p-3" dir="ltr"><code>&lt;div id="editor"&gt;&lt;/div&gt;
+&lt;script src="https://richtext.online/embed.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  var ed = RichTextEditor.create('#editor', { height: 400 });
+  ed.onChange(function (html) { /* save html */ });
+&lt;/script&gt;</code></pre>
+				<p class="small"><a href="/embed-example.html">Consultez le guide d'intégration complet et la démo en direct</a> (en anglais). Les éditeurs intégrés n'incluent ni connexion, ni enregistrement dans le cloud, ni historique des versions, et ne touchent jamais aux documents que vos visiteurs ont enregistrés sur RichText.online. Le HTML renvoyé par l'éditeur est rédigé par l'utilisateur : nettoyez-le avant de l'afficher ailleurs. RichText.online enregistre des statistiques d'usage anonymes pour les éditeurs intégrés, y compris le domaine du site qui les intègre.</p>
+			</section>
+
+			<section class="mb-5">
+				<h2 class="h4 fw-bold mb-3">Questions fréquentes</h2>
+				<div class="small">
+					<h3 class="h6 fw-semibold">RichText.online est-il gratuit ?</h3>
+					<p>Oui, entièrement gratuit, sans limite d'utilisation, sans formule payante et sans compte. Ouvrez la page et commencez à écrire immédiatement.</p>
+
+					<h3 class="h6 fw-semibold">Où mon contenu est-il stocké ?</h3>
+					<p>Votre contenu est enregistré automatiquement dans le stockage local de votre navigateur, sur votre propre appareil. Rien n'est envoyé à un serveur. Effacer les données de votre navigateur supprime le contenu enregistré : utilisez donc l'exportation ou le partage pour en conserver une copie durable.</p>
+
+					<h3 class="h6 fw-semibold">Comment fonctionne le partage ?</h3>
+					<p>Cliquer sur Partager compresse le HTML de votre document et l'encode directement dans l'URL. Le navigateur du destinataire le décompresse et affiche le document — aucun serveur n'intervient et aucune donnée n'est stockée. Pour les très gros documents dont l'URL serait trop longue, l'option GitHub Gist stocke le contenu sur GitHub et génère un lien court.</p>
+
+					<h3 class="h6 fw-semibold">Puis-je coller du contenu depuis Word ou Google Docs ?</h3>
+					<p>Oui. L'éditeur nettoie automatiquement le balisage propriétaire de Microsoft Word au moment du collage, en supprimant les balises XML cachées, les styles en ligne et les commentaires conditionnels qui perturberaient la mise en page. La mise en forme de base — gras, italique, titres, listes et liens — est conservée.</p>
+
+					<h3 class="h6 fw-semibold">Fonctionne-t-il hors ligne ?</h3>
+					<p>Une fois la page chargée, vous pouvez écrire et mettre en forme du contenu sans connexion internet. La barre d'outils, l'enregistrement automatique, l'exportation et l'impression fonctionnent hors ligne. Le partage (méthode par fragment d'URL) permet aussi de générer le lien hors ligne, mais la méthode GitHub Gist nécessite une connexion réseau pour appeler l'API GitHub.</p>
+
+					<h3 class="h6 fw-semibold">Puis-je l'utiliser sur mobile ?</h3>
+					<p>Oui. La barre d'outils s'adapte et passe à la ligne sur les petits écrans. La zone d'édition fonctionne avec les claviers mobiles. Pour une meilleure expérience sur mobile, utilisez une version récente de Chrome, Safari ou Firefox.</p>
+
+					<h3 class="h6 fw-semibold">Comment insérer une image ?</h3>
+					<p>Il y a deux façons. Cliquez sur l'icône d'image depuis une URL (cadre photo) pour coller l'adresse web d'une image hébergée ailleurs. Cliquez sur l'icône d'import de fichier (photo avec un plus) pour choisir un fichier image sur votre appareil — il est intégré directement au document sous forme d'URI de données base64, sans hébergement externe.</p>
+
+					<h3 class="h6 fw-semibold">Qu'est-ce que le mode Markdown ?</h3>
+					<p>Le mode Markdown remplace l'éditeur par une vue partagée : une zone de texte brut à gauche où vous écrivez en syntaxe Markdown, et un aperçu HTML en direct à droite qui se met à jour pendant la saisie. C'est utile si vous préférez écrire en Markdown tout en voyant immédiatement le rendu. Utilisez le bouton MD pour passer du mode Markdown au mode texte enrichi.</p>
+				</div>
+			</section>
+
+			<section class="mb-5" id="languages">
+				<h2 class="h4 fw-bold mb-3">Langues disponibles</h2>
+				<p class="small mb-2">RichText.online est disponible en sept langues. L'anglais est la langue par défaut.</p>
+				<ul class="list-inline small mb-0">
+					<li class="list-inline-item"><a href="/" hreflang="en" lang="en" translate="no">English</a></li>
+					<li class="list-inline-item"><a href="/ja/" hreflang="ja" lang="ja" translate="no">日本語</a></li>
+					<li class="list-inline-item"><a href="/fr/" hreflang="fr" lang="fr" translate="no">Français</a></li>
+					<li class="list-inline-item"><a href="/es/" hreflang="es" lang="es" translate="no">Español</a></li>
+					<li class="list-inline-item"><a href="/ar/" hreflang="ar" lang="ar" translate="no">العربية</a></li>
+					<li class="list-inline-item"><a href="/pt/" hreflang="pt" lang="pt" translate="no">Português</a></li>
+					<li class="list-inline-item"><a href="/ru/" hreflang="ru" lang="ru" translate="no">Русский</a></li>
+				</ul>
+			</section>
+
+		</footer>
+	</div>
+	<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="helpModalLabel">Raccourcis clavier</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+				</div>
+				<div class="modal-body p-0">
+					<table class="table table-sm table-bordered mb-0">
+						<thead class="table-light">
+							<tr><th>Raccourci</th><th>Action</th></tr>
+						</thead>
+						<tbody>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + B</kbd></td><td>Gras</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + I</kbd></td><td>Italique</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + U</kbd></td><td>Souligné</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + Z</kbd></td><td>Annuler</td></tr>
+							<tr><td id="shortcut-redo"><kbd><span class="key-mod">Ctrl</span> + Y</kbd></td><td>Rétablir</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + A</kbd></td><td>Tout sélectionner</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + C</kbd></td><td>Copier</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + X</kbd></td><td>Couper</td></tr>
+							<tr><td><kbd><span class="key-mod">Ctrl</span> + V</kbd></td><td>Coller</td></tr>
+							<tr><td><kbd>Entrée</kbd> dans la barre d'URL</td><td>Confirmer l'insertion du lien / de l'image</td></tr>
+							<tr><td><kbd>Échap</kbd> dans la barre d'URL</td><td>Fermer la barre d'URL</td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="shareModalLabel"><i class="fas fa-share-nodes me-2"></i>Partager le document</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">Toute personne disposant de ce lien peut consulter et modifier une copie de votre document — aucun compte nécessaire.</p>
+					<label class="form-label fw-semibold small">URL de partage</label>
+					<div class="input-group mb-1">
+						<input type="text" id="share-url-input" class="form-control form-control-sm font-monospace" readonly>
+						<button class="btn btn-outline-secondary btn-sm" onclick="copyShareUrl();" title="Copier l'URL"><i class="fas fa-copy"></i></button>
+					</div>
+					<div class="d-flex align-items-center justify-content-between mb-2">
+						<span id="share-copy-feedback" class="small text-success"></span>
+						<button class="btn btn-link btn-sm text-muted p-0 small" onclick="showGistSection();">Utiliser GitHub Gist à la place &rsaquo;</button>
+					</div>
+					<div id="share-url-warning" class="alert alert-warning small py-2 px-3 mb-2" style="display:none;">
+						<i class="fas fa-triangle-exclamation me-1"></i>
+						Cette URL dépasse 2&thinsp;000 caractères et risque d'être tronquée par certaines applications ou messageries. Utilisez GitHub Gist ci-dessous pour obtenir un lien plus court.
+					</div>
+					<div id="share-gist-section" style="display:none;">
+						<hr class="my-3">
+						<label class="form-label fw-semibold small">GitHub Gist <span class="fw-normal text-muted">(URL plus courte)</span></label>
+						<p class="small text-muted mb-2">Créez un <a href="https://github.com/settings/tokens/new?scopes=gist&description=RichText.online" target="_blank" rel="noopener noreferrer">jeton GitHub</a> avec la portée <code>gist</code> et collez-le ci-dessous. Votre jeton n'est jamais enregistré.</p>
+						<div class="input-group mb-2">
+							<input type="password" id="gist-token-input" class="form-control form-control-sm" placeholder="ghp_…" autocomplete="off">
+							<button id="btn-share-gist" class="btn btn-primary btn-sm" onclick="shareViaGist();">Créer le Gist</button>
+						</div>
+						<div id="gist-error" class="text-danger small" style="display:none;"></div>
+						<div id="gist-success" class="text-success small" style="display:none;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="historyModalLabel"><i class="fas fa-clock-rotate-left me-2"></i>Historique des versions</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">Les instantanés sont enregistrés automatiquement pendant que vous travaillez et ne sont conservés que sur cet appareil. Restaurer une version enregistre d'abord votre texte actuel sous forme d'instantané : rien n'est perdu.</p>
+					<div id="history-empty" class="text-muted small text-center py-4" style="display:none;">Aucune version antérieure pour l'instant — continuez à écrire et les instantanés apparaîtront ici.</div>
+					<div id="history-list" class="list-group"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="cloudSaveModal" tabindex="-1" aria-labelledby="cloudSaveModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="cloudSaveModalLabel"><i class="fas fa-cloud-arrow-up me-2"></i>Enregistrer dans le cloud</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+				</div>
+				<div class="modal-body">
+					<p class="small text-muted mb-3">Enregistré dans votre compte — accessible depuis n'importe quel appareil une fois connecté.</p>
+					<label class="form-label fw-semibold small">Titre du document</label>
+					<input type="text" id="cloud-save-title" class="form-control form-control-sm mb-3" placeholder="Document sans titre">
+					<div id="cloud-save-error" class="text-danger small mb-2" style="display:none;"></div>
+					<div class="d-flex gap-2">
+						<button id="btn-confirm-cloud-save" class="btn btn-primary btn-sm" onclick="saveToCloud(false);">Enregistrer</button>
+						<button id="cloud-save-as-new" class="btn btn-outline-secondary btn-sm" style="display:none;" onclick="saveToCloud(true);">Enregistrer une nouvelle copie</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="documentsModal" tabindex="-1" aria-labelledby="documentsModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="documentsModalLabel"><i class="fas fa-folder-open me-2"></i>Mes documents</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+				</div>
+				<div class="modal-body">
+					<div id="cloud-docs-loading" class="text-muted small text-center py-4">Chargement…</div>
+					<div id="cloud-docs-empty" class="text-muted small text-center py-4" style="display:none;">Aucun document enregistré pour l'instant — utilisez l'icône de nuage de la barre d'outils pour en enregistrer un ici.</div>
+					<div id="cloud-docs-list" class="list-group"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+	<script>
+		firebase.initializeApp({
+			apiKey: "AIzaSyBsEkDEf1qqDVlQUpsUc5qG_SbPuNPiTQI",
+			authDomain: "richtext-online.firebaseapp.com",
+			projectId: "richtext-online",
+			storageBucket: "richtext-online.firebasestorage.app",
+			messagingSenderId: "483792477186",
+			appId: "1:483792477186:web:40083f00456bc496e75b1b"
+		});
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+	<script>window.RT_I18N = {"account": "Compte", "myDocuments": "Mes documents", "signOut": "Se déconnecter", "signInFailed": "Échec de la connexion : {msg}", "untitledDocument": "Document sans titre", "saveFailed": "Impossible d'enregistrer le document.", "loadDocsFailed": "Impossible de charger les documents : {msg}", "open": "Ouvrir", "deleteConfirm": "Supprimer ce document ? Cette action est irréversible.", "loadingShared": "Chargement du document partagé…", "sharedLoadFailed": "Impossible de charger le document partagé.", "justNow": "À l'instant", "emptyDocument": "(document vide)", "restore": "Restaurer", "copied": "Copié !", "gistTokenRequired": "Veuillez saisir un jeton d'accès personnel GitHub.", "creating": "Création…", "createGist": "Créer le Gist", "gistCreated": "Gist créé ! L'URL ci-dessus est mise à jour — copiez-la et partagez-la.", "gistApiError": "Erreur de l'API GitHub ({status})", "gistFailed": "Impossible de créer le Gist.", "unsupportedVideo": "URL non prise en charge — collez un lien YouTube ou Vimeo.", "imageLoadFailed": "Impossible de charger l'image — vérifiez l'URL.", "counter": "Mots : {words} | Caractères : {chars}", "darkMode": "Mode sombre", "lightMode": "Mode clair", "fullscreen": "Plein écran", "exitFullscreen": "Quitter le plein écran", "noMatches": "Aucun résultat", "matchOf": "{current} sur {total}", "allReplaced": "Tout a été remplacé", "editingOn": "Édition : activée", "editingOff": "Édition : désactivée"};</script>
+	<script src="/editor.js?v=4"></script>
+</body>
+</html>
