@@ -243,5 +243,6 @@
   "allReplaced": "تم استبدال الكل",
   "editingOn": "التحرير: مفعّل",
   "editingOff": "التحرير: متوقف"
- }
+ },
+ "note": "تمت ترجمة هذه الصفحة آليًا (ترجمة آلية) وقد تحتوي على أخطاء. إذا رأيت أن الترجمة ليست جيدة بما يكفي بلغتك الأم، فيرجى المساهمة في مستودع Git عبر الرابط التالي: <a href=\"https://github.com/souravkhoso1/wysiwyg-editor\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/souravkhoso1/wysiwyg-editor</a>"
 }

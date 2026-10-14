@@ -3,7 +3,7 @@
 
 index.html is the English source of truth. Every translatable string in it (element text,
 title/placeholder/aria-label attributes, meta descriptions, the JSON-LD description) gets a stable
-id derived from its text. Translations live in i18n/<lang>.json as {"html": {id: text}, "js": {key: text}}.
+id derived from its text. Translations live in i18n/<lang>.json as {"html": {id: text}, "js": {key: text}, "note": html}.
 
     python3 tools/build_i18n.py extract   # refresh i18n/en.json from index.html and editor.js
     python3 tools/build_i18n.py check     # validate translations (missing ids, markup mismatches)
@@ -203,6 +203,8 @@ def validate(code, en, tr):
             problems.append('%s: empty translation for %s' % (code, k))
         elif tags_of(v) != tags_of(en['html'][k]):
             problems.append('%s: markup differs from English for %s' % (code, k))
+    if 'github.com/souravkhoso1/wysiwyg-editor' not in tr.get('note', ''):
+        problems.append('%s: "note" (machine-translation notice linking to the repo) is missing' % code)
     for k, v in tr.get('js', {}).items():
         if k in en['js'] and sorted(re.findall(r'\{\w+\}', v)) != sorted(re.findall(r'\{\w+\}', en['js'][k])):
             problems.append('%s: placeholders differ from English for js.%s' % (code, k))
@@ -240,6 +242,8 @@ def build_page(src, segs, code, tr):
     out = replace_once(out, 'class="dropdown-item" href="%s"' % meta['path'], 'class="dropdown-item active" href="%s"' % meta['path'])
     if meta['dir'] == 'rtl':
         out = replace_once(out, 'dist/css/bootstrap.min.css', 'dist/css/bootstrap.rtl.min.css')
+    note = '<div class="alert alert-info small py-2 px-3 mb-3 lang-note" role="note">%s</div>' % tr['note']
+    out = replace_once(out, '\t\t</header>\n', '\t\t</header>\n\t\t' + note + '\n')
     payload = json.dumps(tr['js'], ensure_ascii=False).replace('</', '<\\/')
     m = re.search(r'<script src="/editor\.js\?v=\d+"></script>', out)
     if not m:

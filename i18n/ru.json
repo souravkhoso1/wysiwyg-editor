@@ -243,5 +243,6 @@
   "allReplaced": "Всё заменено",
   "editingOn": "Редактирование: вкл.",
   "editingOff": "Редактирование: выкл."
- }
+ },
+ "note": "Эта страница переведена автоматически (машинный перевод) и может содержать ошибки. Если вы считаете, что перевод на вашем родном языке недостаточно хорош, пожалуйста, внесите вклад в Git-репозиторий: <a href=\"https://github.com/souravkhoso1/wysiwyg-editor\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/souravkhoso1/wysiwyg-editor</a>"
 }

@@ -128,6 +128,7 @@ mark.find-match-current {
 
 .embed-mode header,
 .embed-mode footer,
+.embed-mode .lang-note,
 .embed-mode #shared-banner,
 .embed-mode #btn-signin,
 .embed-mode #account-widget,

@@ -243,5 +243,6 @@
   "allReplaced": "Todo reemplazado",
   "editingOn": "Edición: activada",
   "editingOff": "Edición: desactivada"
- }
+ },
+ "note": "Esta página se ha traducido automáticamente (traducción automática) y puede contener errores. Si consideras que la traducción no es lo bastante buena en tu lengua materna, contribuye al repositorio de Git: <a href=\"https://github.com/souravkhoso1/wysiwyg-editor\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/souravkhoso1/wysiwyg-editor</a>"
 }
