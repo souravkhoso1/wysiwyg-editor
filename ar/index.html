@@ -18,6 +18,10 @@
 	<link rel="alternate" hreflang="x-default" href="https://richtext.online/">
 	<meta name="google-adsense-account" content="ca-pub-2084790723060606">
 
+	<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+	<link rel="icon" href="/favicon.ico" sizes="48x48">
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
 	<!-- Open Graph -->
 	<meta property="og:type" content="website">
 	<meta property="og:locale" content="ar_AR">
@@ -72,12 +76,11 @@
 	}
 	</script>
 
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<link rel="stylesheet" href="/styles.css?v=4">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI" crossorigin="anonymous">
+	<link rel="stylesheet" href="/styles.css?v=5">
 </head>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-X3P1QLTV49"></script>
 <script>
   // Embed mode: set by embed.js (?embed=1&embed_host=...&parent_origin=...). Must run before first paint and before gtag config.
   window.rtEmbed = (function() {
@@ -100,8 +103,16 @@
     return info;
   })();
 
+  // Analytics runs only on the real site, so local copies, previews and file:// opens don't pollute the data.
+  window.rtGaEnabled = /^(www\.)?richtext\.online$/.test(location.hostname);
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag(){ if (window.rtGaEnabled) dataLayer.push(arguments); }
+  if (window.rtGaEnabled) {
+    var gaScript = document.createElement('script');
+    gaScript.async = true;
+    gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-X3P1QLTV49';
+    document.head.appendChild(gaScript);
+  }
   gtag('js', new Date());
 
   var gaParams = { traffic_context: window.rtEmbed.embedded ? 'embed' : 'direct' };
@@ -237,7 +248,7 @@
 			<button title="تحديد الكل" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="execCmd('selectAll');">تحديد الكل</button>
 			<button title="مسح الكل" class="btn btn-sm btn-outline-danger" onmousedown="event.preventDefault()" onclick="clearAll();">مسح الكل</button>
 			<div class="vr mx-1"></div>
-			<button id="btn-toggle-edit" title="تبديل وضع التحرير" class="btn btn-sm btn-success" onmousedown="event.preventDefault()" onclick="toggleEdit();">التحرير: مفعّل</button>
+			<button id="btn-toggle-edit" title="التبديل بين وضع التحرير ووضع القراءة فقط" class="btn btn-sm btn-success" onmousedown="event.preventDefault()" onclick="toggleEdit();">التحرير</button>
 			<button id="btn-print" title="طباعة" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="printDocument();" disabled><i class="fas fa-print"></i></button>
 			<button id="btn-export" title="تصدير بصيغة HTML" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportHTML();" disabled><i class="fas fa-download"></i></button>
 			<button id="btn-export-pdf" title="تصدير بصيغة PDF" class="btn btn-sm btn-outline-secondary" onmousedown="event.preventDefault()" onclick="exportPDF();" disabled><i class="fas fa-file-pdf"></i></button>
@@ -324,7 +335,7 @@
 			<button class="btn btn-sm btn-outline-info ms-2" onmousedown="event.preventDefault()" onclick="newDocument();">مستند جديد</button>
 			<button type="button" class="btn-close ms-auto" onclick="dismissSharedBanner();"></button>
 		</div>
-		<div id="editor" class="bg-white border border-bottom-0 p-3" contenteditable="true"><h2>مرحبًا بك في RichText.online</h2><p><strong>ابدأ الكتابة هنا</strong> — يختفي هذا النص التجريبي بمجرد أن تكتب أي شيء. يُحفظ عملك تلقائيًا في متصفحك، فيمكنك العودة في أي وقت دون أن تفقد شيئًا.</p><h3>ما الذي يمكنك فعله بهذا المحرر</h3><ul><li><strong>تنسيق النص</strong> — خط عريض ومائل وتسطير وشطب ونص سفلي وعلوي من شريط الأدوات.</li><li><strong>تنظيم مستندك</strong> — طبّق العناوين من المستوى 1 إلى 6 للحصول على أقسام واضحة وتسلسل هرمي منظم.</li><li><strong>إضافة القوائم</strong> — قوائم نقطية أو مرقّمة بنقرة واحدة.</li><li><strong>التحكم بالخطوط والألوان</strong> — اختر من سبعة أنواع خطوط وسبعة أحجام جاهزة، وحدّد أي لون للنص أو للخلفية.</li><li><strong>إدراج الروابط والصور</strong> — الصق رابطًا لإنشاء ارتباط تشعبي، أو ضمّن صورة من الويب، أو ارفع صورة من جهازك.</li><li><strong>تضمين الفيديو</strong> — الصق رابط YouTube أو Vimeo لتضمين فيديو قابل للتشغيل داخل النص.</li><li><strong>إنشاء الجداول</strong> — أدرج جداول حتى 4 × 4، ثم أضف صفوفًا وأعمدة أو احذفها في أي وقت.</li><li><strong>البحث والاستبدال</strong> — ابحث في مستندك مع تمييز النتائج والتنقل بينها، واستبدل نتيجة واحدة أو جميع النتائج دفعة واحدة.</li><li><strong>التبديل إلى Markdown</strong> — اكتب بصيغة Markdown مع معاينة مباشرة في لوحتين، ثم عُد إلى النص المنسّق في أي وقت.</li><li><strong>المشاركة برابط</strong> — انقر على زر المشاركة لإنشاء رابط يعيد مستندك كما هو لكل من يفتحه.</li><li><strong>التصدير</strong> — نزّل مستندك كملف HTML مستقل أو افتح عرض PDF جاهزًا للطباعة.</li></ul><p>لا حساب ولا تثبيت ولا إدارة ملفات. كل شيء يعمل مباشرة في متصفحك.</p></div>
+		<div id="editor" class="bg-white border border-bottom-0 p-3 is-empty" contenteditable="true" data-placeholder="ابدأ الكتابة أو الصق نصك هنا. يُحفظ عملك تلقائيًا في هذا المتصفح."></div>
 		<div id="markdown-pane" class="d-none">
 			<div class="d-flex bg-white border border-top-0 rounded-bottom overflow-hidden" style="min-height: 400px;">
 				<textarea id="markdown-input" class="border-0 p-3 font-monospace" style="flex:1; resize:none; outline:none; min-height:400px;" placeholder="Write Markdown here..."></textarea>
@@ -624,24 +635,11 @@
 			</div>
 		</div>
 	</div>
-	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
-	<script>
-		firebase.initializeApp({
-			apiKey: "AIzaSyBsEkDEf1qqDVlQUpsUc5qG_SbPuNPiTQI",
-			authDomain: "richtext-online.firebaseapp.com",
-			projectId: "richtext-online",
-			storageBucket: "richtext-online.firebasestorage.app",
-			messagingSenderId: "483792477186",
-			appId: "1:483792477186:web:40083f00456bc496e75b1b"
-		});
-	</script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
-	<script>window.RT_I18N = {"account": "الحساب", "myDocuments": "مستنداتي", "signOut": "تسجيل الخروج", "signInFailed": "فشل تسجيل الدخول: {msg}", "untitledDocument": "مستند بلا عنوان", "saveFailed": "تعذّر حفظ المستند.", "loadDocsFailed": "تعذّر تحميل المستندات: {msg}", "open": "فتح", "deleteConfirm": "هل تريد حذف هذا المستند؟ لا يمكن التراجع عن هذا الإجراء.", "loadingShared": "جارٍ تحميل المستند المشترك…", "sharedLoadFailed": "تعذّر تحميل المستند المشترك.", "justNow": "الآن", "emptyDocument": "(مستند فارغ)", "restore": "استعادة", "copied": "تم النسخ!", "gistTokenRequired": "الرجاء إدخال رمز وصول شخصي من GitHub.", "creating": "جارٍ الإنشاء…", "createGist": "إنشاء Gist", "gistCreated": "تم إنشاء Gist! تم تحديث الرابط أعلاه — انسخه وشاركه.", "gistApiError": "خطأ في واجهة GitHub البرمجية ({status})", "gistFailed": "تعذّر إنشاء Gist.", "unsupportedVideo": "رابط غير مدعوم — الصق رابط YouTube أو Vimeo.", "imageLoadFailed": "تعذّر تحميل الصورة — تحقق من الرابط.", "counter": "الكلمات: {words} | الأحرف: {chars}", "darkMode": "الوضع الداكن", "lightMode": "الوضع الفاتح", "fullscreen": "ملء الشاشة", "exitFullscreen": "الخروج من ملء الشاشة", "noMatches": "لا توجد نتائج", "matchOf": "{current} من {total}", "allReplaced": "تم استبدال الكل", "editingOn": "التحرير: مفعّل", "editingOff": "التحرير: متوقف"};</script>
-	<script src="/editor.js?v=4"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js" integrity="sha384-948ahk4ZmxYVYOc+rxN1H2gM1EJ2Duhp7uHtZ4WSLkV4Vtx5MUqnV+l7u9B+jFv+" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.17/dist/purify.min.js" integrity="sha384-P0JNneQf81HOl9VwNXK76cQ9VMD6Nfsnepxb0cCOg8+UzEdzgPHAPV4wVQrvYQSx" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js" integrity="sha384-0d+Gr7vM4Drod8E3hXKgciWJSWbjD/opKLLygI9ktiWbuvlDwQLzU46wJ9s5gsp7" crossorigin="anonymous"></script>
+	<script>window.RT_I18N = {"account": "الحساب", "myDocuments": "مستنداتي", "signOut": "تسجيل الخروج", "signInFailed": "فشل تسجيل الدخول: {msg}", "untitledDocument": "مستند بلا عنوان", "saveFailed": "تعذّر حفظ المستند.", "loadDocsFailed": "تعذّر تحميل المستندات: {msg}", "open": "فتح", "deleteConfirm": "هل تريد حذف هذا المستند؟ لا يمكن التراجع عن هذا الإجراء.", "loadingShared": "جارٍ تحميل المستند المشترك…", "sharedLoadFailed": "تعذّر تحميل المستند المشترك.", "justNow": "الآن", "emptyDocument": "(مستند فارغ)", "restore": "استعادة", "copied": "تم النسخ!", "gistTokenRequired": "الرجاء إدخال رمز وصول شخصي من GitHub.", "creating": "جارٍ الإنشاء…", "createGist": "إنشاء Gist", "gistCreated": "تم إنشاء Gist! تم تحديث الرابط أعلاه — انسخه وشاركه.", "gistApiError": "خطأ في واجهة GitHub البرمجية ({status})", "gistFailed": "تعذّر إنشاء Gist.", "unsupportedVideo": "رابط غير مدعوم — الصق رابط YouTube أو Vimeo.", "imageLoadFailed": "تعذّر تحميل الصورة — تحقق من الرابط.", "counter": "الكلمات: {words} | الأحرف: {chars}", "darkMode": "الوضع الداكن", "lightMode": "الوضع الفاتح", "fullscreen": "ملء الشاشة", "exitFullscreen": "الخروج من ملء الشاشة", "noMatches": "لا توجد نتائج", "matchOf": "{current} من {total}", "allReplaced": "تم استبدال الكل", "editingOn": "التحرير", "editingOff": "قراءة فقط", "signInUnavailable": "تسجيل الدخول غير متاح: تعذّر تحميل خدمات Google. تحقق من اتصالك أو من مانع المحتوى ثم أعد المحاولة."};</script>
+	<script src="/editor.js?v=5"></script>
 </body>
 </html>

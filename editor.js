@@ -48,8 +48,9 @@ var RT_DEFAULTS = {
 	"noMatches": "No matches",
 	"matchOf": "{current} of {total}",
 	"allReplaced": "All replaced",
-	"editingOn": "Editing: ON",
-	"editingOff": "Editing: OFF"
+	"editingOn": "Editing",
+	"editingOff": "Read-only",
+	"signInUnavailable": "Sign-in is unavailable: Google services could not be loaded. Check your connection or content blocker and try again."
 };
 /* i18n:defaults:end */
 
@@ -68,32 +69,110 @@ function trackEvent(name, params) {
 	if (typeof gtag === 'function') gtag('event', name, params || {});
 }
 
-// ── Auth and cloud persistence (Firebase) ────────────────────────────────────
+// ── HTML sanitising ──────────────────────────────────────────────────────────
+// DOMPurify drops <iframe> by default, which erased saved YouTube/Vimeo embeds. Allow iframes, then keep
+// only those that point at the two embed URLs insertVideo() can create.
+
+var VIDEO_SRC_RE = /^https:\/\/(www\.youtube\.com\/embed\/[A-Za-z0-9_-]{11}|player\.vimeo\.com\/video\/\d+)$/;
+
+function sanitizeHtml(html) {
+	var frag = DOMPurify.sanitize(html, {
+		ADD_TAGS: ['iframe'],
+		ADD_ATTR: ['allowfullscreen', 'frameborder', 'loading', 'contenteditable'],
+		RETURN_DOM_FRAGMENT: true
+	});
+	frag.querySelectorAll('iframe').forEach(function(f) {
+		if (!VIDEO_SRC_RE.test(f.getAttribute('src') || '')) f.remove();
+	});
+	var box = document.createElement('div');
+	box.appendChild(frag);
+	return box.innerHTML;
+}
+
+// ── Auth and cloud persistence (Firebase, loaded on demand) ──────────────────
+// The Firebase SDK is about 150 KB, so it only loads when someone signs in, hovers the sign-in button,
+// or was signed in on a previous visit. If it can't load (content blockers, restricted networks) the
+// editor keeps working and only sign-in is unavailable.
 
 var currentUser = null;
 var currentCloudDocId = null;
 var currentCloudTitle = null;
 
+var FIREBASE_BASE = 'https://www.gstatic.com/firebasejs/10.13.2/';
+var FIREBASE_APP = { file: 'firebase-app-compat.js', integrity: 'sha384-+65NgAKqXr1Nb7sBmV6O09pL8ASqZsi29OE718meKinGAWaa70VE5V6LNjXVBjIA' };
+var FIREBASE_MORE = [
+	{ file: 'firebase-auth-compat.js', integrity: 'sha384-I1LYojsZ5RM1cOda44Z2h42Qa6YfsQ1XkXxREnhp4ueYBR/4d1pG1K+NZM537Vsj' },
+	{ file: 'firebase-firestore-compat.js', integrity: 'sha384-YHSscHG455M7b+d6r5ibTMznxrZxV272bMjXT9ndTgmx05fLR7HsdmcVklhpBSyt' }
+];
+var FIREBASE_CONFIG = {
+	apiKey: 'AIzaSyBsEkDEf1qqDVlQUpsUc5qG_SbPuNPiTQI',
+	authDomain: 'richtext-online.firebaseapp.com',
+	projectId: 'richtext-online',
+	storageBucket: 'richtext-online.firebasestorage.app',
+	messagingSenderId: '483792477186',
+	appId: '1:483792477186:web:40083f00456bc496e75b1b'
+};
+var AUTH_HINT_KEY = 'richtext-online-signed-in';
+var firebaseLoading = null;
+
+function loadScriptOnce(item) {
+	return new Promise(function(resolve, reject) {
+		var el = document.createElement('script');
+		el.src = FIREBASE_BASE + item.file;
+		el.integrity = item.integrity;
+		el.crossOrigin = 'anonymous';
+		el.onload = resolve;
+		el.onerror = function() { reject(new Error('Could not load ' + item.file)); };
+		document.head.appendChild(el);
+	});
+}
+
+function loadFirebase() {
+	if (EMBED.embedded) return Promise.reject(new Error('Firebase is not available in embed mode'));
+	if (firebaseLoading) return firebaseLoading;
+	firebaseLoading = loadScriptOnce(FIREBASE_APP)
+		.then(function() { return Promise.all(FIREBASE_MORE.map(loadScriptOnce)); })
+		.then(function() {
+			if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+			firebase.auth().onAuthStateChanged(function(user) {
+				currentUser = user;
+				try {
+					if (user) localStorage.setItem(AUTH_HINT_KEY, '1');
+					else localStorage.removeItem(AUTH_HINT_KEY);
+				} catch (e) {}
+				if (!user) {
+					currentCloudDocId = null;
+					currentCloudTitle = null;
+				}
+				updateAccountUI(user);
+				updateCloudButtons();
+			});
+		})
+		.catch(function(e) {
+			firebaseLoading = null;
+			throw e;
+		});
+	return firebaseLoading;
+}
+
+function prefetchFirebase() {
+	loadFirebase().catch(function() {});
+}
+
 function getDb() {
 	return firebase.firestore();
 }
 
-firebase.auth().onAuthStateChanged(function(user) {
-	currentUser = user;
-	if (!user) {
-		currentCloudDocId = null;
-		currentCloudTitle = null;
-	}
-	updateAccountUI(user);
-	updateCloudButtons();
-});
-
 function signInWithGoogle() {
-	var provider = new firebase.auth.GoogleAuthProvider();
-	firebase.auth().signInWithPopup(provider)
+	loadFirebase()
+		.then(function() {
+			return firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+		})
 		.then(function() { trackEvent('login', { method: 'Google' }); })
 		.catch(function(e) {
-			if (e.code !== 'auth/cancelled-popup-request' && e.code !== 'auth/popup-closed-by-user') {
+			if (!e || !e.code) {
+				alert(rtT('signInUnavailable'));
+			} else if (e.code !== 'auth/cancelled-popup-request' && e.code !== 'auth/popup-closed-by-user') {
 				alert(rtT('signInFailed', { msg: e.message }));
 			}
 		});
@@ -102,6 +181,17 @@ function signInWithGoogle() {
 function signOutUser() {
 	firebase.auth().signOut().then(function() { trackEvent('logout'); });
 }
+
+(function warmUpSignIn() {
+	if (EMBED.embedded) return;
+	var btn = document.getElementById('btn-signin');
+	['pointerenter', 'pointerdown', 'focus', 'touchstart'].forEach(function(type) {
+		if (btn) btn.addEventListener(type, prefetchFirebase, { once: true, passive: true });
+	});
+	try {
+		if (localStorage.getItem(AUTH_HINT_KEY) === '1') prefetchFirebase();
+	} catch (e) {}
+})();
 
 function updateAccountUI(user) {
 	var signInBtn = document.getElementById('btn-signin');
@@ -286,7 +376,7 @@ function loadCloudDocument(docId, title) {
 	getDb().collection('documents').doc(docId).get().then(function(doc) {
 		if (!doc.exists) return;
 		var data = doc.data();
-		editor.innerHTML = DOMPurify.sanitize(data.content || '');
+		editor.innerHTML = sanitizeHtml(data.content || '');
 		currentCloudDocId = docId;
 		currentCloudTitle = data.title || title;
 		dismissSharedBanner();
@@ -341,7 +431,7 @@ function initEmbedMode() {
 		var d = e.data;
 		if (!d || d.rt !== 1) return;
 		if (d.type === 'setHTML') {
-			editor.innerHTML = DOMPurify.sanitize(String(d.html || ''));
+			editor.innerHTML = sanitizeHtml(String(d.html || ''));
 			updateCounter();
 			updateEditorActions();
 		} else if (d.type === 'getHTML') {
@@ -383,7 +473,7 @@ function restoreFromHash(compressed) {
 	try {
 		var html = LZString.decompressFromEncodedURIComponent(compressed);
 		if (html) {
-			editor.innerHTML = DOMPurify.sanitize(html);
+			editor.innerHTML = sanitizeHtml(html);
 			showSharedBanner();
 			return;
 		}
@@ -405,7 +495,7 @@ function restoreFromGist(gistId) {
 			var files = data.files;
 			var file = files && (files['document.html'] || Object.values(files)[0]);
 			if (file && file.content) {
-				editor.innerHTML = DOMPurify.sanitize(file.content);
+				editor.innerHTML = sanitizeHtml(file.content);
 				updateCounter();
 				updateEditorActions();
 				showSharedBanner();
@@ -544,7 +634,7 @@ function restoreSnapshot(timestamp) {
 	trackEvent('restore_snapshot');
 	// Preserve current content as a snapshot before overwriting, so restoring is non-destructive.
 	takeSnapshot();
-	editor.innerHTML = DOMPurify.sanitize(snap.content);
+	editor.innerHTML = sanitizeHtml(snap.content);
 	lastSnapshotContent = editor.innerHTML;
 	try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) {}
 	updateCounter();
@@ -665,12 +755,19 @@ function execCmd(command) {
 	document.execCommand(command, false, null);
 }
 
+var colorTrackTimers = {};
+
 function execCommandWithArg(command, arg) {
 	restoreSelection();
 	if (command === 'foreColor') currentForeColor = arg;
 	var params = { command: command };
 	if (command === 'formatBlock' || command === 'fontName' || command === 'fontSize') params.value = arg;
-	trackEvent('format', params);
+	if (command === 'foreColor' || command === 'hiliteColor') {
+		clearTimeout(colorTrackTimers[command]);
+		colorTrackTimers[command] = setTimeout(function() { trackEvent('format', params); }, 1000);
+	} else {
+		trackEvent('format', params);
+	}
 	document.execCommand(command, false, arg);
 }
 
@@ -835,6 +932,7 @@ function updateCounter() {
 
 function updateEditorActions() {
 	var empty = editor.textContent.trim() === '';
+	editor.classList.toggle('is-empty', empty && !editor.querySelector('img, table, iframe, hr'));
 	['btn-print', 'btn-export', 'btn-export-pdf', 'btn-share'].forEach(function(id) {
 		var btn = document.getElementById(id);
 		if (btn) btn.disabled = empty;
@@ -1261,6 +1359,71 @@ document.getElementById('find-input') && document.getElementById('find-input').a
 	if (redoCell) redoCell.innerHTML = '<kbd>⌘ + Shift + Z</kbd>';
 })();
 
+// ── Language suggestion ──────────────────────────────────────────────────────
+// Shown only on the English page, only when the browser's first language has a translation, and never
+// replaces the page or redirects: it is a dismissible link. Each message is written in its own language.
+
+var LANG_SUGGESTIONS = {
+	ja: { path: '/ja/', text: 'このサイトは日本語でもご利用いただけます。', cta: '日本語で開く', close: '閉じる' },
+	fr: { path: '/fr/', text: 'Ce site est disponible en français.', cta: 'Passer en français', close: 'Fermer' },
+	es: { path: '/es/', text: 'Este sitio está disponible en español.', cta: 'Cambiar a español', close: 'Cerrar' },
+	ar: { path: '/ar/', text: 'هذا الموقع متاح بالعربية.', cta: 'التبديل إلى العربية', close: 'إغلاق' },
+	pt: { path: '/pt/', text: 'Este site está disponível em português.', cta: 'Mudar para português', close: 'Fechar' },
+	ru: { path: '/ru/', text: 'Этот сайт доступен на русском языке.', cta: 'Открыть на русском', close: 'Закрыть' }
+};
+var LANG_DISMISS_KEY = 'richtext-online-lang-dismissed';
+
+function suggestLanguage() {
+	if (EMBED.embedded || document.documentElement.lang !== 'en') return;
+	// A shared document lives in this URL's hash/query; the link would lose it.
+	if (location.hash.indexOf('#v1:') === 0 || location.search.indexOf('gist=') !== -1) return;
+	var first = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+	var code = first.toLowerCase().split('-')[0];
+	var s = LANG_SUGGESTIONS[code];
+	var toolbar = document.getElementById('toolbar');
+	if (!s || !toolbar) return;
+	try { if (localStorage.getItem(LANG_DISMISS_KEY) === '1') return; } catch (e) {}
+
+	var bar = document.createElement('div');
+	bar.id = 'lang-suggestion';
+	bar.className = 'alert alert-info d-flex align-items-center gap-2 py-2 px-3 mb-2 small';
+	bar.setAttribute('role', 'note');
+	bar.lang = code;
+	bar.dir = code === 'ar' ? 'rtl' : 'ltr';
+
+	var text = document.createElement('span');
+	text.style.flex = '1';
+	text.textContent = s.text;
+	var link = document.createElement('a');
+	link.className = 'btn btn-sm btn-primary text-nowrap';
+	link.href = s.path;
+	link.hreflang = code;
+	link.textContent = s.cta;
+	var close = document.createElement('button');
+	close.type = 'button';
+	close.className = 'btn-close';
+	close.setAttribute('aria-label', s.close);
+
+	function remember() { try { localStorage.setItem(LANG_DISMISS_KEY, '1'); } catch (e) {} }
+	link.addEventListener('click', function() {
+		remember();
+		trackEvent('language_suggestion', { action: 'accept', language: code });
+	});
+	close.addEventListener('click', function() {
+		remember();
+		bar.remove();
+		trackEvent('language_suggestion', { action: 'dismiss', language: code });
+	});
+
+	bar.appendChild(text);
+	bar.appendChild(link);
+	bar.appendChild(close);
+	toolbar.parentNode.insertBefore(bar, toolbar);
+	trackEvent('language_suggestion', { action: 'shown', language: code });
+}
+
+suggestLanguage();
+
 if (typeof module !== 'undefined' && module.exports) {
 	module.exports = {
 		toggleFullscreen,
@@ -1328,6 +1491,9 @@ if (typeof module !== 'undefined' && module.exports) {
 		renderHistoryList,
 		restoreSnapshot,
 		trackEvent,
+		sanitizeHtml,
+		loadFirebase,
+		suggestLanguage,
 		printDocument,
 		signInWithGoogle,
 		signOutUser,

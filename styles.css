@@ -147,3 +147,20 @@ mark.find-match-current {
 	border-left: 0;
 	border-right: 4px solid #dee2e6;
 }
+
+/* Placeholder shown while the editor is empty (text comes from data-placeholder, translated per page) */
+#editor.is-empty::before {
+	content: attr(data-placeholder);
+	color: #6c757d;
+	pointer-events: none;
+	float: left;
+	height: 0;
+}
+
+[dir="rtl"] #editor.is-empty::before {
+	float: right;
+}
+
+[data-bs-theme="dark"] #editor.is-empty::before {
+	color: #94a3b8;
+}

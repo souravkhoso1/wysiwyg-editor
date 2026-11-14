@@ -32,11 +32,14 @@ LANGS = {
     'ru': dict(name='Русский', path='/ru/', locale='ru_RU', dir='ltr'),
 }
 
+BOOTSTRAP_LTR_SRI = 'sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH'
+BOOTSTRAP_RTL_SRI = 'sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb'
+
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
 INLINE = {'a', 'abbr', 'b', 'br', 'code', 'em', 'i', 'img', 'input', 'kbd', 'mark', 's', 'small',
           'span', 'strong', 'sub', 'sup', 'u'}
 SKIP_TAGS = {'script', 'style', 'pre', 'textarea', 'noscript', 'svg', 'kbd'}
-ATTRS = ('title', 'placeholder', 'aria-label', 'alt')
+ATTRS = ('title', 'placeholder', 'data-placeholder', 'aria-label', 'alt')
 META_KEYS = {'description', 'keywords', 'og:title', 'og:description', 'twitter:title', 'twitter:description'}
 NO_TRANSLATE = {'RichText.online', 'MD', 'HR', 'https://', 'ghp_…'}
 LETTERS = re.compile(r'[^\W\d_]{2,}')
@@ -241,7 +244,9 @@ def build_page(src, segs, code, tr):
     out = replace_once(out, 'class="dropdown-item active" href="/"', 'class="dropdown-item" href="/"')
     out = replace_once(out, 'class="dropdown-item" href="%s"' % meta['path'], 'class="dropdown-item active" href="%s"' % meta['path'])
     if meta['dir'] == 'rtl':
-        out = replace_once(out, 'dist/css/bootstrap.min.css', 'dist/css/bootstrap.rtl.min.css')
+        # the RTL stylesheet is a different file, so it needs its own Subresource Integrity hash
+        out = replace_once(out, 'dist/css/bootstrap.min.css" integrity="%s"' % BOOTSTRAP_LTR_SRI,
+                           'dist/css/bootstrap.rtl.min.css" integrity="%s"' % BOOTSTRAP_RTL_SRI)
     note = '<div class="alert alert-info small py-2 px-3 mb-3 lang-note" role="note">%s</div>' % tr['note']
     out = replace_once(out, '\t\t</header>\n', '\t\t</header>\n\t\t' + note + '\n')
     payload = json.dumps(tr['js'], ensure_ascii=False).replace('</', '<\\/')
