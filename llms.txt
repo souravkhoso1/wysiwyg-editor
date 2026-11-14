@@ -2,13 +2,13 @@
 
 > RichText.online is a free, browser-based rich text (WYSIWYG) editor. It needs no sign-up and no installation. Documents are saved automatically in the visitor's own browser; signing in with Google is optional and only adds saving documents to an account.
 
-What it does: bold, italic, underline, strikethrough, headings H1-H6, lists, text and background colour, fonts and sizes, links, images, YouTube and Vimeo embeds, tables, find and replace, a Markdown mode with live preview, source HTML view, dark mode, fullscreen, version history on the device, and export as HTML or PDF (browser print). A document can be shared as a link that contains the document itself, with a GitHub Gist as an option for very long documents. The editor can also be embedded in other websites with one script tag.
+What it does: bold, italic, underline, strikethrough, headings H1-H6, lists, text and background colour, fonts and sizes, links, images, YouTube and Vimeo embeds, tables, find and replace, a Markdown mode with live preview, source HTML view, dark mode, fullscreen, version history on the device, and export as HTML, Markdown, Word (.docx), plain text or PDF (browser print), or copy the formatted text. A document can be shared as a link that contains the document itself, with a GitHub Gist as an option for very long documents. The editor can also be embedded in other websites with one script tag.
 
 ## Pages
 
 - [Editor (English)](https://richtext.online/): the editor and the full feature list, how-to guide, use cases and FAQ
 - [Embedding guide](https://richtext.online/embed-example.html): how to add the editor to another website (English)
-- [Japanese](https://richtext.online/ja/), [French](https://richtext.online/fr/), [Spanish](https://richtext.online/es/), [Arabic](https://richtext.online/ar/), [Portuguese](https://richtext.online/pt/), [Russian](https://richtext.online/ru/): the same editor and content in each language (machine translated)
+- [Japanese](https://richtext.online/ja/), [French](https://richtext.online/fr/), [Spanish](https://richtext.online/es/), [Arabic](https://richtext.online/ar/), [Portuguese](https://richtext.online/pt/), [Russian](https://richtext.online/ru/), [German](https://richtext.online/de/), [Simplified Chinese](https://richtext.online/zh/), [Korean](https://richtext.online/ko/), [Vietnamese](https://richtext.online/vi/), [Indonesian](https://richtext.online/id/): the same editor and content in each language (machine translated)
 
 ## Facts
 

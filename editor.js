@@ -50,7 +50,14 @@ var RT_DEFAULTS = {
 	"allReplaced": "All replaced",
 	"editingOn": "Editing",
 	"editingOff": "Read-only",
-	"signInUnavailable": "Sign-in is unavailable: Google services could not be loaded. Check your connection or content blocker and try again."
+	"signInUnavailable": "Sign-in is unavailable: Google services could not be loaded. Check your connection or content blocker and try again.",
+	"close": "Close",
+	"clipboardBlocked": "Your browser blocked clipboard access. Use Ctrl/Cmd+C, X or V instead.",
+	"exportFailed": "Could not create the file. Please try again.",
+	"savedLocal": "Saved in this browser",
+	"savedCloud": "Saved to your account",
+	"cloudDirty": "Changes not saved to your account yet",
+	"cloudHint": "You're signed in. Use the cloud button in the toolbar to save this document to your account and open it on any device."
 };
 /* i18n:defaults:end */
 
@@ -168,7 +175,10 @@ function signInWithGoogle() {
 		.then(function() {
 			return firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
 		})
-		.then(function() { trackEvent('login', { method: 'Google' }); })
+		.then(function() {
+			trackEvent('login', { method: 'Google' });
+			showCloudHint();
+		})
 		.catch(function(e) {
 			if (!e || !e.code) {
 				alert(rtT('signInUnavailable'));
@@ -297,6 +307,7 @@ async function saveToCloud(asNew) {
 		}
 		currentCloudTitle = title;
 		trackEvent('document_save_cloud', { method: asNew ? 'new_copy' : 'save' });
+		setSaveStatus('cloud');
 		var modalEl = document.getElementById('cloudSaveModal');
 		var modal = bootstrap.Modal.getInstance(modalEl);
 		if (modal) modal.hide();
@@ -385,6 +396,7 @@ function loadCloudDocument(docId, title) {
 		updateCounter();
 		updateEditorActions();
 		trackEvent('document_load_cloud');
+		setSaveStatus('cloud');
 		var modalEl = document.getElementById('documentsModal');
 		var modal = bootstrap.Modal.getInstance(modalEl);
 		if (modal) modal.hide();
@@ -465,7 +477,10 @@ function initEmbedMode() {
 function restoreFromStorage() {
 	try {
 		var saved = localStorage.getItem(STORAGE_KEY);
-		if (saved) editor.innerHTML = saved;
+		if (saved) {
+			editor.innerHTML = saved;
+			setSaveStatus('local');
+		}
 	} catch (e) {}
 }
 
@@ -521,6 +536,9 @@ function dismissSharedBanner() {
 function newDocument() {
 	trackEvent('new_document');
 	editor.innerHTML = '';
+	currentCloudDocId = null;
+	currentCloudTitle = null;
+	setSaveStatus('');
 	history.replaceState(null, '', location.pathname);
 	dismissSharedBanner();
 	try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
@@ -805,7 +823,7 @@ function toggleSource() {
 async function copyText() {
 	var sel = window.getSelection();
 	if (sel && sel.toString()) {
-		await navigator.clipboard.writeText(sel.toString());
+		try { await navigator.clipboard.writeText(sel.toString()); } catch (e) { showToast(rtT('clipboardBlocked')); }
 	}
 }
 
@@ -815,15 +833,17 @@ async function pasteText() {
 		restoreSelection();
 		document.execCommand('insertText', false, text);
 	} catch (err) {
-		// clipboard read permission denied or clipboard empty
+		showToast(rtT('clipboardBlocked'));
 	}
 }
 
 async function cutText() {
 	var sel = window.getSelection();
 	if (sel && sel.toString()) {
-		await navigator.clipboard.writeText(sel.toString());
-		document.execCommand('delete');
+		try {
+			await navigator.clipboard.writeText(sel.toString());
+			document.execCommand('delete');
+		} catch (e) { showToast(rtT('clipboardBlocked')); }
 	}
 }
 
@@ -923,7 +943,7 @@ document.getElementById('url-input').addEventListener('keydown', function(e) {
 });
 
 function updateCounter() {
-	var el = document.getElementById('editor-counter');
+	var el = document.getElementById('counter-text') || document.getElementById('editor-counter');
 	if (!el) return;
 	var text = editor.textContent || '';
 	var words = text.trim() ? text.trim().split(/\s+/).length : 0;
@@ -933,7 +953,7 @@ function updateCounter() {
 function updateEditorActions() {
 	var empty = editor.textContent.trim() === '';
 	editor.classList.toggle('is-empty', empty && !editor.querySelector('img, table, iframe, hr'));
-	['btn-print', 'btn-export', 'btn-export-pdf', 'btn-share'].forEach(function(id) {
+	['btn-export-menu', 'btn-share'].forEach(function(id) {
 		var btn = document.getElementById(id);
 		if (btn) btn.disabled = empty;
 	});
@@ -969,9 +989,12 @@ editor.addEventListener('input', function() {
 		notifyParentOfChange();
 		return;
 	}
+	if (currentCloudDocId) setSaveStatus('dirty');
 	clearTimeout(saveTimer);
 	saveTimer = setTimeout(function() {
-		try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) {}
+		var ok = true;
+		try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) { ok = false; }
+		if (ok && !currentCloudDocId) setSaveStatus(editor.textContent.trim() ? 'local' : '');
 	}, 500);
 	scheduleHistorySnapshot();
 });
@@ -985,6 +1008,7 @@ function clearAll() {
 	if (!EMBED.embedded) {
 		try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
 		clearHistory();
+		if (!currentCloudDocId) setSaveStatus('');
 	}
 	updateCounter();
 	updateEditorActions();
@@ -1014,15 +1038,153 @@ function exportPDF() {
 	win.close();
 }
 
-function exportHTML() {
-	trackEvent('export_html');
-	var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + editor.innerHTML + '</body></html>';
-	var blob = new Blob([html], { type: 'text/html' });
+// The editor's HTML without transient UI such as find-and-replace highlights.
+function exportableHtml() {
+	var clone = editor.cloneNode(true);
+	clone.querySelectorAll('mark.find-match').forEach(function(m) {
+		while (m.firstChild) m.parentNode.insertBefore(m.firstChild, m);
+		m.remove();
+	});
+	return clone.innerHTML;
+}
+
+function downloadBlob(blob, filename) {
 	var a = document.createElement('a');
 	a.href = URL.createObjectURL(blob);
-	a.download = 'document.html';
+	a.download = filename;
+	document.body.appendChild(a);
 	a.click();
-	URL.revokeObjectURL(a.href);
+	a.remove();
+	setTimeout(function() { URL.revokeObjectURL(a.href); }, 1000);
+}
+
+function exportHTML() {
+	trackEvent('export_html');
+	var html = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>' + exportableHtml() + '</body></html>';
+	downloadBlob(new Blob([html], { type: 'text/html' }), 'document.html');
+}
+
+function exportText() {
+	trackEvent('export_text');
+	downloadBlob(new Blob([editor.innerText], { type: 'text/plain;charset=utf-8' }), 'document.txt');
+}
+
+var exporterLoading = null;
+function loadExporter() {
+	if (window.RTExport) return Promise.resolve();
+	if (exporterLoading) return exporterLoading;
+	exporterLoading = new Promise(function(resolve, reject) {
+		var el = document.createElement('script');
+		el.src = '/export.js?v=1';
+		el.onload = resolve;
+		el.onerror = function() { exporterLoading = null; reject(new Error('Could not load export.js')); };
+		document.head.appendChild(el);
+	});
+	return exporterLoading;
+}
+
+function exportMarkdown() {
+	trackEvent('export_markdown');
+	loadExporter()
+		.then(function() { downloadBlob(new Blob([RTExport.toMarkdown(editor)], { type: 'text/markdown;charset=utf-8' }), 'document.md'); })
+		.catch(function() { showToast(rtT('exportFailed')); });
+}
+
+function exportDocx() {
+	trackEvent('export_docx');
+	loadExporter()
+		.then(function() { return RTExport.toDocx(editor); })
+		.then(function(blob) { downloadBlob(blob, 'document.docx'); })
+		.catch(function() { showToast(rtT('exportFailed')); });
+}
+
+function copyViaSelection() {
+	var sel = window.getSelection(), saved = sel.rangeCount ? sel.getRangeAt(0).cloneRange() : null, ok = false;
+	var range = document.createRange();
+	range.selectNodeContents(editor);
+	sel.removeAllRanges();
+	sel.addRange(range);
+	try { ok = document.execCommand('copy'); } catch (e) {}
+	sel.removeAllRanges();
+	if (saved) sel.addRange(saved);
+	showToast(rtT(ok ? 'copied' : 'clipboardBlocked'));
+}
+
+async function copyFormatted() {
+	trackEvent('copy_formatted');
+	var html = exportableHtml(), text = editor.innerText;
+	try {
+		if (!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write)) throw new Error('unsupported');
+		await navigator.clipboard.write([new ClipboardItem({
+			'text/html': new Blob([html], { type: 'text/html' }),
+			'text/plain': new Blob([text], { type: 'text/plain' })
+		})]);
+		showToast(rtT('copied'));
+	} catch (e) {
+		copyViaSelection();
+	}
+}
+
+async function copyHtml() {
+	trackEvent('copy_html');
+	try {
+		await navigator.clipboard.writeText(exportableHtml());
+		showToast(rtT('copied'));
+	} catch (e) {
+		showToast(rtT('clipboardBlocked'));
+	}
+}
+
+// ── Small status messages ─────────────────────────────────────────────────────
+
+var toastTimer = null;
+function showToast(text) {
+	var t = document.getElementById('rt-toast');
+	if (!t) {
+		t = document.createElement('div');
+		t.id = 'rt-toast';
+		t.setAttribute('role', 'status');
+		t.setAttribute('aria-live', 'polite');
+		document.body.appendChild(t);
+	}
+	t.textContent = text;
+	t.classList.add('show');
+	clearTimeout(toastTimer);
+	toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2600);
+}
+
+// Tells people where their work is: this browser, or their account.
+function setSaveStatus(kind) {
+	if (EMBED.embedded) return;
+	var el = document.getElementById('save-status');
+	if (!el) return;
+	var key = { local: 'savedLocal', cloud: 'savedCloud', dirty: 'cloudDirty' }[kind];
+	el.textContent = key ? rtT(key) : '';
+	el.classList.toggle('text-warning-emphasis', kind === 'dirty');
+}
+
+function showCloudHint() {
+	var toolbar = document.getElementById('toolbar');
+	if (EMBED.embedded || !toolbar || document.getElementById('cloud-hint')) return;
+	var bar = document.createElement('div');
+	bar.id = 'cloud-hint';
+	bar.className = 'alert alert-success d-flex align-items-center gap-2 py-2 px-3 mb-2 small';
+	bar.setAttribute('role', 'status');
+	var text = document.createElement('span');
+	text.style.flex = '1';
+	text.textContent = rtT('cloudHint');
+	var close = document.createElement('button');
+	close.type = 'button';
+	close.className = 'btn-close';
+	close.setAttribute('aria-label', rtT('close'));
+	var btn = document.getElementById('btn-cloud-save');
+	function done() { bar.remove(); if (btn) btn.classList.remove('pulse'); }
+	close.addEventListener('click', done);
+	bar.appendChild(text);
+	bar.appendChild(close);
+	toolbar.parentNode.insertBefore(bar, toolbar);
+	if (btn) btn.classList.add('pulse');
+	setTimeout(done, 20000);
 }
 
 function toggleMarkdown() {
@@ -1359,6 +1521,27 @@ document.getElementById('find-input') && document.getElementById('find-input').a
 	if (redoCell) redoCell.innerHTML = '<kbd>⌘ + Shift + Z</kbd>';
 })();
 
+// Toolbar menus use fixed positioning so they are not clipped by the phone-width scrolling toolbar.
+(function initToolbarMenus() {
+	if (!window.bootstrap) return;
+	document.querySelectorAll('#toolbar [data-bs-toggle="dropdown"]').forEach(function(el) {
+		bootstrap.Dropdown.getOrCreateInstance(el, { popperConfig: function(cfg) { cfg.strategy = 'fixed'; return cfg; } });
+	});
+})();
+
+// Installable and usable offline. The worker is network-first, so deployments are never masked by a stale cache.
+if ('serviceWorker' in navigator && !EMBED.embedded && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+	window.addEventListener('load', function() {
+		navigator.serviceWorker.register('/sw.js').catch(function() {});
+		// The worker only sees requests made after it takes control, so hand it what this visit already loaded.
+		navigator.serviceWorker.ready.then(function(reg) {
+			var urls = performance.getEntriesByType('resource').map(function(r) { return r.name; });
+			urls.push(location.origin + location.pathname);
+			if (reg.active) reg.active.postMessage({ type: 'precache', urls: urls });
+		}).catch(function() {});
+	});
+}
+
 // ── Language suggestion ──────────────────────────────────────────────────────
 // Shown only on the English page, only when the browser's first language has a translation, and never
 // replaces the page or redirects: it is a dismissible link. Each message is written in its own language.
@@ -1369,7 +1552,12 @@ var LANG_SUGGESTIONS = {
 	es: { path: '/es/', text: 'Este sitio está disponible en español.', cta: 'Cambiar a español', close: 'Cerrar' },
 	ar: { path: '/ar/', text: 'هذا الموقع متاح بالعربية.', cta: 'التبديل إلى العربية', close: 'إغلاق' },
 	pt: { path: '/pt/', text: 'Este site está disponível em português.', cta: 'Mudar para português', close: 'Fechar' },
-	ru: { path: '/ru/', text: 'Этот сайт доступен на русском языке.', cta: 'Открыть на русском', close: 'Закрыть' }
+	ru: { path: '/ru/', text: 'Этот сайт доступен на русском языке.', cta: 'Открыть на русском', close: 'Закрыть' },
+	de: { path: '/de/', text: 'Diese Website ist auch auf Deutsch verfügbar.', cta: 'Auf Deutsch öffnen', close: 'Schließen' },
+	zh: { path: '/zh/', lang: 'zh-Hans', text: '本网站也提供简体中文版本。', cta: '切换到简体中文', close: '关闭' },
+	ko: { path: '/ko/', text: '이 사이트는 한국어로도 이용하실 수 있습니다.', cta: '한국어로 열기', close: '닫기' },
+	vi: { path: '/vi/', text: 'Trang web này cũng có tiếng Việt.', cta: 'Chuyển sang tiếng Việt', close: 'Đóng' },
+	id: { path: '/id/', text: 'Situs ini juga tersedia dalam Bahasa Indonesia.', cta: 'Buka dalam Bahasa Indonesia', close: 'Tutup' }
 };
 var LANG_DISMISS_KEY = 'richtext-online-lang-dismissed';
 
@@ -1378,7 +1566,9 @@ function suggestLanguage() {
 	// A shared document lives in this URL's hash/query; the link would lose it.
 	if (location.hash.indexOf('#v1:') === 0 || location.search.indexOf('gist=') !== -1) return;
 	var first = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-	var code = first.toLowerCase().split('-')[0];
+	var tag = first.toLowerCase(), code = tag.split('-')[0];
+	// Traditional Chinese readers (zh-TW, zh-HK, zh-Hant) should not be sent to the Simplified page.
+	if (code === 'zh' && /-(tw|hk|mo|hant)\b/.test(tag)) return;
 	var s = LANG_SUGGESTIONS[code];
 	var toolbar = document.getElementById('toolbar');
 	if (!s || !toolbar) return;
@@ -1388,7 +1578,7 @@ function suggestLanguage() {
 	bar.id = 'lang-suggestion';
 	bar.className = 'alert alert-info d-flex align-items-center gap-2 py-2 px-3 mb-2 small';
 	bar.setAttribute('role', 'note');
-	bar.lang = code;
+	bar.lang = s.lang || code;
 	bar.dir = code === 'ar' ? 'rtl' : 'ltr';
 
 	var text = document.createElement('span');
@@ -1397,7 +1587,7 @@ function suggestLanguage() {
 	var link = document.createElement('a');
 	link.className = 'btn btn-sm btn-primary text-nowrap';
 	link.href = s.path;
-	link.hreflang = code;
+	link.hreflang = s.lang || code;
 	link.textContent = s.cta;
 	var close = document.createElement('button');
 	close.type = 'button';
@@ -1491,6 +1681,14 @@ if (typeof module !== 'undefined' && module.exports) {
 		renderHistoryList,
 		restoreSnapshot,
 		trackEvent,
+		exportText,
+		exportMarkdown,
+		exportDocx,
+		copyFormatted,
+		copyHtml,
+		showToast,
+		setSaveStatus,
+		showCloudHint,
 		sanitizeHtml,
 		loadFirebase,
 		suggestLanguage,

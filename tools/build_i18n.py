@@ -30,7 +30,17 @@ LANGS = {
     'ar': dict(name='العربية', path='/ar/', locale='ar_AR', dir='rtl'),
     'pt': dict(name='Português', path='/pt/', locale='pt_BR', dir='ltr'),
     'ru': dict(name='Русский', path='/ru/', locale='ru_RU', dir='ltr'),
+    'de': dict(name='Deutsch', path='/de/', locale='de_DE', dir='ltr'),
+    'zh': dict(name='简体中文', path='/zh/', locale='zh_CN', dir='ltr', lang='zh-Hans'),
+    'ko': dict(name='한국어', path='/ko/', locale='ko_KR', dir='ltr'),
+    'vi': dict(name='Tiếng Việt', path='/vi/', locale='vi_VN', dir='ltr'),
+    'id': dict(name='Bahasa Indonesia', path='/id/', locale='id_ID', dir='ltr'),
 }
+
+
+def html_lang(code):
+    """Value for <html lang> and hreflang. Usually the code itself; Chinese uses the script subtag."""
+    return LANGS[code].get('lang', code)
 
 BOOTSTRAP_LTR_SRI = 'sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH'
 BOOTSTRAP_RTL_SRI = 'sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb'
@@ -232,13 +242,13 @@ def build_page(src, segs, code, tr):
         out = out[:s.start] + t + out[s.end:]
     url = SITE + meta['path']
     dir_attr = ' dir="rtl"' if meta['dir'] == 'rtl' else ''
-    out = replace_once(out, '<html lang="en">', '<html lang="%s"%s>' % (code, dir_attr))
+    out = replace_once(out, '<html lang="en">', '<html lang="%s"%s>' % (html_lang(code), dir_attr))
     out = replace_once(out, '<link rel="canonical" href="%s/">' % SITE, '<link rel="canonical" href="%s">' % url)
     out = replace_once(out, '<meta property="og:locale" content="en_US">', '<meta property="og:locale" content="%s">' % meta['locale'])
     out = replace_once(out, '<meta property="og:url" content="%s/">' % SITE, '<meta property="og:url" content="%s">' % url)
     out = replace_once(out, '<meta name="twitter:url" content="%s/">' % SITE, '<meta name="twitter:url" content="%s">' % url)
     out = replace_once(out, '"url": "%s/",' % SITE, '"url": "%s",' % url)
-    out = replace_once(out, '"inLanguage": "en"', '"inLanguage": "%s"' % code)
+    out = replace_once(out, '"inLanguage": "en"', '"inLanguage": "%s"' % html_lang(code))
     out = replace_once(out, '<span data-lang-current translate="no">English</span>',
                        '<span data-lang-current translate="no">%s</span>' % meta['name'])
     out = replace_once(out, 'class="dropdown-item active" href="/"', 'class="dropdown-item" href="/"')
@@ -259,7 +269,7 @@ def build_page(src, segs, code, tr):
 
 def sitemap():
     def alts():
-        lines = ['    <xhtml:link rel="alternate" hreflang="%s" href="%s%s"/>' % (c, SITE, m['path']) for c, m in LANGS.items()]
+        lines = ['    <xhtml:link rel="alternate" hreflang="%s" href="%s%s"/>' % (html_lang(c), SITE, m['path']) for c, m in LANGS.items()]
         lines.append('    <xhtml:link rel="alternate" hreflang="x-default" href="%s/"/>' % SITE)
         return '\n'.join(lines)
     urls = ''.join('  <url>\n    <loc>%s%s</loc>\n%s\n  </url>\n' % (SITE, m['path'], alts()) for m in LANGS.values())
@@ -268,8 +278,33 @@ def sitemap():
             + urls + '</urlset>\n')
 
 
+def check_language_lists(src):
+    """index.html lists every language in three places; fail if any is missing or stale."""
+    problems = []
+    for code, m in LANGS.items():
+        hl = html_lang(code)
+        path = m['path']
+        checks = {
+            '<head> hreflang link': '<link rel="alternate" hreflang="%s" href="%s%s">' % (hl, SITE, path),
+            'header language switcher': 'href="%s" hreflang="%s" lang="%s" translate="no">%s</a></li>' % (path, hl, hl, m['name']),
+        }
+        if code != 'en':
+            checks['footer language list'] = '<li class="list-inline-item"><a href="%s" hreflang="%s" lang="%s" translate="no">%s</a></li>' % (path, hl, hl, m['name'])
+        for where, needle in checks.items():
+            if needle not in src:
+                problems.append('index.html: %s is missing for %s (expected %s)' % (where, code, needle))
+    listed = set(re.findall(r'<link rel="alternate" hreflang="([^"]+)" href=', src)) - {'x-default'}
+    for extra in sorted(listed - {html_lang(c) for c in LANGS}):
+        problems.append('index.html: hreflang "%s" is not in LANGS' % extra)
+    return problems
+
+
 def check(write):
     src = (ROOT / 'index.html').read_text(encoding='utf-8')
+    problems = check_language_lists(src)
+    if problems:
+        print('\n'.join(problems))
+        raise SystemExit(1)
     segs = find_segments(src)
     en = {'html': {}, 'js': load_defaults()}
     for s in segs:
