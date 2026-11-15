@@ -244,7 +244,12 @@
   "savedLocal": "In diesem Browser gespeichert",
   "savedCloud": "In Ihrem Konto gespeichert",
   "cloudDirty": "Änderungen noch nicht in Ihrem Konto gespeichert",
-  "cloudHint": "Sie sind angemeldet. Mit der Wolken-Schaltfläche in der Symbolleiste speichern Sie dieses Dokument in Ihrem Konto und können es auf jedem Gerät öffnen."
+  "cloudHint": "Sie sind angemeldet. Mit der Wolken-Schaltfläche in der Symbolleiste speichern Sie dieses Dokument in Ihrem Konto und können es auf jedem Gerät öffnen.",
+  "saveLocalFailed": "Speichern in diesem Browser nicht möglich: Der Speicher ist voll. Exportiere oder kopiere deine Arbeit.",
+  "otherTabChanged": "Dieses Dokument wurde in einem anderen Tab geändert. Deine Version hier bleibt im Versionsverlauf erhalten.",
+  "loadOtherTab": "Andere Version laden",
+  "keepMine": "Diese Version behalten",
+  "cloudTooLarge": "Dieses Dokument ist zu groß, um in deinem Konto gespeichert zu werden (Limit etwa 1 MB). Entferne oder verkleinere große Bilder und versuche es erneut."
  },
  "note": "Diese Seite wurde maschinell übersetzt (automatische Übersetzung) und kann Fehler enthalten. Wenn die Übersetzung in Ihrer Muttersprache nicht gut genug ist, tragen Sie bitte zum Git-Repository bei: <a href=\"https://github.com/souravkhoso1/wysiwyg-editor\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/souravkhoso1/wysiwyg-editor</a>"
 }

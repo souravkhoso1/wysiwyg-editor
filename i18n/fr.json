@@ -244,7 +244,12 @@
   "savedLocal": "Enregistré dans ce navigateur",
   "savedCloud": "Enregistré dans votre compte",
   "cloudDirty": "Modifications pas encore enregistrées dans votre compte",
-  "cloudHint": "Vous êtes connecté. Utilisez le bouton nuage de la barre d'outils pour enregistrer ce document dans votre compte et l'ouvrir sur n'importe quel appareil."
+  "cloudHint": "Vous êtes connecté. Utilisez le bouton nuage de la barre d'outils pour enregistrer ce document dans votre compte et l'ouvrir sur n'importe quel appareil.",
+  "saveLocalFailed": "Enregistrement impossible dans ce navigateur : l'espace de stockage est plein. Exportez ou copiez votre travail.",
+  "otherTabChanged": "Ce document a été modifié dans un autre onglet. Votre version est conservée dans l'historique des versions.",
+  "loadOtherTab": "Charger l'autre version",
+  "keepMine": "Garder cette version",
+  "cloudTooLarge": "Ce document est trop volumineux pour être enregistré dans votre compte (limite d'environ 1 Mo). Supprimez ou réduisez les grandes images, puis réessayez."
  },
  "note": "Cette page a été traduite automatiquement (traduction automatique) et peut contenir des erreurs. Si la traduction ne vous semble pas assez bonne dans votre langue maternelle, merci de contribuer au dépôt Git : <a href=\"https://github.com/souravkhoso1/wysiwyg-editor\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/souravkhoso1/wysiwyg-editor</a>"
 }

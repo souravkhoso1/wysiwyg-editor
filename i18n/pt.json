@@ -244,7 +244,12 @@
   "savedLocal": "Salvo neste navegador",
   "savedCloud": "Salvo na sua conta",
   "cloudDirty": "As alterações ainda não foram salvas na sua conta",
-  "cloudHint": "Você entrou na conta. Use o botão de nuvem da barra de ferramentas para salvar este documento na sua conta e abri-lo em qualquer dispositivo."
+  "cloudHint": "Você entrou na conta. Use o botão de nuvem da barra de ferramentas para salvar este documento na sua conta e abri-lo em qualquer dispositivo.",
+  "saveLocalFailed": "Não foi possível salvar neste navegador: o armazenamento está cheio. Exporte ou copie seu trabalho.",
+  "otherTabChanged": "Este documento foi alterado em outra guia. Sua versão aqui foi mantida no histórico de versões.",
+  "loadOtherTab": "Carregar a outra versão",
+  "keepMine": "Manter esta versão",
+  "cloudTooLarge": "Este documento é grande demais para ser salvo na sua conta (limite de cerca de 1 MB). Remova ou reduza imagens grandes e tente novamente."
  },
  "note": "Esta página foi traduzida automaticamente (tradução automática) e pode conter erros. Se você achar que a tradução não está boa o bastante no seu idioma nativo, contribua com o repositório Git: <a href=\"https://github.com/souravkhoso1/wysiwyg-editor\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/souravkhoso1/wysiwyg-editor</a>"
 }

@@ -244,7 +244,12 @@
   "savedLocal": "Đã lưu trong trình duyệt này",
   "savedCloud": "Đã lưu vào tài khoản của bạn",
   "cloudDirty": "Các thay đổi chưa được lưu vào tài khoản của bạn",
-  "cloudHint": "Bạn đã đăng nhập. Dùng nút đám mây trên thanh công cụ để lưu tài liệu này vào tài khoản và mở trên bất kỳ thiết bị nào."
+  "cloudHint": "Bạn đã đăng nhập. Dùng nút đám mây trên thanh công cụ để lưu tài liệu này vào tài khoản và mở trên bất kỳ thiết bị nào.",
+  "saveLocalFailed": "Không thể lưu trong trình duyệt này: bộ nhớ đã đầy. Hãy xuất hoặc sao chép nội dung của bạn.",
+  "otherTabChanged": "Tài liệu này đã được thay đổi ở một thẻ khác. Phiên bản của bạn ở đây được giữ trong Lịch sử phiên bản.",
+  "loadOtherTab": "Tải phiên bản kia",
+  "keepMine": "Giữ phiên bản này",
+  "cloudTooLarge": "Tài liệu quá lớn để lưu vào tài khoản của bạn (giới hạn khoảng 1 MB). Hãy xóa hoặc thu nhỏ các ảnh lớn rồi thử lại."
  },
  "note": "Trang này được dịch tự động (dịch máy) và có thể có lỗi. Nếu bạn thấy bản dịch tiếng mẹ đẻ của mình chưa đủ tốt, vui lòng đóng góp cho kho Git: <a href=\"https://github.com/souravkhoso1/wysiwyg-editor\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/souravkhoso1/wysiwyg-editor</a>"
 }

@@ -57,7 +57,12 @@ var RT_DEFAULTS = {
 	"savedLocal": "Saved in this browser",
 	"savedCloud": "Saved to your account",
 	"cloudDirty": "Changes not saved to your account yet",
-	"cloudHint": "You're signed in. Use the cloud button in the toolbar to save this document to your account and open it on any device."
+	"cloudHint": "You're signed in. Use the cloud button in the toolbar to save this document to your account and open it on any device.",
+	"saveLocalFailed": "Couldn't save in this browser: storage is full. Export or copy your work.",
+	"otherTabChanged": "This document was changed in another tab. Your version here is kept in Version history.",
+	"loadOtherTab": "Load the other version",
+	"keepMine": "Keep this version",
+	"cloudTooLarge": "This document is too large to save to your account (limit about 1 MB). Remove or shrink large images and try again."
 };
 /* i18n:defaults:end */
 
@@ -65,6 +70,19 @@ function rtT(key, vars) {
 	var overrides = window.RT_I18N || {};
 	var str = overrides[key] !== undefined ? overrides[key] : RT_DEFAULTS[key];
 	return str.replace(/\{(\w+)\}/g, function(m, name) { return vars && vars[name] !== undefined ? vars[name] : m; });
+}
+
+// Writes the draft to localStorage. Returns false (and tells the user) when the browser refuses.
+var pauseAutosave = false;
+function saveLocal() {
+	if (EMBED.embedded || pauseAutosave) return true;
+	try {
+		localStorage.setItem(STORAGE_KEY, editor.innerHTML);
+		return true;
+	} catch (e) {
+		setSaveStatus('failed');
+		return false;
+	}
 }
 
 // URL length above which we warn and suggest GitHub Gist
@@ -282,6 +300,9 @@ function openCloudSaveModal() {
 	new bootstrap.Modal(document.getElementById('cloudSaveModal')).show();
 }
 
+// Firestore documents are limited to 1 MiB; leave headroom for the other fields.
+var CLOUD_MAX_BYTES = 950000;
+
 async function saveToCloud(asNew) {
 	if (!currentUser) return;
 	var title = document.getElementById('cloud-save-title').value.trim() || rtT('untitledDocument');
@@ -291,6 +312,8 @@ async function saveToCloud(asNew) {
 	btn.disabled = true;
 	try {
 		var db = getDb();
+		var size = new Blob([editor.innerHTML]).size;
+		if (size > CLOUD_MAX_BYTES) throw new Error(rtT('cloudTooLarge'));
 		var payload = {
 			ownerId: currentUser.uid,
 			ownerEmail: currentUser.email || null,
@@ -392,7 +415,7 @@ function loadCloudDocument(docId, title) {
 		currentCloudTitle = data.title || title;
 		dismissSharedBanner();
 		history.replaceState(null, '', location.pathname);
-		try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) {}
+		saveLocal();
 		updateCounter();
 		updateEditorActions();
 		trackEvent('document_load_cloud');
@@ -559,7 +582,12 @@ function getHistory() {
 }
 
 function setHistory(list) {
-	try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); } catch (e) {}
+	// History is a convenience: if storage is full, keep fewer snapshots rather than
+	// competing with the live draft for space.
+	while (list.length) {
+		try { localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); return; } catch (e) { list.shift(); }
+	}
+	try { localStorage.removeItem(HISTORY_KEY); } catch (e) {}
 }
 
 function clearHistory() {
@@ -654,7 +682,7 @@ function restoreSnapshot(timestamp) {
 	takeSnapshot();
 	editor.innerHTML = sanitizeHtml(snap.content);
 	lastSnapshotContent = editor.innerHTML;
-	try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) {}
+	saveLocal();
 	updateCounter();
 	updateEditorActions();
 	var modalEl = document.getElementById('historyModal');
@@ -918,16 +946,47 @@ function insertImageFromUrl(url) {
 	img.src = url;
 }
 
+// Large photos are scaled down and re-encoded so they fit in localStorage, the Firestore
+// document limit and share links. GIF and SVG are left alone (animation / vector).
+var IMAGE_MAX_SIDE = 1600;
+
+function shrinkImage(file, done) {
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var original = e.target.result;
+		if (!/^image\/(jpeg|png|webp)$/.test(file.type)) { done(original); return; }
+		var img = new Image();
+		img.onload = function() {
+			var scale = Math.min(1, IMAGE_MAX_SIDE / Math.max(img.naturalWidth, img.naturalHeight));
+			var w = Math.max(1, Math.round(img.naturalWidth * scale));
+			var h = Math.max(1, Math.round(img.naturalHeight * scale));
+			if (scale === 1 && original.length < 200000) { done(original); return; }
+			try {
+				var canvas = document.createElement('canvas');
+				canvas.width = w;
+				canvas.height = h;
+				canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+				var out = file.type === 'image/jpeg' ? canvas.toDataURL('image/jpeg', 0.85) : canvas.toDataURL('image/webp', 0.85);
+				// Browsers that can't write WebP silently return PNG; keep whichever is smaller.
+				done(out.length < original.length ? out : original);
+			} catch (err) {
+				done(original);
+			}
+		};
+		img.onerror = function() { done(original); };
+		img.src = original;
+	};
+	reader.readAsDataURL(file);
+}
+
 function insertImageFromFile(input) {
 	var file = input.files && input.files[0];
 	if (!file) return;
-	var reader = new FileReader();
-	reader.onload = function(e) {
+	shrinkImage(file, function(dataUrl) {
 		trackEvent('insert_image', { source: 'file' });
 		restoreSelection();
-		document.execCommand('insertImage', false, e.target.result);
-	};
-	reader.readAsDataURL(file);
+		document.execCommand('insertImage', false, dataUrl);
+	});
 	input.value = '';
 }
 
@@ -992,11 +1051,54 @@ editor.addEventListener('input', function() {
 	if (currentCloudDocId) setSaveStatus('dirty');
 	clearTimeout(saveTimer);
 	saveTimer = setTimeout(function() {
-		var ok = true;
-		try { localStorage.setItem(STORAGE_KEY, editor.innerHTML); } catch (e) { ok = false; }
-		if (ok && !currentCloudDocId) setSaveStatus(editor.textContent.trim() ? 'local' : '');
+		if (pauseAutosave) return;
+		if (saveLocal() && !currentCloudDocId) setSaveStatus(editor.textContent.trim() ? 'local' : '');
 	}, 500);
 	scheduleHistorySnapshot();
+});
+
+// Another tab saved a different draft. Hold our own autosave until the person chooses,
+// and keep our version in history so neither side's work is lost.
+window.addEventListener('storage', function(e) {
+	if (EMBED.embedded || e.storageArea !== localStorage || e.key !== STORAGE_KEY) return;
+	if (document.getElementById('tab-conflict')) return;
+	if ((e.newValue || '') === editor.innerHTML) return;
+	takeSnapshot();
+	pauseAutosave = true;
+	var bar = document.createElement('div');
+	bar.id = 'tab-conflict';
+	bar.className = 'alert alert-warning d-flex align-items-center flex-wrap gap-2 py-2 px-3 mb-2 small';
+	bar.setAttribute('role', 'alert');
+	var text = document.createElement('span');
+	text.style.flex = '1 1 240px';
+	text.textContent = rtT('otherTabChanged');
+	var load = document.createElement('button');
+	load.type = 'button';
+	load.className = 'btn btn-sm btn-warning';
+	load.textContent = rtT('loadOtherTab');
+	var keep = document.createElement('button');
+	keep.type = 'button';
+	keep.className = 'btn btn-sm btn-outline-secondary';
+	keep.textContent = rtT('keepMine');
+	function finish() { bar.remove(); pauseAutosave = false; }
+	load.addEventListener('click', function() {
+		var latest = '';
+		try { latest = localStorage.getItem(STORAGE_KEY) || ''; } catch (err) {}
+		editor.innerHTML = sanitizeHtml(latest);
+		finish();
+		updateCounter();
+		updateEditorActions();
+		setSaveStatus(editor.textContent.trim() ? 'local' : '');
+	});
+	keep.addEventListener('click', function() {
+		finish();
+		if (saveLocal() && !currentCloudDocId) setSaveStatus(editor.textContent.trim() ? 'local' : '');
+	});
+	bar.appendChild(text);
+	bar.appendChild(load);
+	bar.appendChild(keep);
+	var toolbar = document.getElementById('toolbar');
+	toolbar.parentNode.insertBefore(bar, toolbar);
 });
 
 function clearAll() {
@@ -1158,9 +1260,10 @@ function setSaveStatus(kind) {
 	if (EMBED.embedded) return;
 	var el = document.getElementById('save-status');
 	if (!el) return;
-	var key = { local: 'savedLocal', cloud: 'savedCloud', dirty: 'cloudDirty' }[kind];
+	var key = { local: 'savedLocal', cloud: 'savedCloud', dirty: 'cloudDirty', failed: 'saveLocalFailed' }[kind];
 	el.textContent = key ? rtT(key) : '';
 	el.classList.toggle('text-warning-emphasis', kind === 'dirty');
+	el.classList.toggle('text-danger', kind === 'failed');
 }
 
 function showCloudHint() {
@@ -1318,18 +1421,36 @@ function insertChar(ch) {
 }
 
 var isDarkMode = false;
+var THEME_KEY = 'richtext-online-theme';
 
-function toggleDarkMode() {
-	isDarkMode = !isDarkMode;
-	trackEvent('toggle_dark_mode', { enabled: isDarkMode });
-	document.documentElement.setAttribute('data-bs-theme', isDarkMode ? 'dark' : 'light');
-	document.body.classList.toggle('dark-mode', isDarkMode);
+function applyDarkMode(on) {
+	isDarkMode = on;
+	document.documentElement.setAttribute('data-bs-theme', on ? 'dark' : 'light');
+	document.body.classList.toggle('dark-mode', on);
 	var btn = document.getElementById('btn-dark-mode');
 	if (btn) {
-		btn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-		btn.title = isDarkMode ? rtT('lightMode') : rtT('darkMode');
+		btn.innerHTML = on ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+		btn.title = on ? rtT('lightMode') : rtT('darkMode');
 	}
 }
+
+function toggleDarkMode() {
+	applyDarkMode(!isDarkMode);
+	trackEvent('toggle_dark_mode', { enabled: isDarkMode });
+	if (!EMBED.embedded) {
+		try { localStorage.setItem(THEME_KEY, isDarkMode ? 'dark' : 'light'); } catch (e) {}
+	}
+}
+
+// A saved choice wins; otherwise follow the system setting. Embeds stay light (the host
+// page controls them, and we never read the visitor's storage there).
+(function initTheme() {
+	if (EMBED.embedded) return;
+	var saved = null;
+	try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+	var dark = saved ? saved === 'dark' : !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+	if (dark) applyDarkMode(true);
+})();
 
 var isFullscreen = false;
 

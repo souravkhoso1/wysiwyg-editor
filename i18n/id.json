@@ -244,7 +244,12 @@
   "savedLocal": "Tersimpan di browser ini",
   "savedCloud": "Tersimpan di akun Anda",
   "cloudDirty": "Perubahan belum tersimpan di akun Anda",
-  "cloudHint": "Anda sudah masuk. Gunakan tombol awan di bilah alat untuk menyimpan dokumen ini ke akun Anda dan membukanya di perangkat mana pun."
+  "cloudHint": "Anda sudah masuk. Gunakan tombol awan di bilah alat untuk menyimpan dokumen ini ke akun Anda dan membukanya di perangkat mana pun.",
+  "saveLocalFailed": "Tidak bisa menyimpan di browser ini: penyimpanan penuh. Ekspor atau salin pekerjaan Anda.",
+  "otherTabChanged": "Dokumen ini diubah di tab lain. Versi Anda di sini tetap tersimpan di Riwayat versi.",
+  "loadOtherTab": "Muat versi lainnya",
+  "keepMine": "Pertahankan versi ini",
+  "cloudTooLarge": "Dokumen ini terlalu besar untuk disimpan ke akun Anda (batas sekitar 1 MB). Hapus atau perkecil gambar besar lalu coba lagi."
  },
  "note": "Halaman ini diterjemahkan secara otomatis (terjemahan mesin) dan mungkin mengandung kesalahan. Jika menurut Anda terjemahan dalam bahasa ibu Anda kurang baik, silakan berkontribusi pada repositori Git: <a href=\"https://github.com/souravkhoso1/wysiwyg-editor\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/souravkhoso1/wysiwyg-editor</a>"
 }

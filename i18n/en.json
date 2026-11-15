@@ -244,6 +244,11 @@
   "savedLocal": "Saved in this browser",
   "savedCloud": "Saved to your account",
   "cloudDirty": "Changes not saved to your account yet",
-  "cloudHint": "You're signed in. Use the cloud button in the toolbar to save this document to your account and open it on any device."
+  "cloudHint": "You're signed in. Use the cloud button in the toolbar to save this document to your account and open it on any device.",
+  "saveLocalFailed": "Couldn't save in this browser: storage is full. Export or copy your work.",
+  "otherTabChanged": "This document was changed in another tab. Your version here is kept in Version history.",
+  "loadOtherTab": "Load the other version",
+  "keepMine": "Keep this version",
+  "cloudTooLarge": "This document is too large to save to your account (limit about 1 MB). Remove or shrink large images and try again."
  }
 }

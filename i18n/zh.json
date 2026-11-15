@@ -244,7 +244,12 @@
   "savedLocal": "已保存在此浏览器中",
   "savedCloud": "已保存到您的账号",
   "cloudDirty": "更改尚未保存到您的账号",
-  "cloudHint": "您已登录。使用工具栏中的云按钮，可将此文档保存到您的账号，并在任何设备上打开。"
+  "cloudHint": "您已登录。使用工具栏中的云按钮，可将此文档保存到您的账号，并在任何设备上打开。",
+  "saveLocalFailed": "无法保存到此浏览器:存储空间已满。请导出或复制您的内容。",
+  "otherTabChanged": "此文档已在另一个标签页中被修改。您当前的版本已保存在版本历史中。",
+  "loadOtherTab": "加载另一个版本",
+  "keepMine": "保留此版本",
+  "cloudTooLarge": "此文档过大,无法保存到您的账户(上限约 1 MB)。请删除或缩小大图片后重试。"
  },
  "note": "本页面为机器翻译（自动翻译），可能存在错误。如果您觉得母语翻译质量不够好，欢迎为 Git 仓库做出贡献：<a href=\"https://github.com/souravkhoso1/wysiwyg-editor\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/souravkhoso1/wysiwyg-editor</a>"
 }
