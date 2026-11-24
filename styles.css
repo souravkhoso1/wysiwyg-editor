@@ -226,11 +226,11 @@ mark.find-match-current {
 
 	#toolbar .btn,
 	#toolbar .form-select {
-		min-height: 40px;
+		min-height: 44px;
 	}
 
 	#toolbar .btn {
-		min-width: 40px;
+		min-width: 44px;
 	}
 
 	/* fade on the right edge while there is more to scroll to; sits in its own space once scrolled to the end */

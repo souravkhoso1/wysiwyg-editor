@@ -1258,7 +1258,16 @@ async function copyHtml() {
 		await navigator.clipboard.writeText(exportableHtml());
 		showToast(rtT('copied'));
 	} catch (e) {
-		showToast(rtT('clipboardBlocked'));
+		// Older Safari and some webviews refuse the async API; a hidden textarea still works there.
+		var ta = document.createElement('textarea'), ok = false;
+		ta.value = exportableHtml();
+		ta.setAttribute('readonly', '');
+		ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;font-size:16px';
+		document.body.appendChild(ta);
+		ta.select();
+		try { ok = document.execCommand('copy'); } catch (err) {}
+		ta.remove();
+		showToast(rtT(ok ? 'copied' : 'clipboardBlocked'));
 	}
 }
 
