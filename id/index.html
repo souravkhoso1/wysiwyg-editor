@@ -112,6 +112,16 @@
 
   // Analytics runs only on the real site, so local copies, previews and file:// opens don't pollute the data.
   window.rtGaEnabled = /^(www\.)?richtext\.online$/.test(location.hostname);
+  // Own visits can be excluded: open the site once with ?notrack=1 in each browser (?notrack=0 undoes it).
+  // Never read or written in embed mode, where the visitor's storage is off limits.
+  if (window.rtGaEnabled && !window.rtEmbed.embedded) {
+    try {
+      var nt = new URLSearchParams(location.search).get('notrack');
+      if (nt === '1') localStorage.setItem('richtext-online-notrack', '1');
+      if (nt === '0') localStorage.removeItem('richtext-online-notrack');
+      if (localStorage.getItem('richtext-online-notrack') === '1') window.rtGaEnabled = false;
+    } catch (e) {}
+  }
   window.dataLayer = window.dataLayer || [];
   function gtag(){ if (window.rtGaEnabled) dataLayer.push(arguments); }
   if (window.rtGaEnabled) {
@@ -122,7 +132,9 @@
   }
   gtag('js', new Date());
 
-  var gaParams = { traffic_context: window.rtEmbed.embedded ? 'embed' : 'direct' };
+  // page_language is the language of the page itself (not the visitor's browser language, which GA already reports).
+  var gaParams = { traffic_context: window.rtEmbed.embedded ? 'embed' : 'direct', page_language: document.documentElement.lang || 'en' };
+  window.rtGaParams = gaParams;
   if (window.rtEmbed.embedded) gaParams.embed_host = window.rtEmbed.host;
   gtag('config', 'G-X3P1QLTV49', gaParams);
 </script>
@@ -669,6 +681,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.17/dist/purify.min.js" integrity="sha384-P0JNneQf81HOl9VwNXK76cQ9VMD6Nfsnepxb0cCOg8+UzEdzgPHAPV4wVQrvYQSx" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js" integrity="sha384-0d+Gr7vM4Drod8E3hXKgciWJSWbjD/opKLLygI9ktiWbuvlDwQLzU46wJ9s5gsp7" crossorigin="anonymous"></script>
 	<script>window.RT_I18N = {"account": "Akun", "myDocuments": "Dokumen saya", "signOut": "Keluar", "signInFailed": "Gagal masuk: {msg}", "untitledDocument": "Dokumen tanpa judul", "saveFailed": "Gagal menyimpan dokumen.", "loadDocsFailed": "Tidak dapat memuat dokumen: {msg}", "open": "Buka", "deleteConfirm": "Hapus dokumen ini? Tindakan ini tidak dapat dibatalkan.", "loadingShared": "Memuat dokumen yang dibagikan…", "sharedLoadFailed": "Tidak dapat memuat dokumen yang dibagikan.", "justNow": "Baru saja", "emptyDocument": "(dokumen kosong)", "restore": "Pulihkan", "copied": "Tersalin!", "gistTokenRequired": "Masukkan token akses pribadi GitHub.", "creating": "Membuat…", "createGist": "Buat Gist", "gistCreated": "Gist berhasil dibuat! URL di atas sudah diperbarui — salin dan bagikan.", "gistApiError": "Kesalahan API GitHub ({status})", "gistFailed": "Gagal membuat Gist.", "unsupportedVideo": "URL tidak didukung — tempel tautan YouTube atau Vimeo.", "imageLoadFailed": "Tidak dapat memuat gambar — periksa URL-nya.", "counter": "Kata: {words} | Karakter: {chars}", "darkMode": "Mode gelap", "lightMode": "Mode terang", "fullscreen": "Layar penuh", "exitFullscreen": "Keluar dari layar penuh", "noMatches": "Tidak ada hasil", "matchOf": "{current} dari {total}", "allReplaced": "Semua telah diganti", "editingOn": "Mengedit", "editingOff": "Hanya baca", "signInUnavailable": "Tidak dapat masuk: layanan Google gagal dimuat. Periksa koneksi atau pemblokir konten Anda, lalu coba lagi.", "close": "Tutup", "clipboardBlocked": "Browser Anda memblokir akses papan klip. Gunakan Ctrl/Cmd+C, X, atau V.", "exportFailed": "Tidak dapat membuat file. Silakan coba lagi.", "savedLocal": "Tersimpan di browser ini", "savedCloud": "Tersimpan di akun Anda", "cloudDirty": "Perubahan belum tersimpan di akun Anda", "cloudHint": "Anda sudah masuk. Gunakan tombol awan di bilah alat untuk menyimpan dokumen ini ke akun Anda dan membukanya di perangkat mana pun.", "saveLocalFailed": "Tidak bisa menyimpan di browser ini: penyimpanan penuh. Ekspor atau salin pekerjaan Anda.", "otherTabChanged": "Dokumen ini diubah di tab lain. Versi Anda di sini tetap tersimpan di Riwayat versi.", "loadOtherTab": "Muat versi lainnya", "keepMine": "Pertahankan versi ini", "cloudTooLarge": "Dokumen ini terlalu besar untuk disimpan ke akun Anda (batas sekitar 1 MB). Hapus atau perkecil gambar besar lalu coba lagi."};</script>
-	<script src="/editor.js?v=7"></script>
+	<script src="/editor.js?v=8"></script>
 </body>
 </html>

@@ -112,6 +112,16 @@
 
   // Analytics runs only on the real site, so local copies, previews and file:// opens don't pollute the data.
   window.rtGaEnabled = /^(www\.)?richtext\.online$/.test(location.hostname);
+  // Own visits can be excluded: open the site once with ?notrack=1 in each browser (?notrack=0 undoes it).
+  // Never read or written in embed mode, where the visitor's storage is off limits.
+  if (window.rtGaEnabled && !window.rtEmbed.embedded) {
+    try {
+      var nt = new URLSearchParams(location.search).get('notrack');
+      if (nt === '1') localStorage.setItem('richtext-online-notrack', '1');
+      if (nt === '0') localStorage.removeItem('richtext-online-notrack');
+      if (localStorage.getItem('richtext-online-notrack') === '1') window.rtGaEnabled = false;
+    } catch (e) {}
+  }
   window.dataLayer = window.dataLayer || [];
   function gtag(){ if (window.rtGaEnabled) dataLayer.push(arguments); }
   if (window.rtGaEnabled) {
@@ -122,7 +132,9 @@
   }
   gtag('js', new Date());
 
-  var gaParams = { traffic_context: window.rtEmbed.embedded ? 'embed' : 'direct' };
+  // page_language is the language of the page itself (not the visitor's browser language, which GA already reports).
+  var gaParams = { traffic_context: window.rtEmbed.embedded ? 'embed' : 'direct', page_language: document.documentElement.lang || 'en' };
+  window.rtGaParams = gaParams;
   if (window.rtEmbed.embedded) gaParams.embed_host = window.rtEmbed.host;
   gtag('config', 'G-X3P1QLTV49', gaParams);
 </script>
@@ -669,6 +681,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.17/dist/purify.min.js" integrity="sha384-P0JNneQf81HOl9VwNXK76cQ9VMD6Nfsnepxb0cCOg8+UzEdzgPHAPV4wVQrvYQSx" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js" integrity="sha384-0d+Gr7vM4Drod8E3hXKgciWJSWbjD/opKLLygI9ktiWbuvlDwQLzU46wJ9s5gsp7" crossorigin="anonymous"></script>
 	<script>window.RT_I18N = {"account": "Konto", "myDocuments": "Meine Dokumente", "signOut": "Abmelden", "signInFailed": "Anmeldung fehlgeschlagen: {msg}", "untitledDocument": "Unbenanntes Dokument", "saveFailed": "Das Dokument konnte nicht gespeichert werden.", "loadDocsFailed": "Dokumente konnten nicht geladen werden: {msg}", "open": "Öffnen", "deleteConfirm": "Dieses Dokument löschen? Das kann nicht rückgängig gemacht werden.", "loadingShared": "Geteiltes Dokument wird geladen…", "sharedLoadFailed": "Das geteilte Dokument konnte nicht geladen werden.", "justNow": "Gerade eben", "emptyDocument": "(leeres Dokument)", "restore": "Wiederherstellen", "copied": "Kopiert!", "gistTokenRequired": "Bitte geben Sie ein persönliches GitHub-Zugriffstoken ein.", "creating": "Wird erstellt…", "createGist": "Gist erstellen", "gistCreated": "Gist erstellt! Die URL oben wurde aktualisiert – kopieren und teilen Sie sie.", "gistApiError": "GitHub-API-Fehler ({status})", "gistFailed": "Der Gist konnte nicht erstellt werden.", "unsupportedVideo": "Nicht unterstützte URL – fügen Sie einen YouTube- oder Vimeo-Link ein.", "imageLoadFailed": "Das Bild konnte nicht geladen werden – bitte prüfen Sie die URL.", "counter": "Wörter: {words} | Zeichen: {chars}", "darkMode": "Dunkelmodus", "lightMode": "Hellmodus", "fullscreen": "Vollbild", "exitFullscreen": "Vollbild beenden", "noMatches": "Keine Treffer", "matchOf": "{current} von {total}", "allReplaced": "Alle ersetzt", "editingOn": "Bearbeiten", "editingOff": "Nur lesen", "signInUnavailable": "Anmeldung nicht verfügbar: Die Google-Dienste konnten nicht geladen werden. Prüfen Sie Ihre Verbindung oder Ihren Inhaltsblocker und versuchen Sie es erneut.", "close": "Schließen", "clipboardBlocked": "Ihr Browser hat den Zugriff auf die Zwischenablage blockiert. Verwenden Sie stattdessen Strg/Cmd+C, X oder V.", "exportFailed": "Die Datei konnte nicht erstellt werden. Bitte versuchen Sie es erneut.", "savedLocal": "In diesem Browser gespeichert", "savedCloud": "In Ihrem Konto gespeichert", "cloudDirty": "Änderungen noch nicht in Ihrem Konto gespeichert", "cloudHint": "Sie sind angemeldet. Mit der Wolken-Schaltfläche in der Symbolleiste speichern Sie dieses Dokument in Ihrem Konto und können es auf jedem Gerät öffnen.", "saveLocalFailed": "Speichern in diesem Browser nicht möglich: Der Speicher ist voll. Exportiere oder kopiere deine Arbeit.", "otherTabChanged": "Dieses Dokument wurde in einem anderen Tab geändert. Deine Version hier bleibt im Versionsverlauf erhalten.", "loadOtherTab": "Andere Version laden", "keepMine": "Diese Version behalten", "cloudTooLarge": "Dieses Dokument ist zu groß, um in deinem Konto gespeichert zu werden (Limit etwa 1 MB). Entferne oder verkleinere große Bilder und versuche es erneut."};</script>
-	<script src="/editor.js?v=7"></script>
+	<script src="/editor.js?v=8"></script>
 </body>
 </html>

@@ -94,6 +94,27 @@ function trackEvent(name, params) {
 	if (typeof gtag === 'function') gtag('event', name, params || {});
 }
 
+// Language switches: menu, footer list and the suggestion banner all link to /<lang>/.
+// A beacon survives the page navigation that follows the click.
+document.addEventListener('click', function(e) {
+	var a = e.target.closest && e.target.closest('a[hreflang]');
+	if (!a || (a.getAttribute('href') || '').charAt(0) !== '/') return;
+	var from = document.documentElement.lang || 'en';
+	var to = a.getAttribute('hreflang');
+	if (to === from) return;
+	var source = a.closest('#lang-switcher') ? 'menu' : a.closest('#lang-suggestion') ? 'suggestion' : 'footer';
+	trackEvent('language_switch', { from_language: from, to_language: to, source: source, transport_type: 'beacon' });
+});
+
+// Sign-in funnel: the first cloud save a browser ever makes (compare with `login`).
+function trackFirstCloudSave() {
+	try {
+		if (localStorage.getItem('richtext-online-first-cloud-save')) return;
+		localStorage.setItem('richtext-online-first-cloud-save', '1');
+	} catch (e) { return; }
+	trackEvent('first_cloud_save');
+}
+
 // ── HTML sanitising ──────────────────────────────────────────────────────────
 // DOMPurify drops <iframe> by default, which erased saved YouTube/Vimeo embeds. Allow iframes, then keep
 // only those that point at the two embed URLs insertVideo() can create.
@@ -330,6 +351,7 @@ async function saveToCloud(asNew) {
 		}
 		currentCloudTitle = title;
 		trackEvent('document_save_cloud', { method: asNew ? 'new_copy' : 'save' });
+		trackFirstCloudSave();
 		setSaveStatus('cloud');
 		var modalEl = document.getElementById('cloudSaveModal');
 		var modal = bootstrap.Modal.getInstance(modalEl);
@@ -473,6 +495,7 @@ function initEmbedMode() {
 			postToParent({ type: 'html', id: d.id, html: editor.innerHTML });
 		}
 	});
+	trackEvent('embed_loaded');
 	postToParent({ type: 'ready' });
 }
 
@@ -513,6 +536,7 @@ function restoreFromHash(compressed) {
 		if (html) {
 			editor.innerHTML = sanitizeHtml(html);
 			showSharedBanner();
+			trackEvent('share_link_opened', { method: 'hash' });
 			return;
 		}
 	} catch (e) {}
@@ -537,6 +561,7 @@ function restoreFromGist(gistId) {
 				updateCounter();
 				updateEditorActions();
 				showSharedBanner();
+				trackEvent('share_link_opened', { method: 'gist' });
 			} else {
 				showSharedLoadError();
 			}
